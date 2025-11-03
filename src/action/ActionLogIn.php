@@ -15,16 +15,14 @@ class ActionLogIn extends Action
             $tmp .= "<form action=\"?action=logIn\" method=\"post\">";
             $tmp .= "<input type=\"submit\" name=\"logOut\" value=\"LogOut\">";
         }else {
-            $tmp = "<h1>LogIn</h1>";
-
-            $tmp .= "</br> <form action=\"?action=logIn\" method=\"post\">
-                <input type=\"email\" name=\"email\" placeholder=\"Email\">
-                <input type=\"password\" name=\"password\" placeholder=\"\">
-                <input type=\"submit\" value=\"Register\">
-            ";
-
-
-            $tmp .= "</form>";
+            $tmp = <<<HTML
+            </br> 
+            <form action="?action=logIn" method="post">
+                <input type="email" name="email" placeholder="Email">
+                <input type="password" name="password" placeholder="Password">
+                <input type="submit" value="Register">
+            </form>
+            HTML;
         }
         return $tmp;
     }

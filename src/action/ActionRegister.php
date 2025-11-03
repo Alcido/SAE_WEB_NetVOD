@@ -10,12 +10,14 @@ class ActionRegister extends Action
     {
         $tmp = "<h1>Register</h1>";
 
-        $tmp.= "</br> <form action=\"?action=register\" method=\"post\">
-                <input type=\"text\" name=\"username\" placeholder=\"Username\">
-                <input type=\"email\" name=\"email\" placeholder=\"Email\">
-                <input type=\"password\" name=\"password\" placeholder=\"\">
-                <input type=\"submit\" value=\"Register\">
-            ";
+        $tmp.=
+        <<<HTML
+            </br> <form action="?action=register" method="post">
+                <input type="text" name="username" placeholder="Username">
+                <input type="email" name="email" placeholder="Email">
+                <input type="password" name="password" placeholder="Password">
+                <input type="submit" value="Register">
+        HTML;
 
 
         $tmp.= "</form>";
