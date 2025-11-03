@@ -3,7 +3,9 @@
 namespace NetVOD\src\action;
 
 use NetVOD\src\action\Action;
+use NetVOD\src\auth\AuthnProvider;
 use NetVOD\src\repository\Repository;
+use NetVOD\src\exception\AuthnException;
 
 class ActionLogIn extends Action
 {
@@ -13,16 +15,18 @@ class ActionLogIn extends Action
         if (isset($_SESSION['user'])) {
             $tmp = <<<HTML
             <h1>LogIn</h1><h2>You are already logged in</h2>
-            <form action="?action=logIn\" method="post">
+            <form action="?action=disconnect" method="post">
                 <input type="submit" name="logOut" value="LogOut">
             </form>
             HTML;
-        }else {
+        } else {
             $tmp = <<<HTML
             </br> 
             <form action="?action=logIn" method="post">
-                <input type="email" name="email" placeholder="Email">
-                <input type="password" name="password" placeholder="Password">
+                <label for="email">Email</label>
+                <input type="email" name="email" id="email" placeholder="utilisateur@mail.com" required autofocus>
+                <label for="password">Mot de passe</label>
+                <input type="password" name="password" id="password" placeholder="Password" required>
                 <input type="submit" value="Register">
             </form>
             HTML;
@@ -35,34 +39,24 @@ class ActionLogIn extends Action
      */
     public function lancerPost(): string
     {
-        $tmp = "<h1>LogIn</h1><h2>";
-
         if (isset($_POST['email']) && isset($_POST['password'])) {
 
-            $repo = Repository::getInstance();
-            if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) || !filter_var($_POST['password'], FILTER_VALIDATE_REGEXP)){
-                throw new \Exception("Invalid email or password");
+            if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) || !filter_var($_POST['password'], FILTER_VALIDATE_REGEXP)) {
+                throw new \InvalidArgumentException("Invalid email or password");
             }
 
-            $email = $_POST['email'] ;
+            $email = $_POST['email'];
             $password = $_POST['password'];
 
-            if($repo->isUser($email, $password)){
-                $_SESSION['user'] = $email;
-                $tmp.= "User added";
-            }else{
-                $tmp.= "Some Problem occured";
+            try {
+                AuthnProvider::signin($email, $password);
+                // On renvoit la page d'accueil
+                header('Location: ?action=default');
+            } catch (AuthnException $e) {
+                // Erreur de connexion
+                $html = "<script>alert('Erreur : identifiants incorrects ! Merci de créer un compte ou de vérifier les informations de connexion');</script>" . $this->lancerGet();
             }
-
-        }else if (isset($_POST['logOut'])) {
-            unset($_SESSION['user']);
-            $tmp.= "User Logged Out";
-        }else{
-            $tmp.= "Data not set";
         }
-
-        $tmp.= "</h2>";
-
-        return $tmp;
+        return $html;
     }
 }

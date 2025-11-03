@@ -2,6 +2,9 @@
 
 namespace NetVOD\src\dispatcher;
 
+use NetVOD\src\action\ActionDefault;
+use NetVOD\src\action\ActionDisconnect;
+use NetVOD\src\action\ActionLogIn;
 use NetVOD\src\action\ActionRegister;
 use NetVOD\src\repository\Repository;
 
@@ -19,16 +22,24 @@ class Dispatcher
 
 
     public function run() : void {
-        Repository::setConfig("/opt/lampp/htdocs/Config.ini");
-        echo "<head> <link rel = \"stylesheet\" href=''>" .
-            "<title> NetVOD </title></head>";
+        $actionExec = new ActionDefault;
 
+        //on modifie l'action à executer selon l'action de l'URL
         switch ($this->action) {
-            case "menu":
-                echo "<h1> NetVOD </h1>";
+            case 'default':
+                $actionExec = new ActionDefault;
                 break;
+            case 'login':
+                $actionExec = new ActionLogIn;
+                break;
+            case 'register':
+                $actionExec = new ActionRegister;
+                break;
+            case 'logout':
+                $actionExec = new ActionDisconnect;
             default:
         }
+        $this->renderPage($actionExec());
     }
 
     private function renderPage(string $html) : void {
@@ -40,7 +51,6 @@ class Dispatcher
                 <head>
                 <meta charset="UTF-8">
                 <title>NetVOD</title>
-                <link rel="stylesheet" href="css/styleSpotify.css">
                 </head>
                 <body>
                 HTML;
@@ -51,12 +61,12 @@ class Dispatcher
             $page .=
                 <<<HTML
                 <div id = "choices">
-                    <h1>Deefy</h1>
+                    <h1>NetVOD</h1>
                        <nav>
                         <ul>
-                          <li><a href="?action=menu"><span>Accueil</span></a></li>
+                          <li><a href="?action=default"><span>Accueil</span></a></li>
                         </ul>
-                        <form action="?action=disconnect" method="post">
+                        <form action="?action=logout" method="post">
                           <button type="submit">Déconnexion</button>
                         </form>
                       </nav>

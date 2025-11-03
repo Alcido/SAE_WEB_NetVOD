@@ -2,58 +2,59 @@
 
 namespace NetVOD\src\action;
 
+use NetVOD\src\auth\AuthnProvider;
+use NetVOD\src\Exception\AuthnException;
 use NetVOD\src\repository\Repository;
 
 class ActionRegister extends Action
     {
     public function lancerGet(): string
     {
-        $tmp = "<h1>Register</h1>";
-
-        $tmp.=
+        $tmp =
         <<<HTML
-            </br> <form action="?action=register" method="post">
-                <input type="text" name="username" placeholder="Username">
-                <input type="email" name="email" placeholder="Email">
-                <input type="password" name="password" placeholder="Password">
+            <h1>Register</h1>
+            </br>
+            <form action="?action=register" method="post">
+                <label for="username">Nom d'utilisateur</label>
+                <input type="text" name="username" id="username" placeholder="Username" required autofocus>
+                <label for="email">Email</label>
+                <input type="email" name="email" id="email" placeholder="Email" required>
+                 <label for="password">Mot de passe</label>
+                <input type="password" name="password" id="password" placeholder="Password" required>
                 <input type="submit" value="Register">
+            </form>
         HTML;
-
-
-        $tmp.= "</form>";
 
         return $tmp;
     }
 
     /**
-     * @throws \Exception
+     * @throws \Exception si erreur avec l'utilisation de l'objet PDO
      */
     public function lancerPost(): string
     {
-        $tmp = "<h1>Register</h1><h2>";
+        $tmp = "<h1>Register</h1><p>";
 
-        if (isset($_POST['username']) && isset($_POST['email']) && isset($_POST['password'])) {
-
-            $repo = Repository::getInstance();
-            if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) || !filter_var($_POST['password'], FILTER_VALIDATE_REGEXP) || !filter_var($_POST['username'], FILTER_VALIDATE_REGEXP)){
-                throw new \Exception("Invalid email or password");
-            }
-
-            $email = $_POST['email'] ;
-            $password = $_POST['password'];
-            $username = $_POST['username'];
-
-            if($repo->addUser($username, $email, $password)){
-                $tmp.= "User added";
-            }else{
-                $tmp.= "Some Problem occured";
-            }
-
-        }else{
-            $tmp.= "Data not set";
+        //on vérifie que les données renseignées soient conformes
+        if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) || !filter_var($_POST['username'], FILTER_VALIDATE_REGEXP)){
+            throw new \Exception("Invalid email or password");
         }
 
-        $tmp.= "</h2>";
+        $email = $_POST['email'] ;
+        $password = $_POST['password'];
+        $username = $_POST['username'];
+
+        try {
+            AuthnProvider::register($email, $password, $username);
+        } catch (AuthnException $e) {
+            return $this->lancerGet() . "<script>alert('Erreur : identifiant déjà présent !');</script>";
+        }
+
+        $tmp.= "L'enregistrement est effectué</p>";
+
+        if (!isset($_SESSION['user'])) {
+            header("Location: ?action=login");
+        }
 
         return $tmp;
     }
