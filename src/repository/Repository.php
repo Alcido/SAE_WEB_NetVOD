@@ -49,10 +49,6 @@ class Repository
         }
     }
 
-    //pourquoi ?
-    public function getPDO(): PDO {
-        return $this->pdo;
-    }
 
     //permet a un user de se cree un compte renvoie un boolean si reussite ou non
     public function createUser(string $pseudo, string $email, string $password) : bool {
