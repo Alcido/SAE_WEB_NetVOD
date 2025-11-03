@@ -1,8 +1,8 @@
 <?php
 
-namespace iutnc\NetVOD\dispatcher;
+namespace NetVOD\dispatcher;
 
-use iutnc\NetVOD\repository\Repository;
+use NetVOD\repository\Repository;
 
 class Dispatcher
 {

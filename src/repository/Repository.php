@@ -1,6 +1,6 @@
 <?php
 
-namespace iutnc\NetVOD\repository;
+namespace NetVOD\repository;
 
 use Exception;
 use PDO;
