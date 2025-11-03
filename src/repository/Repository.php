@@ -1,6 +1,6 @@
 <?php
 
-namespace iutnc\NetVOD\repository;
+namespace NetVOD\src\repository;
 
 use Exception;
 use PDO;
@@ -13,7 +13,6 @@ class Repository
     public PDO $pdo;
 
     private function __construct() {
-        //mysql:host=localhost;dbname=NetVOD
         $dsn = Repository::$config['driver'] . ':host=' .Repository::$config['host'] . ';dbname=' . Repository::$config['database'];
         $this->pdo = new PDO($dsn, Repository::$config['username'], Repository::$config['password'],[
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, // affiche les erreurs SQL

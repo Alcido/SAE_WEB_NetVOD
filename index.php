@@ -1,7 +1,20 @@
 <?php
+declare(strict_types=1);
+require_once 'vendor/autoload.php';
+use NetVOD\src\dispatcher\Dispatcher;
 
-use iutnc\NetVOD\dispatcher\Dispatcher;
+session_start();
 
-require_once 'loader/AutoLoader.php';
-(new iutnc\NetVOD\Loader\AutoLoader("iutnc\\NetVOD\\", __DIR__))->register();
-(new Dispatcher())->run();
+$demandeConn = (isset($_GET['action']) and $_GET['action'] === 'register');
+
+if (!isset($_SESSION['user']) and !$demandeConn) {
+    $action = "login";
+} else {
+    $action = $_GET['action'] ?? 'default';
+}
+
+$dispatcher = new Dispatcher($action);
+$dispatcher->run();
+
+
+

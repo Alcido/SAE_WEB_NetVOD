@@ -1,0 +1,15 @@
+{
+    "name": "petel/sae_web_net-vod",
+    "autoload": {
+        "psr-4": {
+            "NetVOD\\src\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Matthieu Petelot",
+            "email": "matthieu.petelot5@etu.univ-lorraine.fr"
+        }
+    ],
+    "require": {}
+}
