@@ -22,12 +22,13 @@ class Episode extends Video
 
 
     /** Getter magique
-     * @param $attribute
+     * @param string $attribut
      * @return mixed
+     * @throws \Exception si l'attribut n'existe pas
      */
-    public function __get($attribute) : mixed
+    public function __get(string $attribut) : mixed
     {
-        if (property_exists($this, $attribute)) return $this->$attribute;
-        return null;
+        if (property_exists($this, $attribut)) return $this->$attribut;
+        throw new \Exception("attribut non defini : $attribut");
     }
 }

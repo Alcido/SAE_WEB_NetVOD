@@ -27,12 +27,13 @@ class Video
     }
 
     /** Getter magique
-     * @param $attribut
+     * @param string $attribut
      * @return mixed valeur de l'attribut
+     * @throws \Exception si l'attribut n'existe pas
      */
-    public function __get($attribut) : mixed
+    public function __get(string $attribut) : mixed
     {
         if (property_exists($this, $attribut)) return $this->$attribut;
-        return null;
+        throw new \Exception("attribut non defini : $attribut");
     }
 }
