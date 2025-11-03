@@ -13,7 +13,6 @@ class Repository
     public PDO $pdo;
 
     private function __construct() {
-        //mysql:host=localhost;dbname=SpotiDecoy
         $dsn = Repository::$config['driver'] . ':host=' .Repository::$config['host'] . ';dbname=' . Repository::$config['database'];
         $this->pdo = new PDO($dsn, Repository::$config['username'], Repository::$config['password']);
     }

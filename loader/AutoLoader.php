@@ -1,6 +1,6 @@
 <?php
 
-namespace iutnc\NetVOD\loader;
+namespace NetVOD\loader;
 
 class AutoLoader
 {
