@@ -2,6 +2,7 @@
 
 namespace NetVOD\src\dispatcher;
 
+use NetVOD\src\action\ActionRegister;
 use NetVOD\src\repository\Repository;
 
 class Dispatcher
