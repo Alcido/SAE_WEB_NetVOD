@@ -11,9 +11,12 @@ class ActionLogIn extends Action
     public function lancerGet(): string
     {
         if (isset($_SESSION['user'])) {
-            $tmp = "<h1>LogIn</h1><h2>You are already logged in</h2>";
-            $tmp .= "<form action=\"?action=logIn\" method=\"post\">";
-            $tmp .= "<input type=\"submit\" name=\"logOut\" value=\"LogOut\">";
+            $tmp = <<<HTML
+            <h1>LogIn</h1><h2>You are already logged in</h2>
+            <form action="?action=logIn\" method="post">
+                <input type="submit" name="logOut" value="LogOut">
+            </form>
+            HTML;
         }else {
             $tmp = <<<HTML
             </br> 
@@ -26,6 +29,10 @@ class ActionLogIn extends Action
         }
         return $tmp;
     }
+
+    /**
+     * @throws \Exception
+     */
     public function lancerPost(): string
     {
         $tmp = "<h1>LogIn</h1><h2>";
@@ -33,8 +40,12 @@ class ActionLogIn extends Action
         if (isset($_POST['email']) && isset($_POST['password'])) {
 
             $repo = Repository::getInstance();
-            $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
-            $password = filter_var($_POST['password'], FILTER_SANITIZE_STRING);
+            if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) || !filter_var($_POST['password'], FILTER_VALIDATE_REGEXP)){
+                throw new \Exception("Invalid email or password");
+            }
+
+            $email = $_POST['email'] ;
+            $password = $_POST['password'];
 
             if($repo->isUser($email, $password)){
                 $_SESSION['user'] = $email;

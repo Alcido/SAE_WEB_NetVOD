@@ -24,6 +24,10 @@ class ActionRegister extends Action
 
         return $tmp;
     }
+
+    /**
+     * @throws \Exception
+     */
     public function lancerPost(): string
     {
         $tmp = "<h1>Register</h1><h2>";
@@ -31,9 +35,13 @@ class ActionRegister extends Action
         if (isset($_POST['username']) && isset($_POST['email']) && isset($_POST['password'])) {
 
             $repo = Repository::getInstance();
-            $username = filter_var($_POST['username'], FILTER_SANITIZE_STRING);
-            $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
-            $password = filter_var($_POST['password'], FILTER_SANITIZE_STRING);
+            if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) || !filter_var($_POST['password'], FILTER_VALIDATE_REGEXP) || !filter_var($_POST['username'], FILTER_VALIDATE_REGEXP)){
+                throw new \Exception("Invalid email or password");
+            }
+
+            $email = $_POST['email'] ;
+            $password = $_POST['password'];
+            $username = $_POST['username'];
 
             if($repo->addUser($username, $email, $password)){
                 $tmp.= "User added";
