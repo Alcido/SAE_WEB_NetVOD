@@ -3,6 +3,9 @@
 namespace NetVOD\src\repository;
 
 use Exception;
+use NetVOD\src\auth\User;
+use NetVOD\src\video\Episode;
+use NetVOD\src\video\Serie;
 use PDO;
 
 class Repository
@@ -46,6 +49,7 @@ class Repository
         }
     }
 
+    //pourquoi ?
     public function getPDO(): PDO {
         return $this->pdo;
     }
@@ -56,7 +60,7 @@ class Repository
     }
 
     //verifie que le User existe renvoie true ou false
-    public function isUser(string $email, string $password) : ?bool {
+    public function isUser(string $email, string $password) : mixed {
         return null;
     }
 
@@ -71,7 +75,7 @@ class Repository
     }
 
     //retourne les infod de l'user
-    public function getinfo(string $user_id) : ?User{
+    public function getUser(string $user_id) : ?User{
         return null;
     }
 
@@ -136,8 +140,8 @@ class Repository
         return null;
     }
 
-    //retounre preference d'un use
-    public function gerpref(string $user_id) : ?array
+    //retourne les preferences d'un user
+    public function getPref(string $user_id) : ?array
     {
         return null;
     }
