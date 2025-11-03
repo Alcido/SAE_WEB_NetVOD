@@ -9,15 +9,24 @@ class Dispatcher
     /**
      * @throws \Exception
      */
-    public static function run() : void{
+
+    private string $action;
+
+    public function __construct(string $action) {
+        $this->action = $action;
+    }
+
+
+    public function run() : void {
         Repository::setConfig("/opt/lampp/htdocs/Config.ini");
         echo "<head> <link rel = \"stylesheet\" href=''>" .
             "<title> NetVOD </title></head>";
-        $action = $_GET['action'] ?? "menu";
 
-        switch ($action) {
+        switch ($this->action) {
             case "menu":
                 echo "<h1> NetVOD </h1>";
+                break;
+            default:
         }
 
     }

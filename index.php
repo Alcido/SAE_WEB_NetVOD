@@ -1,10 +1,14 @@
 <?php
 declare(strict_types=1);
-
-use NetVOD\dispatcher\Dispatcher;
+require_once 'vendor/autoload.php';
+use NetVOD\src\dispatcher\Dispatcher;
 
 session_start();
 
-require_once 'vendor/autoload.php';
+$action = $_GET['action'] ?? "menu";
+
+$dispatcher = new Dispatcher($action);
+$dispatcher->run();
+
 
 
