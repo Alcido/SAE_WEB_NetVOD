@@ -14,7 +14,10 @@ class Repository
 
     private function __construct() {
         $dsn = Repository::$config['driver'] . ':host=' .Repository::$config['host'] . ';dbname=' . Repository::$config['database'];
-        $this->pdo = new PDO($dsn, Repository::$config['username'], Repository::$config['password']);
+        $this->pdo = new PDO($dsn, Repository::$config['username'], Repository::$config['password'],[
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, // affiche les erreurs SQL
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC, // renvoie des tableaux associatifs
+            PDO::ATTR_EMULATE_PREPARES => false ]);// empêche certaines injections SQL);
     }
 
     /**
@@ -42,4 +45,11 @@ class Repository
             return Repository::$instance;
         }
     }
+
+    public function getPDO(): PDO {
+        return $this->pdo;
+    }
+
+
+
 }
