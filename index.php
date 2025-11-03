@@ -5,7 +5,13 @@ use NetVOD\src\dispatcher\Dispatcher;
 
 session_start();
 
-$action = $_GET['action'] ?? "menu";
+$demandeConn = (isset($_GET['action']) and $_GET['action'] === 'register');
+
+if (!isset($_SESSION['user']) and !$demandeConn) {
+    $action = "login";
+} else {
+    $action = $_GET['action'] ?? 'default';
+}
 
 $dispatcher = new Dispatcher($action);
 $dispatcher->run();

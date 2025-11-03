@@ -28,6 +28,55 @@ class Dispatcher
                 break;
             default:
         }
+    }
 
+    private function renderPage(string $html) : void {
+
+        // Page HTML
+        $page = <<<HTML
+                <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                <meta charset="UTF-8">
+                <title>NetVOD</title>
+                <link rel="stylesheet" href="css/styleSpotify.css">
+                </head>
+                <body>
+                HTML;
+
+        // Si l'utilisateur est connecté
+        if ($this->action !== 'login' and isset($_SESSION['user'])) {
+            // Affichage du menu
+            $page .=
+                <<<HTML
+                <div id = "choices">
+                    <h1>Deefy</h1>
+                       <nav>
+                        <ul>
+                          <li><a href="?action=menu"><span>Accueil</span></a></li>
+                        </ul>
+                        <form action="?action=disconnect" method="post">
+                          <button type="submit">Déconnexion</button>
+                        </form>
+                      </nav>
+                    </div>
+                HTML;
+        }
+
+        // Ajout du résultat de l'action
+        $page .=
+            <<<HTML
+            <main>
+                <h2>NetVOD la plateforme de vidéo à la demande sans demander</h2>
+                    <div id="content">
+                        $html
+                    </div>
+            </main>
+            </body>
+            </html>
+            HTML;
+
+        // On envoit la page
+        echo $page;
     }
 }
