@@ -1,6 +1,6 @@
 <?php
 
-namespace NetVOD\action;
+namespace NetVOD\src\action;
 
 interface Action
 {

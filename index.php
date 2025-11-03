@@ -1,7 +1,10 @@
 <?php
+declare(strict_types=1);
 
-use iutnc\NetVOD\dispatcher\Dispatcher;
+use NetVOD\dispatcher\Dispatcher;
 
-require_once 'loader/AutoLoader.php';
-(new iutnc\NetVOD\Loader\AutoLoader("iutnc\\NetVOD\\", __DIR__))->register();
-(new Dispatcher())->run();
+session_start();
+
+require_once 'vendor/autoload.php';
+
+
