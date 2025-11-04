@@ -194,21 +194,22 @@ class Repository
     //retourne les infos d'un episode donné
     public function getEpisode(int $episode_id): ?Episode
     {
-        $stmt=$this->pdo->prepare("SELECT episode.titre, episode.file, episode.duree, serie.titre as serieTitre, episode.numero,episode.resume, episode.img 
-                                            FROM episode 
-                                            inner Join serie on serie.id=episode.serie_id 
-                                            WHERE episode.id=?");
+        $query =
+            "SELECT episode.titre, episode.file, episode.duree, serie.titre as serieTitre, serie.id as serieID, episode.numero,episode.resume, episode.img 
+             FROM episode inner Join serie on serie.id=episode.serie_id WHERE episode.id=?";
+        $stmt=$this->pdo->prepare($query);
         $stmt->execute([$episode_id]);
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
         if ($data) {
             return new Episode(
-                intval($data['titre']),
-                intval($data['file']),
+                intval($data['serieID']),
+                $data['titre'],
+                $data['file'],
                 intval($data['duree']),
-                intval($data['serieTitre']),
+                $data['serieTitre'],
                 intval($data['numero']),
-                intval($data['resume']),
-                intval($data['img'])
+                $data['resume'],
+                $data['img']
             );
         }
         return null;
