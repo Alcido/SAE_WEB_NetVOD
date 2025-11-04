@@ -4,6 +4,7 @@ namespace NetVOD\src\video;
 
 class Serie
 {
+    private int $id;
     private string $nom;
     private ?string $genre;
     private ?string $public;

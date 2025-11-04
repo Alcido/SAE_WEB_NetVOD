@@ -15,6 +15,7 @@ class ActionAffichageSerie extends Action
     public function lancerGet(): string
     {
         $repo = Repository::getInstance();
+
         if (!isset($_GET['serieID'])) {
             return "<h1> no serie selected </h1>";
         }
@@ -22,9 +23,19 @@ class ActionAffichageSerie extends Action
         if ($serie == null) {
             return "<h1> serie not existing </h1>";
         }
-        $tmp ="<div>";
+        $moyenne = $repo->getNoteMoyenne($_GET['serieID']);
+        $tmp = "<div>";
+        $tmp .= "<p> Moyenne notes : $moyenne </p>";
         $tmp .= (new SerieRenderer($serie))->renderLong();
-        $tmp .= "</div>";
+        $tmp .= "<div>
+                <ul>";
+        foreach ($repo->getListeCommentaires() as $commentaire) {
+            $tmp.="<li>$commentaire</li>";
+        }
+
+        $tmp .= "</ul></div>
+                </div>";
+
 
 
         return $tmp;

@@ -34,6 +34,7 @@ HMTL;
      * @return string affichage complet de la série
      */
     public  function renderLong() : string {
+
         $nbEpisodes = sizeof($this->serie->episodes);
 
         $html = "<p>Titre de la série : {$this->serie->nom}</p>
@@ -41,6 +42,7 @@ HMTL;
                  <p>Descriptif : {$this->serie->descriptif}</p>
                  <p>Nombre d'épisodes : $nbEpisodes</p>
                  <p>Date d'ajout : {$this->serie->date_ajout}, date de création : {$this->serie->annee}</p>
+                 <p>note moyenne : $moyenne</p>
                  <p>Liste des épisodes : </p><ul>";
 
         foreach ($this->serie->episodes as $episode) {
