@@ -59,7 +59,7 @@ class Repository
      * cette methode permet d'insérer un User dans la BD
      */
     public function createUser(string $pseudo, string $email, string $password, int $role=1) : bool {
-        $stmt = $this->pdo->prepare("INSERT INTO utilisateur (pseudo, email, password, role) VALUES (?, ?, ?)");
+        $stmt = $this->pdo->prepare("INSERT INTO utilisateur (pseudo, email, password, role) VALUES (?, ?, ?, ?)");
         return $stmt->execute([$pseudo,$email, $password,$role]);
     }
 
@@ -220,7 +220,12 @@ class Repository
         return null;
     }
 
-    //retourne les preferences d'un user
+
+    /**
+     * @param int $user_id
+     * @return array
+     * retourne les preferences d'un user
+     */
     public function getPref(int $user_id) : array
     {
         $query = "select id_serie from prefSerie2User where id_ user = ?";
