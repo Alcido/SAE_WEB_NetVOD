@@ -2,6 +2,7 @@
 
 namespace NetVOD\src\action;
 
+use InvalidArgumentException;
 use NetVOD\src\action\Action;
 use NetVOD\src\auth\AuthnProvider;
 use NetVOD\src\repository\Repository;
@@ -27,8 +28,10 @@ class ActionLogIn extends Action
                 <input type="email" name="email" id="email" placeholder="utilisateur@mail.com" required autofocus>
                 <label for="password">Mot de passe</label>
                 <input type="password" name="password" id="password" placeholder="Password" required>
-                <input type="submit" value="Register">
+                <input type="submit" value="LogIn">
             </form>
+
+            <a href="?action=register"><button>Register</button></a>
             HTML;
         }
         return $tmp;
@@ -42,7 +45,7 @@ class ActionLogIn extends Action
         if (isset($_POST['email']) && isset($_POST['password'])) {
 
             if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) || !filter_var($_POST['password'], FILTER_VALIDATE_REGEXP)) {
-                throw new \InvalidArgumentException("Invalid email or password");
+                throw new InvalidArgumentException("Invalid email or password");
             }
 
             $email = $_POST['email'];

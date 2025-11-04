@@ -1,0 +1,130 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+package Action {
+
+interface Action {
++ lancerGET() : string
++ lancerPOST() : string
+}
+
+class ActionLogin
+class ActionRegister
+class ActionCatalogue
+class ActionAffichageSerie
+class ActionAffichageEpisode
+class ActionAffichageListe
+class ActionAccueil
+
+ActionLogin ..|>Action
+ActionRegister ..|>Action
+ActionCatalogue ..|>Action
+ActionAffichageSerie ..|>Action
+ActionAffichageEpisode ..|>Action
+ActionAffichageListe ..|>Action
+ActionAccueil ..|>Action
+}
+
+package BDD {
+class NetRepository {
+- instance : NetRepository
++ getInstance() : NetRepository
++ setConfig(lienFichier : string) : void
++ getUtilisateur(id : int) : Utilisateur
++ getCatalogue() : array
++ getSerie(id : int) : Serie
++ getEpisode(id : int) : Episode
++ ajouterSeriePref(id_serie : int, id_utilisateur : int) : string
++ getSeriesPref(id_utilisateur : int) : array
++ ajouterSerieEnCours(id_serie : int, id_utilisateur : int) : string
++ critiquerSerie(id_serie : int, id_utilisateur : int, note : int, commentaire : string) : string
++ getNoteMoyenne(id_serie) : int
++ getListeCommentaires(id_serie) : array
+}
+}
+
+
+package Video {
+class Serie {
+- nom : string
+- annee : int
+- genre : string
+}
+
+class Video {
+- nom : string
+- duree : int
+- annee : int
+- lienFichier : string
+}
+
+class Episode {
+- serie : Serie
+}
+
+class SeriesPreferees {
+}
+
+class SeriesEnCours {
+}
+
+class ListeVideos {
+- videos : array
+}
+
+class ListeSeries {
+- series : array
+}
+
+
+
+Serie --|> ListeVideos
+
+SeriesPreferees --|> ListeSeries
+SeriesEnCours --|> ListeSeries
+
+Episode --|> Video
+}
+
+
+package Renderer {
+interface Renderer {
++ renderHTML(format : int) : string
+}
+
+class RendererVideo {
+- video : Video
++ renderHTML(format : int) : string
+}
+
+class RendererListe {
+- liste : ListeVideos
++ renderHTML(format : int) : string
+}
+
+RendererVideo ..|> Renderer
+RendererListe ..|> Renderer
+}
+
+package Utilisateur {
+class Utilisateur {
+- role : int
+}
+}
+
+
+package Auth {
+class Authn {
++ register(utilisateur : Utilisateur) : string
++ login(mail : string, mdp : string) : string
+}
+
+class Authz {
++ checkRole(required : int) : boolean
+}
+}
+
+
+
+@enduml
+
