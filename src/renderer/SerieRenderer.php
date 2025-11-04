@@ -2,6 +2,7 @@
 
 namespace NetVOD\src\renderer;
 
+use NetVOD\src\repository\Repository;
 use NetVOD\src\video\Serie;
 
 class SerieRenderer
@@ -25,6 +26,7 @@ class SerieRenderer
         <p>Genre : {$this->serie->genre}</p>
     
 HMTL;
+        $html .= $this->favorite();
         return $html;
     }
 
@@ -46,6 +48,25 @@ HMTL;
             $html .= "<li>" . $episodeRenderer->renderCompact() . "</li>";
         }
         $html .= "</ul>";
+        $html .= $this->favorite();
+
+        return $html;
+    }
+
+    private function favorite() : string {
+        $repo = Repository::getInstance();
+        $pref = $repo->getPref($_SESSION['user']);
+        if (in_array($this->serie,$pref)){
+            $isLiked="remove";
+        }else{
+            $isLiked="add";
+        }
+
+        $html = <<<HMTL
+            <form class="$isLiked" action="?action=$_GET[action]" method="post">
+                <button type="submit" name="addFavorite" value="$isLiked">$isLiked from favorite</button>
+            </form>
+HMTL;
 
         return $html;
     }

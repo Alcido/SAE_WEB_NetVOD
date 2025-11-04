@@ -83,14 +83,32 @@ class Repository
         return null;
     }
 
-    //retourne le catalogue de serie
+    /**Méthode permettant de récupérer la liste des séries de la base
+     * @return array|null liste de toutes les séries de la base de donnée
+     */
     public function getCatalogue(): ?array{
-        return null;
+        $query = "select id from serie";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute();
+        $res = [];
+        while ($row = $stmt->fetch()) {
+            $serie = $this->getSerie($row["id"]);
+            $res[] = $serie;
+        }
+        return $res;
     }
 
-    //retourne les infos de la serie
+    /**Méthode permettant de récupérer l'objet série
+     * @param int $serie_id id de la série cherchée
+     * @return Serie|null
+     */
     public function getSerie(int $serie_id): ?Serie{
-        return null;
+        $query = "select titre, genre, public, annee, date_ajout, img, descriptif from serie where serie_id = ?";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute(array($serie_id));
+        $res = $stmt->fetch();
+        $episodes = $this->getListeEpisodes($serie_id);
+        return new Serie($res['titre'],$res['annee'],$episodes, $res['descriptif'], $res['date_ajout'], $res['genre'], $res['public'], $res['img']);
     }
 
     //ajoute une serie
@@ -99,8 +117,15 @@ class Repository
     }
 
     //ajoute d'iun serie preferé
-    public function addSeriePref(int $serie_id):?bool{
-        return null;
+    public function addSeriePref(int $serie_id, int $user_id):?bool{
+        try {
+            $query = "insert into prefSerie2User values (?, ?)";
+            $stmt = $this->pdo->prepare($query);
+            $stmt->execute([$user_id, $serie_id]);
+        } catch (PDOException $e) {
+            return false;
+        }
+        return true;
     }
 
     //ajoute serie en cours
@@ -159,7 +184,7 @@ class Repository
     {
         $stmt=$this->pdo->prepare("SELECT * FROM episode WHERE serie_id=? order by numero");
         $stmt->execute([$serie_id]);
-        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         if ($data) {
             return $data;
         }
@@ -169,6 +194,23 @@ class Repository
     //retourne les infos d'un episode donné
     public function getEpisode(int $episode_id): ?Episode
     {
+        $stmt=$this->pdo->prepare("SELECT episode.titre, episode.file, episode.duree, serie.titre as serieTitre, episode.numero,episode.resume, episode.img 
+                                            FROM episode 
+                                            inner Join serie on serie.id=episode.serie_id 
+                                            WHERE episode.id=?");
+        $stmt->execute([$episode_id]);
+        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($data) {
+            return new Episode(
+                intval($data['titre']),
+                intval($data['file']),
+                intval($data['duree']),
+                intval($data['serieTitre']),
+                intval($data['numero']),
+                intval($data['resume']),
+                intval($data['img'])
+            );
+        }
         return null;
     }
 
@@ -178,10 +220,23 @@ class Repository
         return null;
     }
 
-    //retourne les preferences d'un user
-    public function getPref(int $user_id) : ?array
+
+    /**
+     * @param int $user_id
+     * @return array
+     * retourne les preferences d'un user
+     */
+    public function getPref(int $user_id) : array
     {
-        return null;
+        $query = "select id_serie from prefSerie2User where id_user = ?";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute(array($user_id));
+        $res = [];
+        while ($row = $stmt->fetch()) {
+            $serie = $this->getSerie($row["id_serie"]);
+            $res[] = $serie;
+        }
+        return $res;
     }
 
     /**
@@ -189,6 +244,12 @@ class Repository
      * @return array|null liste des commentaires
      */
     public function getListeCommentaires(int $serie_id): ?array{
+        $stmt=$this->pdo->prepare("SELECT commentaire FROM notation WHERE id_serie=?");
+        $stmt->execute([$serie_id]);
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        if ($data) {
+            return $data;
+        }
         return null;
     }
 
