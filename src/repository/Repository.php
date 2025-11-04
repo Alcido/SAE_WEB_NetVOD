@@ -256,7 +256,7 @@ class Repository
 
     public function removeSeriePref(int $serie_id, int $user_id) : bool {
         try {
-            $query = 'delete from seriePref2User where id_serie = ? and id_user = ?';
+            $query = 'delete from prefSerie2User where id_serie = ? and id_user = ?';
             $stmt = $this->pdo->prepare($query);
             $stmt->execute(array($serie_id, $user_id));
         } catch (PDOException $e) {
