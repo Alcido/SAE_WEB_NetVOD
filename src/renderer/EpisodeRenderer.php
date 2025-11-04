@@ -2,16 +2,17 @@
 declare(strict_types=1);
 
 namespace NetVOD\src\renderer;
+use NetVOD\src\video\Episode;
 use NetVOD\src\video\Video;
 
 class EpisodeRenderer
 {
-    private Video  $video;
+    private Episode  $video;
 
     /**Constructeur du renderer
      * @param Video $video
      */
-    public function __construct(Video $video) {
+    public function __construct(Episode $video) {
         $this->video = $video;
     }
 
@@ -36,10 +37,11 @@ HMTL;
         <video controls width="250">
             <source src="{$this->video->lienFichier}" type="video/mp4" />
         </video>
-        <p>Episode n°{$this->video->numero} : {$this->video->nom}</p>
+        <p>Série : {$this->video->nom_serie} - ep. {$this->video->numero} : {$this->video->nom}</p>
         <p>Résumé : {$this->video->resume}</p>
         <p>Durée : {$this->video->duree}</p>
         <p>Année de création : {$this->video->annee}</p>
+        
 HMTL;
         return $html;
     }

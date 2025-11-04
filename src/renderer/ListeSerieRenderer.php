@@ -16,7 +16,8 @@ class ListeSerieRenderer
         $html = "<p>Nombre de séries dans cette liste : $nbSerie</p>";
         $html .= "<ul>";
         foreach ($this->series as $serie) {
-            $html .= "<li>" . new SerieRenderer($serie)->renderCompact() . "</li>";
+            $rendererSerie = new SerieRenderer($serie);
+            $html .= "<li>" . $rendererSerie->renderCompact() . "</li>";
         }
         $html .= "</ul>";
         return $html;
