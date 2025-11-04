@@ -55,23 +55,9 @@ class Repository
         return false;
     }
 
-    //verifie que le User existe renvoie true ou false
-    public function isUser(string $email, string $password) : mixed {
-        return null;
-    }
-
-    //retourne l'id de l'user par son email
-    public function findUserEmail(string $email) : ?string{
-        return null;
-    }
-
-    //retourne un User par son id
-    public function findUserID(string $user_id) : ?User{
-        return null;
-    }
 
     //retourne les infod de l'user
-    public function getUser(string $user_id) : ?User{
+    public function getUser(int $user_id) : ?User{
         return null;
     }
 
@@ -81,64 +67,66 @@ class Repository
     }
 
     //retourne les infos de la serie
-    public function getInfosSerie(string $serie_id): ?Serie{
+    public function getSerie(int $serie_id): ?Serie{
         return null;
     }
 
     //ajoute une serie
-    public function addSerie(Serie $serie) : ?bool{
+    public function addSerie(Serie $serie) : ?bool {
         return null;
     }
 
     //ajoute d'iun serie preferé
-    public function addPref(string $serie_id):?bool{
+    public function addSeriePref(int $serie_id):?bool{
         return null;
     }
 
     //ajoute serie en cours
-    public function setEnCours(string $serie_id) : ?bool
+    public function addSerieEnCours(int $serie_id) : ?bool
     {
         return null;
     }
 
     //permet de note une serie
-    public function noteSerie(string $serie_id,string $user_id, int $note) : ?bool
-    {
-        return null;
-    }
-
-    //permet de commenté une serie
-    public function commSerie(string $serie_id,string $user_id, string $comment) : ?bool
+    public function noterSerie(int $serie_id,int $user_id, int $note, string $comm) : ?bool
     {
         return null;
     }
 
     //retourne la note moyenne d'une serie
-    public function getNoteMoyenne(string $serie_id): ?float{
+    public function getNoteMoyenne(int $serie_id): ?float{
         return null;
     }
 
-    //retpourne la lsiet des episode d'une serie
-    public function getEpisodes(string $serie_id): ?array
+    //retourne la liste des episode d'une serie
+    public function getListeEpisodes(int $serie_id): ?array
     {
         return null;
     }
 
     //retourne les infos d'un episode donné
-    public function getInfosEpisode(string $episode_id): ?Episode
+    public function getEpisode(int $episode_id): ?Episode
     {
         return null;
     }
 
     //ajoute u episode a une serie
-    public function addEpisode(string $serie_id, Episode $ep) : ?bool
+    public function addEpisode(int $serie_id, Episode $ep) : ?bool
     {
         return null;
     }
 
     //retourne les preferences d'un user
-    public function getPref(string $user_id) : ?array
+    public function getPref(int $user_id) : ?array
     {
+        return null;
+    }
+
+    /**
+     * @param int $serie_id id de la série dont on veut les commentaire
+     * @return array|null liste des commentaires
+     */
+    public function getListeCommentaires(int $serie_id): ?array{
         return null;
     }
 
