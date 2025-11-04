@@ -7,11 +7,11 @@ create table  serie(
                        annee int(5),
                        date_ajout date not null,
                        genre varchar(128),
-                       public varchar(128),
+                       type_public varchar(128),
                        primary key (id)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO `serie` (`id`, `titre`, `descriptif`, `img`, `annee`, `date_ajout`, `genre`, `public`) VALUES
+INSERT INTO `serie` (`id`, `titre`, `descriptif`, `img`, `annee`, `date_ajout`, `genre`, `type_public`) VALUES
 (1,'Le lac aux mystères',	'C\'est l\'histoire d\'un lac mystérieux et plein de surprises. La série, bluffante et haletante, nous entraine dans un labyrinthe d\'intrigues époustouflantes. A ne rater sous aucun prétexte !','',2020,'2022-10-30', null, null),
 (2,'L\'eau a coulé','Une série nostalgique qui nous invite à revisiter notre passé et à se remémorer tout ce qui s\'est passé depuis que tant d\'eau a coulé sous les ponts.','',1907,'2022-10-29', null, null),
 (3,'Chevaux fous','Une série sur la vie des chevals sauvages en liberté. Décoiffante.','',2017,'2022-10-31', null, null),
