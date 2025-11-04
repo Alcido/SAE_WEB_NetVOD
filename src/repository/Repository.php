@@ -51,13 +51,9 @@ class Repository
 
 
     //permet a un user de se cree un compte renvoie un boolean si reussite ou non
-    public function createUser(string $pseudo, string $email, string $password) : bool {
-        return false;
-    }
-
-    //verifie que le User existe renvoie true ou false
-    public function isUser(string $email, string $password) : mixed {
-        return null;
+    public function createUser(string $pseudo, string $email, string $password, int $role=1) : bool {
+        $stmt = $this->pdo->prepare("INSERT INTO utilisateur (pseudo, email, password, role) VALUES (?, ?, ?)");
+        return $stmt->execute([$pseudo,$email, $password,$role]);
     }
 
     //retourne l'id de l'user par son email
