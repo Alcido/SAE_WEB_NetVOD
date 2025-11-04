@@ -44,10 +44,6 @@ class ActionLogIn extends Action
     {
         if (isset($_POST['email']) && isset($_POST['password'])) {
 
-            if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) || !filter_var($_POST['password'], FILTER_VALIDATE_REGEXP)) {
-                throw new InvalidArgumentException("Invalid email or password");
-            }
-
             $email = $_POST['email'];
             $password = $_POST['password'];
 

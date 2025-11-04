@@ -6,16 +6,22 @@ use NetVOD\src\repository\Repository;
 
 class ActionAddPref extends Action
 {
-    public function lancerGet(): string
+    public function lancerPost(): string
     {
         $serie_id = $_GET['serie_id'];
-        $ajout = Repository::getInstance()->addSeriePref($serie_id);
-        if (!$ajout) {
-            return "<p>Cette série ne peut pas être ajoutée à votre liste de préférences.</p>";
-        } else return "<p>Série ajoutée à votre liste de préférences.</p>";
+        $user_id = unserialize($_SESSION['user'])->id;
+
+            $repo = Repository::getInstance();
+            if ($_POST['addFavorite'] == "add"){
+                $repo->addSeriePref($serie_id, $user_id);
+            }else{
+                $repo->removeSeriePref($serie_id, $user_id);
+            }
+            header("Location: ?action=home");
+            return "";
     }
 
-    public function lancerPost(): string
+    public function lancerGet(): string
     {
         return $this->lancerGet();
     }

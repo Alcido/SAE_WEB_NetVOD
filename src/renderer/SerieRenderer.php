@@ -21,10 +21,11 @@ class SerieRenderer
 
 
         $html = <<<HMTL
+        <a href='?action=serie&serieID={$this->serie->id}'>
         <img src="{$this->serie->lienImage}" />
         <p>Titre de la série : {$this->serie->nom}</p>
         <p>Genre : {$this->serie->genre}</p>
-    
+        </a>
 HMTL;
         $html .= $this->favorite();
         return $html;
@@ -37,13 +38,12 @@ HMTL;
 
         $nbEpisodes = sizeof($this->serie->episodes);
 
-        $html = "<p>Titre de la série : {$this->serie->nom}</p>
+        $html = "<a href='?action=serie&serieID={$this->serie->id}'><p>Titre de la série : {$this->serie->nom}</p>
                  <p>Genre : {$this->serie->genre}</p>
                  <p>Descriptif : {$this->serie->descriptif}</p>
                  <p>Nombre d'épisodes : $nbEpisodes</p>
                  <p>Date d'ajout : {$this->serie->date_ajout}, date de création : {$this->serie->annee}</p>
-                 <p>note moyenne : $moyenne</p>
-                 <p>Liste des épisodes : </p><ul>";
+                 <p>Liste des épisodes : </p><ul></a>";
 
         foreach ($this->serie->episodes as $episode) {
             $episodeRenderer = new EpisodeRenderer($episode);
@@ -57,16 +57,18 @@ HMTL;
 
     private function favorite() : string {
         $repo = Repository::getInstance();
-        $pref = $repo->getPref($_SESSION['user']);
+        $pref = $repo->getPref(unserialize($_SESSION['user'])->id);
         if (in_array($this->serie,$pref)){
-            $isLiked="remove";
+            $isLiked = "remove";
+            $texte="Supprimer des favoris";
         }else{
-            $isLiked="add";
+            $isLiked = "add";
+            $texte="Ajouter des favoris";
         }
 
         $html = <<<HMTL
-            <form class="$isLiked" action="?action=$_GET[action]" method="post">
-                <button type="submit" name="addFavorite" value="$isLiked">$isLiked from favorite</button>
+            <form class="$isLiked" action="?action=add-pref&serie_id={$this->serie->id}" method="post">
+                <button type="submit" name="addFavorite" value="$isLiked">$texte</button>
             </form>
 HMTL;
 

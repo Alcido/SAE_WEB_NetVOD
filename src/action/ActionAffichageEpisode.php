@@ -15,13 +15,17 @@ class ActionAffichageEpisode extends Action
     public function lancerGet(): string
     {
         $repo = Repository::getInstance();
-        if (!isset($_GET['episodeID'])) {
+        $episodeID = $_GET['episodeID'];
+        if (!isset($episodeID)) {
             return "<h1> no episode selected </h1>";
-        }else if ($repo->getEpisode($_GET['episodeID']) == null){
+        }else if ($repo->getEpisode($episodeID) == null){
             return "<h1> episode not existing </h1>";
         }else {
-            $episode = $repo->getEpisode($_GET['episodeID']);
-            $repo->addSerieEnCours($episode->serieID);
+            $episode = $repo->getEpisode($episodeID);
+            $ajout = $repo->addSerieEnCours($episode->serie_id);
+            if (!$ajout) {
+                throw new \Exception("Erreur dans l'ajout en court");
+            }
             $tmp = "<div>";
             $tmp .= (new EpisodeRenderer($episode))->renderLong();
             $tmp .= "</div>";
@@ -39,7 +43,7 @@ class ActionAffichageEpisode extends Action
         if(isset($_POST['note'])){
             $repo = Repository::getInstance();
             $episode = $repo->getEpisode($_GET['episodeID']);
-            $repo->noterSerie($episode->serieID,$_SESSION['user'],$_POST['note'],$_POST['commentaire']);
+            $repo->noterSerie($episode->serie_id,unserialize($_SESSION['user'])->id,intval($_POST['note']),$_POST['commentaire']);
             $tmp = "<h2> Note appliquee</h2>";
         }
         //TODO Save TIMECODE

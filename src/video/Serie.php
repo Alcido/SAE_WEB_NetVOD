@@ -20,7 +20,8 @@ class Serie
      * @param int $annee année de la série
      * @param array $episodes liste d'épisodes
      */
-    public function __construct(string $nom, int $annee, array $episodes, string $desc, string $dateAj, string $genre = null, string $public = null, string $lienImage = null) {
+    public function __construct(int $id, string $nom, int $annee, array $episodes, string $desc, string $dateAj, string $genre = null, string $public = null, string $lienImage = null) {
+        $this->id = $id;
         $this->nom = $nom;
         $this->genre = $genre;
         $this->public = $public;

@@ -17,9 +17,9 @@ class Episode extends Video
      * @param string|null $lienImage
      * @param string $resume
      */
-    public function __construct(int $serie_id, string $nom, string $fichier, int $duree, string $nom_serie, int $numero, string $resume, ?string $lienImage = null)
+    public function __construct(int $id_ep,int $serie_id, string $nom, string $fichier, int $duree, string $nom_serie, int $numero, string $resume, ?string $lienImage = null)
     {
-        parent::__construct($nom, $fichier, $duree, $resume, $lienImage);
+        parent::__construct($id_ep, $nom, $fichier, $duree, $resume, $lienImage);
         $this->serie_id = $serie_id;
         $this->nom_serie = $nom_serie;
         $this->numero = $numero;

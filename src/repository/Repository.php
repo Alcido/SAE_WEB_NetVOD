@@ -67,17 +67,17 @@ class Repository
      * @param int $user_id
      * @return User|null
      */
-    public function getUser(int $user_id) : ?User{
-        $stmt = $this->pdo->prepare("SELECT * FROM utilisateur WHERE id = ?");
-        $stmt->execute([$user_id]);
+    public function getUser(string $mail) : ?array{
+        $stmt = $this->pdo->prepare("SELECT * FROM utilisateur WHERE email = ?");
+        $stmt->execute([$mail]);
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($data) {
-            return new User(
+            return ['user' => new User(
                 intval($data['id']),
                 intval($data['role']),
                 strval($data['pseudo'])
-            );
+            ),'pwd'=>$data['password']];
         }
 
         return null;
@@ -103,12 +103,12 @@ class Repository
      * @return Serie|null
      */
     public function getSerie(int $serie_id): ?Serie{
-        $query = "select titre, genre, type_public, annee, date_ajout, img, descriptif from serie where serie_id = ?";
+        $query = "select id, titre, genre, type_public, annee, date_ajout, img, descriptif from serie where id = ?";
         $stmt = $this->pdo->prepare($query);
         $stmt->execute(array($serie_id));
         $res = $stmt->fetch();
         $episodes = $this->getListeEpisodes($serie_id);
-        return new Serie($res['titre'], intval($res['annee']),$episodes, $res['descriptif'], $res['date_ajout'], $res['genre'], $res['public'], $res['img']);
+        return new Serie($res['id'], $res['titre'], intval($res['annee']),$episodes, $res['descriptif'], $res['date_ajout'], $res['genre'], $res['type_public'], $res['img']);
     }
 
     //ajoute une serie
@@ -131,7 +131,7 @@ class Repository
     //ajoute serie en cours
     public function addSerieEnCours(int $serie_id) : ?bool
     {
-        return null;
+        return true;
     }
 
 
@@ -147,8 +147,8 @@ class Repository
     {
         //on vérifie que le user na pas deja noter la serie aec une exception car si l'user veut renoter mySQL nous renvoie une contrainte d'integrité du a la clé primaire composite
         try {
-            $stmt = $this->pdo->prepare("INSERT INTO notation (id_user, id_serie, date_comm, commentaire, note) VALUES (?,?,?,?,?)");
-            return $stmt->execute([$user_id, $serie_id, $comm, $comm, $note]);
+            $stmt = $this->pdo->prepare("INSERT INTO notation (id_user, id_serie, date_comm, commentaire, note) VALUES (?,?,sysdate(),?,?)");
+            return $stmt->execute([$user_id, $serie_id, $comm, $note]);
         }catch (PDOException $e) {
             if ($e->getCode() == '23000') {
                 //le user avez deja noté la serie
@@ -182,26 +182,28 @@ class Repository
      */
     public function getListeEpisodes(int $serie_id): ?array
     {
-        $stmt=$this->pdo->prepare("SELECT * FROM episode WHERE serie_id=? order by numero");
+        $stmt=$this->pdo->prepare("SELECT id FROM episode WHERE serie_id=? order by numero");
         $stmt->execute([$serie_id]);
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        if ($data) {
-            return $data;
+        $res = [];
+        foreach ($data as $episode) {
+            $res[] = $this->getEpisode($episode['id']);
         }
-        return null;
+        return $res;
     }
 
     //retourne les infos d'un episode donné
     public function getEpisode(int $episode_id): ?Episode
     {
         $query =
-            "SELECT episode.titre, episode.file, episode.duree, serie.titre as serieTitre, serie.id as serieID, episode.numero,episode.resume, episode.img 
+            "SELECT episode.id as id_ep, episode.titre, episode.file, episode.duree, serie.titre as serieTitre, serie.id as serieID, episode.numero,episode.resume, episode.img 
              FROM episode inner Join serie on serie.id=episode.serie_id WHERE episode.id=?";
         $stmt=$this->pdo->prepare($query);
         $stmt->execute([$episode_id]);
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
         if ($data) {
             return new Episode(
+                intval($data['id_ep']),
                 intval($data['serieID']),
                 $data['titre'],
                 $data['file'],

@@ -5,12 +5,12 @@ namespace NetVOD\src\video;
 class Video
 {
     // Attributs
-    private string $nom;
-    private int $id;
-    private string $lienFichier;
-    private ?string $lienImage;
-    private int $duree;
-    private string $resume;
+    protected string $nom;
+    protected int $id;
+    protected string $lienFichier;
+    protected ?string $lienImage;
+    protected int $duree;
+    protected string $resume;
 
     /**
      * @param string $nom nom de la video

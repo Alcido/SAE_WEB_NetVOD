@@ -52,7 +52,7 @@ class Dispatcher
             case 'catalogue':
                 $actionExec = new ActionCatalogue;
                 break;
-            case 'series':
+            case 'serie':
                 $actionExec = new ActionAffichageSerie;
                 break;
             case 'episode':
