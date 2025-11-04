@@ -31,7 +31,6 @@ create table episode(
                         serie_id int(11) not null,
                         img varchar(256),
                         PRIMARY KEY (`id`),
-                        UNIQUE KEY file (`file`),
                         CONSTRAINT fk_EPISODE_id FOREIGN KEY (`serie_id`) REFERENCES `serie` (`id`) ON DELETE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
