@@ -42,7 +42,8 @@ HMTL;
                  <p>Liste des épisodes : </p><ul>";
 
         foreach ($this->serie->episodes as $episode) {
-            $html .= "<li>" . new EpisodeRenderer($episode)->renderCompact() . "</li>";
+            $episodeRenderer = new EpisodeRenderer($episode);
+            $html .= "<li>" . $episodeRenderer->renderCompact() . "</li>";
         }
         $html .= "</ul>";
 
