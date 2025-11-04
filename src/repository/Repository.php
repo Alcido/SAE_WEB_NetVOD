@@ -59,7 +59,7 @@ class Repository
      * cette methode permet d'insérer un User dans la BD
      */
     public function createUser(string $pseudo, string $email, string $password, int $role=1) : bool {
-        $stmt = $this->pdo->prepare("INSERT INTO utilisateur (pseudo, email, password, role) VALUES (?, ?, ?, ?)");
+        $stmt = $this->pdo->prepare("INSERT INTO utilisateur (pseudo, email, password, role) VALUES (?, ?, ?)");
         return $stmt->execute([$pseudo,$email, $password,$role]);
     }
 
@@ -83,14 +83,32 @@ class Repository
         return null;
     }
 
-    //retourne le catalogue de serie
+    /**Méthode permettant de récupérer la liste des séries de la base
+     * @return array|null liste de toutes les séries de la base de donnée
+     */
     public function getCatalogue(): ?array{
-        return null;
+        $query = "select id from serie";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute();
+        $res = [];
+        while ($row = $stmt->fetch()) {
+            $serie = $this->getSerie($row["id"]);
+            $res[] = $serie;
+        }
+        return $res;
     }
 
-    //retourne les infos de la serie
+    /**Méthode permettant de récupérer l'objet série
+     * @param int $serie_id id de la série cherchée
+     * @return Serie|null
+     */
     public function getSerie(int $serie_id): ?Serie{
-        return null;
+        $query = "select titre, genre, public, annee, date_ajout, img, descriptif from serie where serie_id = ?";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute(array($serie_id));
+        $res = $stmt->fetch();
+        $episodes = $this->getListeEpisodes($serie_id);
+        return new Serie($res['titre'],$res['annee'],$episodes, $res['descriptif'], $res['date_ajout'], $res['genre'], $res['public'], $res['img']);
     }
 
     //ajoute une serie
@@ -99,8 +117,15 @@ class Repository
     }
 
     //ajoute d'iun serie preferé
-    public function addSeriePref(int $serie_id):?bool{
-        return null;
+    public function addSeriePref(int $serie_id, int $user_id):?bool{
+        try {
+            $query = "insert into prefSerie2User values (?, ?)";
+            $stmt = $this->pdo->prepare($query);
+            $stmt->execute([$user_id, $serie_id]);
+        } catch (PDOException $e) {
+            return false;
+        }
+        return true;
     }
 
     //ajoute serie en cours
@@ -179,9 +204,17 @@ class Repository
     }
 
     //retourne les preferences d'un user
-    public function getPref(int $user_id) : ?array
+    public function getPref(int $user_id) : array
     {
-        return null;
+        $query = "select id_serie from prefSerie2User where id_ user = ?";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute(array($user_id));
+        $res = [];
+        while ($row = $stmt->fetch()) {
+            $serie = $this->getSerie($row["id_serie"]);
+            $res[] = $serie;
+        }
+        return $res;
     }
 
     /**
