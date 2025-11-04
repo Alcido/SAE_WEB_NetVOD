@@ -59,7 +59,7 @@ class Repository
      * cette methode permet d'insérer un User dans la BD
      */
     public function createUser(string $pseudo, string $email, string $password, int $role=1) : bool {
-        $stmt = $this->pdo->prepare("INSERT INTO utilisateur (pseudo, email, password, role) VALUES (?, ?, ?)");
+        $stmt = $this->pdo->prepare("INSERT INTO utilisateur (pseudo, email, password, role) VALUES (?, ?, ?, ?)");
         return $stmt->execute([$pseudo,$email, $password,$role]);
     }
 
@@ -184,7 +184,7 @@ class Repository
     {
         $stmt=$this->pdo->prepare("SELECT * FROM episode WHERE serie_id=? order by numero");
         $stmt->execute([$serie_id]);
-        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         if ($data) {
             return $data;
         }
@@ -194,6 +194,23 @@ class Repository
     //retourne les infos d'un episode donné
     public function getEpisode(int $episode_id): ?Episode
     {
+        $stmt=$this->pdo->prepare("SELECT episode.titre, episode.file, episode.duree, serie.titre as serieTitre, episode.numero,episode.resume, episode.img 
+                                            FROM episode 
+                                            inner Join serie on serie.id=episode.serie_id 
+                                            WHERE episode.id=?");
+        $stmt->execute([$episode_id]);
+        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($data) {
+            return new Episode(
+                intval($data['titre']),
+                intval($data['file']),
+                intval($data['duree']),
+                intval($data['serieTitre']),
+                intval($data['numero']),
+                intval($data['resume']),
+                intval($data['img'])
+            );
+        }
         return null;
     }
 
@@ -203,10 +220,15 @@ class Repository
         return null;
     }
 
-    //retourne les preferences d'un user
+
+    /**
+     * @param int $user_id
+     * @return array
+     * retourne les preferences d'un user
+     */
     public function getPref(int $user_id) : array
     {
-        $query = "select id_serie from prefSerie2User where id_ user = ?";
+        $query = "select id_serie from prefSerie2User where id_user = ?";
         $stmt = $this->pdo->prepare($query);
         $stmt->execute(array($user_id));
         $res = [];
@@ -222,6 +244,12 @@ class Repository
      * @return array|null liste des commentaires
      */
     public function getListeCommentaires(int $serie_id): ?array{
+        $stmt=$this->pdo->prepare("SELECT commentaire FROM notation WHERE id_serie=?");
+        $stmt->execute([$serie_id]);
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        if ($data) {
+            return $data;
+        }
         return null;
     }
 

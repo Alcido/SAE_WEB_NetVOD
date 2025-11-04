@@ -36,6 +36,14 @@ class ActionAffichageSerie extends Action
      */
     public function lancerPost(): string
     {
+        if (isset($_POST['action']) && isset($_GET['serieID'])){
+            $repo = Repository::getInstance();
+            if ($_POST['action'] == "add"){
+                $repo->addSeriePref($_GET['serieID'],$_SESSION['user']);
+            }else{
+                $repo->removeSeriePref($_GET['serieID'],$_SESSION['user']);
+            }
+        }
         return $this->lancerGet();
     }
 }

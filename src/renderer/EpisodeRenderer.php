@@ -24,6 +24,7 @@ class EpisodeRenderer
         <a href="?action=viewEpisode&episode=$this->video->id"<img src="{$this->video->lienImage}" />
         <p>Episode n°{$this->video->numero} : {$this->video->nom}</p>
         <p>Durée : {$this->video->duree}</p>
+        
 HMTL;
 
         return $html;
