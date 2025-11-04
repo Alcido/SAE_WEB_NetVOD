@@ -35,6 +35,7 @@ class ActionAffichageEpisode extends Action
      */
     public function lancerPost(): string
     {
+        $tmp = "";
         if(isset($_POST['note'])){
             $repo = Repository::getInstance();
             $episode = $repo->getEpisode($_GET['episodeID']);
