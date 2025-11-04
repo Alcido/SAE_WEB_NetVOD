@@ -35,6 +35,13 @@ class ActionAffichageEpisode extends Action
      */
     public function lancerPost(): string
     {
-        return $this->lancerGet();
+        if(isset($_POST['note'])){
+            $repo = Repository::getInstance();
+            $episode = $repo->getEpisode($_GET['episodeID']);
+            $repo->noterSerie($episode->serieID,$_SESSION['user'],$_POST['note'],$_POST['commentaire']);
+            $tmp = "<h2> Note appliquee</h2>";
+        }
+        //TODO Save TIMECODE
+        return $tmp . $this->lancerGet();
     }
 }

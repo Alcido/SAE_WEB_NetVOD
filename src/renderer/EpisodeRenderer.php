@@ -42,8 +42,14 @@ HMTL;
         <p>Résumé : {$this->video->resume}</p>
         <p>Durée : {$this->video->duree}</p>
         <p>Année de création : {$this->video->annee}</p>
-        
-HMTL;
+        </br>
+        </br>
+        <form action="?action=episode" method="post">
+            <input type="text" name="commentaire" placeholder="Ajouter un commentaire">
+            <input type="number" name="note" placeholder="Note">
+            <input type="submit" name="addComment" value="Ajouter un commentaire">
+        </form>
+        HMTL;
         return $html;
     }
 }
