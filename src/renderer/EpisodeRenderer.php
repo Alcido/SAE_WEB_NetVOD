@@ -21,10 +21,11 @@ class EpisodeRenderer
      */
     public function renderCompact() : string {
         $html = <<<HTML
+        <div class="serie-card">
         <a href="?action=episode&episodeID={$this->video->id}">
         <img src="{$this->video->lienImage}" alt="Image de l'épisode"/>
         <p>Episode n°{$this->video->numero} : {$this->video->nom}</p>
-        <p>Durée : {$this->video->duree}</p></a>
+        <p>Durée : {$this->video->duree}</p></a></div>
 HTML;
 
 

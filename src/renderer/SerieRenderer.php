@@ -18,16 +18,16 @@ class SerieRenderer
      * @return string affichage de la série en court
      */
     public function renderCompact() : string {
-
-
-        $html = <<<HMTL
-        <a href='?action=serie&serieID={$this->serie->id}'>
-        <img src="{$this->serie->lienImage}" />
-        <p>Titre de la série : {$this->serie->nom}</p>
-        <p>Genre : {$this->serie->genre}</p>
-        </a>
-HMTL;
-        $html .= $this->favorite();
+        $html = <<<HTML
+        <div class="serie-card">
+            <a href='?action=serie&serieID={$this->serie->id}'>
+                <img src="{$this->serie->lienImage}" />
+                <p>{$this->serie->nom}</p>
+                <p style="font-size: 12px; color: #ccc;">{$this->serie->genre}</p>
+            </a>
+            {$this->favorite()}
+        </div>
+HTML;
         return $html;
     }
 
@@ -38,18 +38,18 @@ HMTL;
 
         $nbEpisodes = sizeof($this->serie->episodes);
 
-        $html = "<a href='?action=serie&serieID={$this->serie->id}'><p>Titre de la série : {$this->serie->nom}</p>
+        $html = "<div class=\"serie-details\"><a href='?action=serie&serieID={$this->serie->id}'><p>Titre de la série : {$this->serie->nom}</p>
                  <p>Genre : {$this->serie->genre}</p>
                  <p>Descriptif : {$this->serie->descriptif}</p>
                  <p>Nombre d'épisodes : $nbEpisodes</p>
                  <p>Date d'ajout : {$this->serie->date_ajout}, date de création : {$this->serie->annee}</p>
-                 <p>Liste des épisodes : </p><ul></a>";
+                 <p>Liste des épisodes : </p><ul>";
 
         foreach ($this->serie->episodes as $episode) {
             $episodeRenderer = new EpisodeRenderer($episode);
             $html .= "<li>" . $episodeRenderer->renderCompact() . "</li>";
         }
-        $html .= "</ul>";
+        $html .= "</ul></a></div>";
         $html .= $this->favorite();
 
         return $html;

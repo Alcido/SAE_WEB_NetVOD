@@ -72,6 +72,7 @@ class Dispatcher
                 <head>
                 <meta charset="UTF-8">
                 <title>NetVOD</title>
+                <link rel="stylesheet" href="src/css/style.css">
                 </head>
                 <body>
                 HTML;
@@ -81,29 +82,22 @@ class Dispatcher
             // Affichage du menu
             $page .=
                 <<<HTML
-                <div id = "choices">
-                    <h1>NetVOD</h1>
-                       <nav>
-                        <ul>
-                          <li><a href="?action=default"><span>Accueil</span></a></li>
-                        </ul>
-                        <form action="?action=logout" method="post">
-                          <button type="submit">Déconnexion</button>
-                        </form>
-                      </nav>
-                    </div>
+                <header class="header">
+                  <nav>
+                    <a class="btn" href="?action=catalogue">Catalogue</a>
+                    <a class="btn" href="?action=home">Mes favoris</a>
+                    <a class="btn btn-danger" href="?action=logout">Déconnexion</a>
+                  </nav>
+                </header>
                 HTML;
         }
 
         // Ajout du résultat de l'action
         $page .=
             <<<HTML
-            <main>
-                <h2>NetVOD la plateforme de vidéo à la demande sans demander</h2>
-                    <div id="content">
-                        $html
-                    </div>
-            </main>
+                <div id="content">
+                    $html
+                </div>
             </body>
             </html>
             HTML;
