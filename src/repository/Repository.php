@@ -7,6 +7,7 @@ use NetVOD\src\auth\User;
 use NetVOD\src\video\Episode;
 use NetVOD\src\video\Serie;
 use PDO;
+use PDOException;
 
 class Repository
 {
@@ -20,7 +21,7 @@ class Repository
         $this->pdo = new PDO($dsn, Repository::$config['username'], Repository::$config['password'],[
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, // affiche les erreurs SQL
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC, // renvoie des tableaux associatifs
-            PDO::ATTR_EMULATE_PREPARES => false ]);// empêche certaines injections SQL);
+            PDO::ATTR_EMULATE_PREPARES => false ]);// empêche certaines injections SQL;
     }
 
     /**
@@ -49,15 +50,36 @@ class Repository
         }
     }
 
-
-    //permet a un user de se cree un compte renvoie un boolean si reussite ou non
+    /**
+     * @param string $pseudo
+     * @param string $email
+     * @param string $password
+     * @param int $role
+     * @return bool
+     * cette methode permet d'insérer un User dans la BD
+     */
     public function createUser(string $pseudo, string $email, string $password, int $role=1) : bool {
-        $stmt = $this->pdo->prepare("INSERT INTO utilisateur (pseudo, email, password, role) VALUES (?, ?, ?)");
+        $stmt = $this->pdo->prepare("INSERT INTO utilisateur (pseudo, email, password, role) VALUES (?, ?, ?, ?)");
         return $stmt->execute([$pseudo,$email, $password,$role]);
     }
 
-    //retourne les infod de l'user
+    /**
+     * @param int $user_id
+     * @return User|null
+     */
     public function getUser(int $user_id) : ?User{
+        $stmt = $this->pdo->prepare("SELECT * FROM utilisateur WHERE id = ?");
+        $stmt->execute([$user_id]);
+        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($data) {
+            return new User(
+                intval($data['id']),
+                intval($data['role']),
+                strval($data['pseudo'])
+            );
+        }
+
         return null;
     }
 
@@ -87,20 +109,60 @@ class Repository
         return null;
     }
 
-    //permet de note une serie
+
+    /**
+     * @param int $serie_id
+     * @param int $user_id
+     * @param int $note
+     * @param string $comm
+     * @return bool|null
+     * permet de note une serie
+     */
     public function noterSerie(int $serie_id,int $user_id, int $note, string $comm) : ?bool
     {
-        return null;
+        //on vérifie que le user na pas deja noter la serie aec une exception car si l'user veut renoter mySQL nous renvoie une contrainte d'integrité du a la clé primaire composite
+        try {
+            $stmt = $this->pdo->prepare("INSERT INTO notation (id_user, id_serie, date_comm, commentaire, note) VALUES (?,?,?,?,?)");
+            return $stmt->execute([$user_id, $serie_id, $comm, $comm, $note]);
+        }catch (PDOException $e) {
+            if ($e->getCode() == '23000') {
+                //le user avez deja noté la serie
+                return false;
+            }
+            throw $e;
+        }
     }
 
-    //retourne la note moyenne d'une serie
+
+
+    /**
+     * @param int $serie_id
+     * @return float|null
+     * retourne la note moyenne d'une serie
+     */
     public function getNoteMoyenne(int $serie_id): ?float{
+        $stmt = $this->pdo->prepare("SELECT Avg(note) FROM notation WHERE id_serie = ? group by id_serie");
+        $stmt->execute([$serie_id]);
+        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($data) {
+            return floatval($data['Avg(note)']);
+        }
         return null;
     }
 
-    //retourne la liste des episode d'une serie
+    /**
+     * @param int $serie_id
+     * @return array|null
+     * retourne la liste des episode d'une serie
+     */
     public function getListeEpisodes(int $serie_id): ?array
     {
+        $stmt=$this->pdo->prepare("SELECT * FROM episode WHERE serie_id=? order by numero");
+        $stmt->execute([$serie_id]);
+        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($data) {
+            return $data;
+        }
         return null;
     }
 
