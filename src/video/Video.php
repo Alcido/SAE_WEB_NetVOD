@@ -6,6 +6,7 @@ class Video
 {
     // Attributs
     private string $nom;
+    private int $id;
     private string $lienFichier;
     private ?string $lienImage;
     private int $duree;
@@ -19,8 +20,9 @@ class Video
      * @param int $annee annee de la video
      * @param string $resume resume de la vidéo
      */
-    public function __construct(string $nom, string $fichier, int $duree, int $annee, string $resume, string $lienImage = null)
+    public function __construct(int $id, string $nom, string $fichier, int $duree, int $annee, string $resume, string $lienImage = null)
     {
+        $this->id = $id;
         $this->nom = $nom;
         $this->lienFichier = $fichier;
         $this->lienImage = $lienImage;
