@@ -15,9 +15,13 @@ class ActionAffichageSerie extends Action
     public function lancerGet(): string
     {
         $repo = Repository::getInstance();
-        //$serie = $repo->getSerie($_GET['serieID']);
-        $serie = new Serie("hizsd",22,[],"hizsd","hizsd");
-
+        if (!isset($_GET['serieID'])) {
+            return "<h1> no serie selected </h1>";
+        }
+        $serie = $repo->getSerie($_GET['serieID']);
+        if ($serie == null) {
+            return "<h1> serie not existing </h1>";
+        }
         $tmp ="<div>";
         $tmp .= (new SerieRenderer($serie))->renderLong();
         $tmp .= "</div>";
