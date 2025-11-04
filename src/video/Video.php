@@ -10,7 +10,6 @@ class Video
     private string $lienFichier;
     private ?string $lienImage;
     private int $duree;
-    private int $annee;
     private string $resume;
 
     /**
@@ -20,14 +19,13 @@ class Video
      * @param int $annee annee de la video
      * @param string $resume resume de la vidéo
      */
-    public function __construct(int $id, string $nom, string $fichier, int $duree, int $annee, string $resume, string $lienImage = null)
+    public function __construct(int $id, string $nom, string $fichier, int $duree, string $resume, string $lienImage = null)
     {
         $this->id = $id;
         $this->nom = $nom;
         $this->lienFichier = $fichier;
         $this->lienImage = $lienImage;
         $this->duree = $duree;
-        $this->annee = $annee;
         $this->resume = $resume;
     }
 
