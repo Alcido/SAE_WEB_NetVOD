@@ -159,7 +159,7 @@ class Repository
     {
         $stmt=$this->pdo->prepare("SELECT * FROM episode WHERE serie_id=? order by numero");
         $stmt->execute([$serie_id]);
-        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         if ($data) {
             return $data;
         }
@@ -169,6 +169,23 @@ class Repository
     //retourne les infos d'un episode donné
     public function getEpisode(int $episode_id): ?Episode
     {
+        $stmt=$this->pdo->prepare("SELECT episode.titre, episode.file, episode.duree, serie.titre as serieTitre, episode.numero,episode.resume, episode.img 
+                                            FROM episode 
+                                            inner Join serie on serie.id=episode.serie_id 
+                                            WHERE episode.id=?");
+        $stmt->execute([$episode_id]);
+        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($data) {
+            return new Episode(
+                intval($data['titre']),
+                intval($data['file']),
+                intval($data['duree']),
+                intval($data['serieTitre']),
+                intval($data['numero']),
+                intval($data['resume']),
+                intval($data['img'])
+            );
+        }
         return null;
     }
 
@@ -189,6 +206,12 @@ class Repository
      * @return array|null liste des commentaires
      */
     public function getListeCommentaires(int $serie_id): ?array{
+        $stmt=$this->pdo->prepare("SELECT commentaire FROM notation WHERE id_serie=?");
+        $stmt->execute([$serie_id]);
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        if ($data) {
+            return $data;
+        }
         return null;
     }
 
