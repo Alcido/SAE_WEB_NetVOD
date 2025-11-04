@@ -5,6 +5,7 @@ namespace NetVOD\src\video;
 class Episode extends Video
 {
     private int $serie_id;
+    private int $numero;
 
     /** Constructeur de la classe Episode
      * @param string $nom
@@ -13,11 +14,13 @@ class Episode extends Video
      * @param int $annee
      * @param int $serie
      * @param string|null $lienImage
+     * @param string $resume
      */
-    public function __construct(string $nom, string $fichier, int $duree, int $annee, int $serie, string $lienImage = null)
+    public function __construct(string $nom, string $fichier, int $duree, int $annee, int $serie, int $numero, string $resume, ?string $lienImage = null)
     {
-        parent::__construct($nom, $fichier, $duree, $annee, $lienImage);
+        parent::__construct($nom, $fichier, $duree, $annee, $resume, $lienImage);
         $this->serie_id = $serie;
+        $this->numero = $numero;
     }
 
 

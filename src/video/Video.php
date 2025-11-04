@@ -10,20 +10,23 @@ class Video
     private ?string $lienImage;
     private int $duree;
     private int $annee;
+    private string $resume;
 
     /**
      * @param string $nom nom de la video
      * @param string $fichier lien vers le fichier de la video
      * @param int $duree duree de la video
      * @param int $annee annee de la video
+     * @param string $resume resume de la vidéo
      */
-    public function __construct(string $nom, string $fichier, int $duree, int $annee, string $lienImage = null)
+    public function __construct(string $nom, string $fichier, int $duree, int $annee, string $resume, string $lienImage = null)
     {
         $this->nom = $nom;
         $this->lienFichier = $fichier;
         $this->lienImage = $lienImage;
         $this->duree = $duree;
         $this->annee = $annee;
+        $this->resume = $resume;
     }
 
     /** Getter magique
