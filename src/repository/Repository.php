@@ -228,7 +228,7 @@ class Repository
      */
     public function getPref(int $user_id) : array
     {
-        $query = "select id_serie from prefSerie2User where id_ user = ?";
+        $query = "select id_serie from prefSerie2User where id_user = ?";
         $stmt = $this->pdo->prepare($query);
         $stmt->execute(array($user_id));
         $res = [];
