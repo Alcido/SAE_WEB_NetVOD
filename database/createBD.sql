@@ -7,11 +7,11 @@ create table  serie(
                        annee int(5),
                        date_ajout date not null,
                        genre varchar(128),
-                       public varchar(128),
+                       type_public varchar(128),
                        primary key (id)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO `serie` (`id`, `titre`, `descriptif`, `img`, `annee`, `date_ajout`, `genre`, `public`) VALUES
+INSERT INTO `serie` (`id`, `titre`, `descriptif`, `img`, `annee`, `date_ajout`, `genre`, `type_public`) VALUES
 (1,'Le lac aux mystères',	'C\'est l\'histoire d\'un lac mystérieux et plein de surprises. La série, bluffante et haletante, nous entraine dans un labyrinthe d\'intrigues époustouflantes. A ne rater sous aucun prétexte !','',2020,'2022-10-30', null, null),
 (2,'L\'eau a coulé','Une série nostalgique qui nous invite à revisiter notre passé et à se remémorer tout ce qui s\'est passé depuis que tant d\'eau a coulé sous les ponts.','',1907,'2022-10-29', null, null),
 (3,'Chevaux fous','Une série sur la vie des chevals sauvages en liberté. Décoiffante.','',2017,'2022-10-31', null, null),
@@ -31,11 +31,10 @@ create table episode(
                         serie_id int(11) not null,
                         img varchar(256),
                         PRIMARY KEY (`id`),
-                        UNIQUE KEY file (`file`),
                         CONSTRAINT fk_EPISODE_id FOREIGN KEY (`serie_id`) REFERENCES `serie` (`id`) ON DELETE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO `episode` (`id`, `numero`, `titre`, `resume`, `duree`, `file`, `serie_id`, 'img') VALUES
+INSERT INTO `episode` (`id`, `numero`, `titre`, `resume`, `duree`, `file`, `serie_id`, `img`) VALUES
 (1,	1,	'Le lac',	'Le lac se révolte ',	8,	'lake.mp4',	1,''),
 (2,	2,	'Le lac : les mystères de l\'eau trouble',	'Un grand mystère, l\'eau du lac est trouble. Jack trouvera-t-il la solution ?',	8,	'lake.mp4',	1, ''),
 (3,	3,	'Le lac : les mystères de l\'eau sale',	'Un grand mystère, l\'eau du lac est sale. Jack trouvera-t-il la solution ?',	8,	'lake.mp4',	1, ''),
@@ -51,7 +50,7 @@ INSERT INTO `episode` (`id`, `numero`, `titre`, `resume`, `duree`, `file`, `seri
 (13,	3,	'les chevaux de l\'étoile noire',	'Les chevaux de l\'Etoile Noire débrquent sur terre et mangent toute l\'herbe !',	7,	'horses.mp4',	3, ''),
 (14,	1,	'Tous à la plage',	'C\'est l\'été, tous à la plage pour profiter du soleil et de la mer.',	18,	'beach.mp4',	4, ''),
 (15,	2,	'La plage le soir',	'A la plage le soir, il n\'y a personne, c\'est tout calme',	18,	'beach.mp4',	4, ''),
-(16,	3,	'La plage le matin',	'A la plage le matin, il n\'y a personne non plus, c\'est tout calme et le jour se lève.',	18,	'beach.mp4',	4, ''),, ''
+(16,	3,	'La plage le matin',	'A la plage le matin, il n\'y a personne non plus, c\'est tout calme et le jour se lève.',	18,	'beach.mp4',	4, ''),
 (17,	1,	'champion de surf',	'Jack fait du surf le matin, le midi le soir, même la nuit. C\'est un pro.',	11,	'surf.mp4',	5, ''),
 (18,	2,	'surf détective',	'Une planche de surf a été volée. Jack mène l\'enquête. Parviendra-t-il à confondre le brigand ?',	11,	'surf.mp4',	5, ''),
 (19,	3,	'surf amitié',	'En fait la planche n\'avait pas été volée, c\'est Jim, le meilleur ami de Jack, qui lui avait fait une blague. Les deux amis partagent une menthe à l\'eau pour célébrer leur amitié sans faille.',	11,	'surf.mp4',	5, ''),

@@ -103,12 +103,12 @@ class Repository
      * @return Serie|null
      */
     public function getSerie(int $serie_id): ?Serie{
-        $query = "select titre, genre, public, annee, date_ajout, img, descriptif from serie where serie_id = ?";
+        $query = "select titre, genre, type_public, annee, date_ajout, img, descriptif from serie where serie_id = ?";
         $stmt = $this->pdo->prepare($query);
         $stmt->execute(array($serie_id));
         $res = $stmt->fetch();
         $episodes = $this->getListeEpisodes($serie_id);
-        return new Serie($res['titre'],$res['annee'],$episodes, $res['descriptif'], $res['date_ajout'], $res['genre'], $res['public'], $res['img']);
+        return new Serie($res['titre'], intval($res['annee']),$episodes, $res['descriptif'], $res['date_ajout'], $res['genre'], $res['public'], $res['img']);
     }
 
     //ajoute une serie
@@ -251,6 +251,17 @@ class Repository
             return $data;
         }
         return null;
+    }
+
+    public function removeSeriePref(int $serie_id, int $user_id) : bool {
+        try {
+            $query = 'delete from seriePref2User where id_serie = ? and id_user = ?';
+            $stmt = $this->pdo->prepare($query);
+            $stmt->execute(array($serie_id, $user_id));
+        } catch (PDOException $e) {
+            return false;
+        }
+        return true;
     }
 
 

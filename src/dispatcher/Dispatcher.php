@@ -2,6 +2,11 @@
 
 namespace NetVOD\src\dispatcher;
 
+use NetVOD\src\action\ActionAccueil;
+use NetVOD\src\action\ActionAddPref;
+use NetVOD\src\action\ActionAffichageEpisode;
+use NetVOD\src\action\ActionAffichageSerie;
+use NetVOD\src\action\ActionCatalogue;
 use NetVOD\src\action\ActionDefault;
 use NetVOD\src\action\ActionDisconnect;
 use NetVOD\src\action\ActionLogIn;
@@ -37,6 +42,22 @@ class Dispatcher
                 break;
             case 'logout':
                 $actionExec = new ActionDisconnect;
+                break;
+            case 'home':
+                $actionExec = new ActionAccueil;
+                break;
+            case 'add-pref':
+                $actionExec = new ActionAddPref;
+                break;
+            case 'catalogue':
+                $actionExec = new ActionCatalogue;
+                break;
+            case 'series':
+                $actionExec = new ActionAffichageSerie;
+                break;
+            case 'episode':
+                $actionExec = new ActionAffichageEpisode;
+                break;
             default:
         }
         $this->renderPage($actionExec());

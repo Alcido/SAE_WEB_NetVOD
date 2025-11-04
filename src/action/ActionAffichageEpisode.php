@@ -20,8 +20,10 @@ class ActionAffichageEpisode extends Action
         }else if ($repo->getEpisode($_GET['episodeID']) == null){
             return "<h1> episode not existing </h1>";
         }else {
+            $episode = $repo->getEpisode($_GET['episodeID']);
+            $repo->addSerieEnCours($episode->serieID);
             $tmp = "<div>";
-            $tmp .= (new EpisodeRenderer($_GET['episodeID']))->renderLong();
+            $tmp .= (new EpisodeRenderer($episode))->renderLong();
             $tmp .= "</div>";
             return $tmp;
         }

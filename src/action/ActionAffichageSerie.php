@@ -39,9 +39,9 @@ class ActionAffichageSerie extends Action
         if (isset($_POST['action']) && isset($_GET['serieID'])){
             $repo = Repository::getInstance();
             if ($_POST['action'] == "add"){
-                $repo->addSeriePref($_GET['serieID']);
+                $repo->addSeriePref($_GET['serieID'],$_SESSION['user']);
             }else{
-                $repo->removeSeriePref($_GET['serieID']);
+                $repo->removeSeriePref($_GET['serieID'],$_SESSION['user']);
             }
         }
         return $this->lancerGet();
