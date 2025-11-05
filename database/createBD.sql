@@ -133,3 +133,13 @@ create table profil(
 
 
 
+drop table if exists  token;
+create table token(
+    id int(11),
+    token varchar(512) not null ,
+    expire date not null,
+    primary key (id,token),
+    unique key token (token),
+    constraint fk_id_yser_token foreign key (id) references utilisateur(id) on delete cascade
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+

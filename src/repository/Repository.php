@@ -532,9 +532,25 @@ class Repository
         }
     }
 
-    public function getUserByEmail($email):bool
+    public function getUserByEmail($email): ?int
     {
-        $stmt = $this->pdo->prepare("SELECT * FROM utilisateur WHERE email = ?");
-        return $stmt->execute([$email]);
+        $stmt = $this->pdo->prepare("SELECT id FROM utilisateur WHERE email = ?");
+        $stmt->execute([$email]);
+        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($data) {
+            return $data;
+        }
+        return null;
+    }
+
+    public function saveToken(int $user_id, string $token, bool $expire) : bool
+    {
+        try {
+            $stmt = $this->pdo->prepare("Insert into token (id, token, expire) values (?, ?, ?)");
+            return $stmt->execute([$user_id, $token, $expire]);
+        }
+        catch (PDOException $e) {
+            return false;
+        }
     }
 }
