@@ -13,34 +13,70 @@ class ActionCatalogue extends Action
      */
     public function lancerGet(): string
     {
-        $tri = null;
-        $filtre = null;
-        if (isset($_GET['tri'])) {
-            $_SESSION['tri'] = $_GET['tri'];
+        $repo = Repository::getInstance();
+
+        //Preparation du catalogue
+        if (isset($_GET['tri'])&& isset($GET['filtre'])) {
+            $catalogue = $repo->getCatalogueTriFiltre($_GET['tri'],$_GET['valeurFiltre'],$_GET['filtre']);
+        }elseif (isset($_GET['tri'])) {
+            echo "test";
+            $catalogue = $repo->getCatalogueTri($_GET['tri']);
+        }elseif (isset($_GET['filtre'])) {
+            $catalogue = $repo->getCatalogueFiltre($_GET['filtre'],$_GET['valeurFiltre']);
+        }else{
+            $catalogue = $repo->getCatalogue();
         }
 
-        if (isset($_GET['filtre'])) {
-            $filtre = $_GET['filtre'];
+
+        if ($catalogue == null) {
+            $catalogue = [];
         }
-
-
-        $catalogue = Repository::getInstance()->getCatalogue($tri,$filtre);
-
-
-
-
 
         $renderer = new ListeSerieRenderer($catalogue);
 
+        //Recupere les argument de tri
+        if (isset($_GET['tri'])) {
+            $tri = <<<HTML
+                 <input type="hidden" name="tri" value="$_GET[tri]"> 
+            HTML;
+        }else {
+            $tri = "";
+        }
+
+        //Recupere les argument de filtre
+        if (isset($_GET['filtre'])) {
+            $filtre = <<<HTML
+                <input type="hidden" name="filtre" value="$_GET[filtre]"> 
+                <input type="hidden" name="valeurFiltre" value="$_GET[valeurFiltre]"> 
+            HTML;
+        }else{
+            $filtre = "";
+        }
+
+        //Formulaire de tri et de filtre
         $tmp = <<<HTML
             <form action="" method="get">
-                <button type="submit" name="tri" value="triMoyenne">Moyenne</button>
-                <button type="submit" name="tri" value="triAlphabet">A-Z</button>
+                <input type="hidden" name="action" value="catalogue">
+                $filtre
+                <button type="submit" name="tri" value="moyenne">Moyenne</button>
+                <button type="submit" name="tri" value="titre">A-Z</button>
             </form>
+
+            <form action="" method="get">
+                <input type="hidden" name="action" value="catalogue">
+                $tri
+                <button type="submit" name="filtre" value="genre">Genre</button>
+                <button type="submit" name="filtre" value="public">Public</button>
+                <input type="text" name="valeurFiltre" placeholder="Valeur" required>
+            </form>
+
+            <a href="?action=catalogue"><button>Reset</button></a>
         HTML;
 
 
-        return "<h1>Catalogue de NetVOD</h1>" . $renderer->render();
+        $tmp .= "<h1>Catalogue de NetVOD</h1>" . $renderer->render();
+
+        return $tmp;
     }
 
     public function lancerPost(): string
