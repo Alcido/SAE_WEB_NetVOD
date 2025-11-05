@@ -38,7 +38,7 @@ class ActionRegister extends Action
         //on vérifie que les données renseignées soient conformes
         if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) || !filter_var($_POST['username'],
                 FILTER_VALIDATE_REGEXP, ['options' => ['regexp' => '/^[\p{L}0-9 ._\-]+$/u']])){
-            throw new \Exception("Invalid email or password");
+            return $this->lancerGet() . "<script>alert('Invalid email or password')</script>";
         }
 
         $email = $_POST['email'] ;
