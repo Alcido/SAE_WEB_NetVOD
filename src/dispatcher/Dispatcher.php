@@ -43,9 +43,6 @@ class Dispatcher
                 break;
             case 'logout':
                 $actionExec = new ActionDisconnect;
-<<<<<<< HEAD
-
-=======
                 break;
             case 'home':
                 $actionExec = new ActionAccueil;
@@ -65,7 +62,6 @@ class Dispatcher
             case 'search':
                 $actionExec = new ActionSearch;
                 break;
->>>>>>> e8423f34ec7c78dbb44071df85ec56a4d6cccb1c
             default:
         }
         $this->renderPage($actionExec());
