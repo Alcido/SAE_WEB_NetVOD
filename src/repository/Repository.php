@@ -60,7 +60,7 @@ class Repository
      */
     public function createUser(string $pseudo, string $email, string $password, int $role=1) : bool {
         try {
-            $stmt = $this->pdo->prepare("INSERT INTO utilisateur (pseudo, email, password, role, verifie) VALUES (?, ?, ?, ?,0)");
+            $stmt = $this->pdo->prepare("INSERT INTO utilisateur (pseudo, email, password, role) VALUES (?, ?, ?, ?)");
             return $stmt->execute([$pseudo, $email, $password, $role]);
         }catch (PDOException $e) {
             if ($e->getCode() == '23000') {
@@ -86,18 +86,18 @@ class Repository
      * @param int $user_id
      * @return User|null
      */
-    public function getUser(string $mail) : ?array{
+    public function getUser(string $mail) : ?User{
         $stmt = $this->pdo->prepare("SELECT * FROM utilisateur WHERE email = ?");
         $stmt->execute([$mail]);
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($data) {
-            return ['user' => new User(
+            return new User(
                 intval($data['id']),
                 intval($data['role']),
                 strval($data['pseudo']),
-                intval($data['verifie']),
-            ),'pwd'=>$data['password']];
+                intval($data['verifie'])
+            );
         }
 
         return null;
@@ -542,5 +542,11 @@ class Repository
         } catch (PDOException $e) {
             return null;
         }
+    }
+
+    public function getUserByEmail($email):bool
+    {
+        $stmt = $this->pdo->prepare("SELECT * FROM utilisateur WHERE email = ?");
+        return $stmt->execute([$email]);
     }
 }
