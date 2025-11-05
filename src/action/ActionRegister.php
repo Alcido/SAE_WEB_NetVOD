@@ -51,12 +51,24 @@ class ActionRegister extends Action
             return $this->lancerGet() . "<script>alert('Erreur : identifiant déjà présent !');</script>";
         }
 
-        $tmp.= "L'enregistrement est effectué</p>";
 
-        if (!isset($_SESSION['user'])) {
-            header("Location: ?action=login");
-        }
+        //Gestion du Token
+        $currentURL = "https://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+        $token = $this->generateRandomString();
+        $_SESSION['token'] = $token;
+        $_SESSION['unverifiedUser'] = Repository::getInstance()->getUser($email);
+
+        $tmp.= "L'enregistrement est presque effectué</p>
+                <p> Veuillez cliquer sur ce lien :</p>
+                <a href='$currentURL?action=verify&token=$token'>$currentURL?action=verify&token=$token</a>";
+
+
+
 
         return $tmp;
+    }
+
+    function generateRandomString($length = 10) {
+        return substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil($length/strlen($x)) )),1,$length);
     }
 }
