@@ -408,7 +408,7 @@ class Repository
         try {
             $query = "select id_serie from serie order by ?";
             $stmt = $this->pdo->prepare($query);
-            $stmt->execute(array([$tri]));
+            $stmt->execute(array($tri));
             $data = $stmt->fetchAll();
             $res = [];
             foreach ($data as $id) {
@@ -424,7 +424,7 @@ class Repository
         try {
             $query = "select id_serie from serie where ? like ? order by ?";
             $stmt = $this->pdo->prepare($query);
-            $stmt->execute(array([$filtre, $valeur, $tri]));
+            $stmt->execute(array($filtre, $valeur, $tri));
             $data = $stmt->fetchAll();
             $res = [];
             foreach ($data as $id) {
@@ -440,7 +440,7 @@ class Repository
         try {
             $query = "select id_serie from serie where ? like ?";
             $stmt = $this->pdo->prepare($query);
-            $stmt->execute(array([$filtre, $valeur]));
+            $stmt->execute(array($filtre, $valeur));
             $data = $stmt->fetchAll();
             $res = [];
             foreach ($data as $id) {
