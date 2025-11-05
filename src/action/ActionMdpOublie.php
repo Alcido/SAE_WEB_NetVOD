@@ -6,7 +6,7 @@ use NetVOD\src\auth\AuthnProvider;
 use NetVOD\src\Exception\AuthnException;
 use NetVOD\src\repository\Repository;
 
-class ActionRegister extends Action
+class ActionMdpOublie extends Action
 {
     public function lancerGet(): string
     {
@@ -43,8 +43,7 @@ class ActionRegister extends Action
          }
 
          $token = bin2hex(random_bytes(16));
-         $expire = date('Y-m-d H:i:s', time() + 3600);// anne moi jour heur format 24h minute ert seconde
-
+         $expire = date('Y-m-d H:i:s', time() + 3600);// anne moi jour heure format 24h minute ert seconde
 
 
          $repo->saveToken($user_id, $token, $expire);
