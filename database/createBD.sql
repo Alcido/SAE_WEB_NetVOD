@@ -128,3 +128,6 @@ create table profil(
                        primary key (id),
                        constraint fk_id_user foreign key (id) references utilisateur (id) on delete cascade
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+

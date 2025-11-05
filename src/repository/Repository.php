@@ -75,17 +75,17 @@ class Repository
      * @param int $user_id
      * @return User|null
      */
-    public function getUser(string $mail) : ?array{
+    public function getUser(string $mail) : ?User{
         $stmt = $this->pdo->prepare("SELECT * FROM utilisateur WHERE email = ?");
         $stmt->execute([$mail]);
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($data) {
-            return ['user' => new User(
+            return new User(
                 intval($data['id']),
                 intval($data['role']),
                 strval($data['pseudo'])
-            ),'pwd'=>$data['password']];
+            );
         }
 
         return null;
@@ -536,5 +536,11 @@ class Repository
         } catch (PDOException $e) {
             return null;
         }
+    }
+
+    public function getUserByEmail($email):bool
+    {
+        $stmt = $this->pdo->prepare("SELECT * FROM utilisateur WHERE email = ?");
+        return $stmt->execute([$email]);
     }
 }
