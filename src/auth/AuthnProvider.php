@@ -23,6 +23,7 @@ class AuthnProvider
     public static function signin(string $mail, string $mdp) : void {
         // On récupère l'utilisateur depuis la BDD
         $user = Repository::getInstance()->getUser($mail);
+        //TODO FIX USAGE USER
         // Si l'utilisateur n'existe pas
         if (!$user) {
             throw new AuthnException("Utilisateur n'existe pas");
