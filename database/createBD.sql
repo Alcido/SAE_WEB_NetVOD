@@ -64,6 +64,7 @@ create table utilisateur(
                             email varchar(256) not null,
                             password varchar(256) not null,
                             role int(5),
+                            verifie boolean not null,
                             primary key (id),
                             unique key email (email)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -121,7 +122,7 @@ create table profil(
                        id int(11),
                        nom varchar(128),
                        prenom varchar(128),
-                       genre int(1),
+                       genre varchar(128),
                        birth_date date NULL,
                        adresse varchar(128),
                        primary key (id),

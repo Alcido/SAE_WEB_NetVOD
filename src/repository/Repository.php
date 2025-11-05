@@ -125,6 +125,12 @@ class Repository
     }
 
     //ajoute d'iun serie preferé
+
+    /**
+     * @param int $serie_id
+     * @param int $user_id
+     * @return bool|null
+     */
     public function addSeriePref(int $serie_id, int $user_id):?bool{
         try {
             $query = "insert into prefSerie2User values (?, ?)";
@@ -138,6 +144,13 @@ class Repository
     }
 
     //ajoute serie en cours
+
+    /**
+     * @param int $serie_id
+     * @param int $user_id
+     * @param int $ep_id
+     * @return bool|null
+     */
     public function addSerieEnCours(int $serie_id, int $user_id, int $ep_num) : ?bool
     {
         try {
@@ -159,6 +172,10 @@ class Repository
 
     }
 
+    /**
+     * @param int $user_id
+     * @return array|null
+     */
     public function getSeriesEncours(int $user_id) : ?array  {
         try {
             $query = "select id_serie from enCours2User where id_user = ?";
@@ -235,6 +252,11 @@ class Repository
     }
 
     //retourne les infos d'un episode donné
+
+    /**
+     * @param int $episode_id
+     * @return Episode|null
+     */
     public function getEpisode(int $episode_id): ?Episode
     {
         $query =
@@ -298,6 +320,11 @@ class Repository
         return null;
     }
 
+    /**
+     * @param int $serie_id
+     * @param int $user_id
+     * @return bool
+     */
     public function removeSeriePref(int $serie_id, int $user_id) : bool {
         try {
             $query = 'delete from prefSerie2User where id_serie = ? and id_user = ?';
@@ -309,6 +336,10 @@ class Repository
         return true;
     }
 
+    /**
+     * @param string $titre
+     * @return array|null
+     */
     public function getSerieRecherche(string $titre) : ?array{
         $query = "select id from serie where titre like ?";
         $stmt = $this->pdo->prepare($query);
@@ -324,33 +355,59 @@ class Repository
         return $res;
     }
 
+    /**
+     * @param int $user_id
+     * @param string $field
+     * @return bool
+     */
+    public function dellInfos(int $user_id, string $field):bool{
+        $allowedFields = ['nom', 'prenom', 'genre', 'birth_date', 'adresse'];
+        if (!in_array($field, $allowedFields)) return false;
 
-    public function ajoutInfoUser(
-        ?int $user_id,
-        ?string $nom,
-        ?string $prenom,
-        ?int $genre,
-        ?string $birth_date,
-        ?string $adresse
-    ): bool {
-        $nom        = ($nom !== null && $nom !== '') ? $nom : null;
-        $prenom     = ($prenom !== null && $prenom !== '') ? $prenom : null;
-        $adresse    = ($adresse !== null && $adresse !== '') ? $adresse : null;
-        $birth_date = ($birth_date !== null && $birth_date !== '') ? $birth_date : null;
 
-        $stmt = $this->pdo->prepare("
-        INSERT INTO profil (id, nom, prenom, genre, birth_date, adresse)
-        VALUES (?, ?, ?, ?, ?, ?)
-        ON DUPLICATE KEY UPDATE
-            nom = IF(VALUES(nom) IS NOT NULL, VALUES(nom), nom),
-            prenom = IF(VALUES(prenom) IS NOT NULL, VALUES(prenom), prenom),
-            genre = IF(VALUES(genre) IS NOT NULL, VALUES(genre), genre),
-            birth_date = IF(VALUES(birth_date) IS NOT NULL, VALUES(birth_date), birth_date),
-            adresse = IF(VALUES(adresse) IS NOT NULL, VALUES(adresse), adresse)
-    ");
+        $sql = "UPDATE profil SET $field = NULL WHERE id = ?";
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute([$user_id]);
 
-        return $stmt->execute([$user_id, $nom, $prenom, $genre, $birth_date, $adresse]);
     }
+
+    /**
+     * @param int $user_id
+     * @param string $field
+     * @param string $value
+     * @return bool
+     */
+    public function  addInfos(int $user_id, string $field, string $value):bool
+    {
+        $allowedFields = ['nom', 'prenom', 'genre', 'birth_date', 'adresse'];
+        if (!in_array($field, $allowedFields)) return false;
+
+        if($value === '' ){
+            $value = null;
+        }
+
+        $stmt = $this->pdo->prepare("INSERT INTO profil (id, $field)
+        VALUES (?, ?)
+        ON DUPLICATE KEY UPDATE
+            $field = VALUES($field)
+        ");
+        return $stmt->execute([$user_id,$value]);
+    }
+
+    /**
+     * @param int $user_id
+     * @return array|null
+     */
+    public function getInfosUser(int $user_id): ?array
+    {
+        $stmt=$this->pdo->prepare("SELECT * FROM profil WHERE id = ?");
+        $stmt->execute([$user_id]);
+        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($data) {
+            return $data;
+        }
+        return null;
+        }
 
     public function isEnCours(int $serie_id, int $user_id) : ?array {
         $query = "select num_ep, id from enCours2User inner join episode on episode.serie_id = enCours2User.id_serie where id_serie = ? and id_user = ? and num_ep = numero";
@@ -360,7 +417,12 @@ class Repository
         return $res === false ? null : $res;
     }
 
-
+    /**
+     * @param int $serie_id
+     * @param int $ep_id
+     * @param int $user_id
+     * @return bool|null
+     */
     public function verifDejaVu (int $serie_id, int $num_ep, int $user_id) : ?bool {
         try {
             $query = "select max(numero) as lastEp from serie inner join episode on serie.id = episode.serie_id where serie.id = ? group by serie_id";
@@ -383,12 +445,17 @@ class Repository
         }
     }
 
+    /**
+     * @param int $user_id
+     * @return array|null
+     */
     public function getSeriesDejaVu(int $user_id) : ?array  {
         try {
             $query = "select id_serie from serieFinie2User where id_user = ?";
             $stmt = $this->pdo->prepare($query);
             $stmt->bindParam(1, $user_id);
             $stmt->execute();
+            $data = $stmt->fetchAll();
             $res = [];
             while ($row = $stmt->fetch()) {
                 $serie = $this->getSerie($row["id_serie"]);
@@ -400,16 +467,30 @@ class Repository
         }
     }
 
+    /**
+     * @param string $tri
+     * @return array|null
+     */
     public function getCatalogueTri(string $tri)
     {
         try {
-            $query = "select id_serie from serie order by ?";
-            $stmt = $this->pdo->prepare($query);
-            $stmt->execute(array([$tri]));
-            $data = $stmt->fetchAll();
+            if ($tri=="moyenne"){
+                $query = "select id
+                    from serie inner join notation on serie.id = notation.id_serie
+                    group by serie.id
+                    order by avg(notation.note) desc";
+                $stmt = $this->pdo->prepare($query);;
+            }else {
+                $query = "select id from serie order by $tri";
+                $stmt = $this->pdo->prepare($query);
+            }
+
+            $stmt->execute();
             $res = [];
-            foreach ($data as $id) {
-                $res[] = $this->getSerie(intval($id));
+            while ($row = $stmt->fetch()) {
+                $serie = $this->getSerie($row["id"]);
+
+                $res[] = $serie;
             }
             return $res;
         } catch (PDOException $e) {
@@ -417,11 +498,17 @@ class Repository
         }
     }
 
+    /**
+     * @param string $filtre
+     * @param string $valeur
+     * @param string $tri
+     * @return array|null
+     */
     public function getCatalogueTriFiltre(string $filtre, string $valeur, string $tri) : ?array {
         try {
-            $query = "select id_serie from serie where ? like ? order by ?";
+            $query = "select id from serie where ? like ? order by ?";
             $stmt = $this->pdo->prepare($query);
-            $stmt->execute(array([$filtre, $valeur, $tri]));
+            $stmt->execute(array($filtre, $valeur, $tri));
             $data = $stmt->fetchAll();
             $res = [];
             foreach ($data as $id) {
@@ -433,11 +520,16 @@ class Repository
         }
     }
 
+    /**
+     * @param string $filtre
+     * @param string $valeur
+     * @return array|null
+     */
     public function getCatalogueFiltre(string $filtre, string $valeur) : ?array {
         try {
-            $query = "select id_serie from serie where ? like ?";
+            $query = "select id from serie where ? like ?";
             $stmt = $this->pdo->prepare($query);
-            $stmt->execute(array([$filtre, $valeur]));
+            $stmt->execute(array($filtre, $valeur));
             $data = $stmt->fetchAll();
             $res = [];
             foreach ($data as $id) {
