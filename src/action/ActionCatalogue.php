@@ -17,20 +17,31 @@ class ActionCatalogue extends Action
 
         //Preparation du catalogue
         if (isset($_GET['tri'])&& isset($GET['filtre'])) {
+            $filtre = $_GET['filtre'];
+            $tri = $_GET['tri'];
+            if ($filtre != "public" && $filtre != "genre" && $tri != "id" && $tri != "titre" && $tri != "moyenne") {
+                throw new \Exception("Filtre invalide");
+            }
             $catalogue = $repo->getCatalogueTriFiltre($_GET['filtre'],$_GET['valeurFiltre'],$_GET['tri']);
         }elseif (isset($_GET['tri'])) {
+            $tri = $_GET['tri'];
+            if ($tri != "id" && $tri != "titre" && $tri != "moyenne") {
+                throw new \Exception("Filtre invalide");
+            }
             echo "test : $_GET[tri]";
             $catalogue = $repo->getCatalogueTri($_GET['tri']);
         }elseif (isset($_GET['filtre'])) {
+            $filtre = $_GET['filtre'];
+            if ($filtre != "public" && $filtre != "genre") {
+                throw new \Exception("Filtre invalide");
+            }
             $catalogue = $repo->getCatalogueFiltre($_GET['filtre'],$_GET['valeurFiltre']);
         }else{
             $catalogue = $repo->getCatalogue();
         }
 
 
-        if ($catalogue == null) {
-            $catalogue = [];
-        }
+
 
         $renderer = new ListeSerieRenderer($catalogue);
 
