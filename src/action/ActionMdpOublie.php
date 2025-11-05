@@ -49,10 +49,9 @@ class ActionRegister extends Action
 
          $repo->saveToken($user_id, $token, $expire);
 
-         // Créer le lien
+
          $resetLink = "http://".$_SERVER['HTTP_HOST']."/?action=reset-mdp&token=$token";
 
-         // Envoyer l'email
          $subject = "Réinitialisation de votre mot de passe";
          $message = "Bonjour,\n\nCliquez sur le lien suivant pour réinitialiser votre mot de passe :\n$resetLink\n\nCe lien est valide pendant 1 heure.";
          $headers = "From: no-reply@netvod.local";
