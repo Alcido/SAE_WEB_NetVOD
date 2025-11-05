@@ -37,6 +37,7 @@ class Dispatcher
                 break;
             case 'logout':
                 $actionExec = new ActionDisconnect;
+
             default:
         }
         $this->renderPage($actionExec());
