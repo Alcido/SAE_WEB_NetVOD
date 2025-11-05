@@ -144,13 +144,13 @@ class Repository
             if ($this->isEnCours($serie_id, $user_id)) {
                 $query = "update enCours2User set num_ep = ? where id_serie = ? and id_user = ?";
                 $stmt = $this->pdo->prepare($query);
-                $stmt->execute([$ep_num, $user_id, $serie_id]);
-                $this->verifDejaVu($serie_id, $ep_num, $user_id);
+                $stmt->execute([$ep_num, $serie_id, $user_id]);
             } else {
                 $query = "insert into enCours2User values (?,?,?)";
                 $stmt = $this->pdo->prepare($query);
                 $stmt->execute([$user_id, $serie_id, $ep_num]);
             }
+            $this->verifDejaVu($serie_id, $ep_num, $user_id);
             return true;
         } catch (PDOException $e) {
             //la serie est deja en cours
@@ -165,10 +165,10 @@ class Repository
             $stmt = $this->pdo->prepare($query);
             $stmt->bindParam(1, $user_id);
             $stmt->execute();
-            $data = $stmt->fetchAll();
             $res = [];
-            foreach ($data as $serie_id) {
-                $res[] = $this->getSerie(intval($serie_id));
+            while ($row = $stmt->fetch()) {
+                $serie = $this->getSerie($row["id_serie"]);
+                $res[] = $serie;
             }
             return $res;
         } catch (PDOException $e) {
@@ -353,17 +353,17 @@ class Repository
     }
 
     public function isEnCours(int $serie_id, int $user_id) : ?array {
-        $query = "select num_ep, id from enCours2User inner join episode on episode.serie_id = enCours2User.id_serie where id_serie = ? and id_user = ?";
+        $query = "select num_ep, id from enCours2User inner join episode on episode.serie_id = enCours2User.id_serie where id_serie = ? and id_user = ? and num_ep = numero";
         $stmt = $this->pdo->prepare($query);
         $stmt->execute(array($serie_id, $user_id));
         $res = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $res ?? null;
+        return $res === false ? null : $res;
     }
 
 
     public function verifDejaVu (int $serie_id, int $num_ep, int $user_id) : ?bool {
         try {
-            $query = "select max(numero) as lastEp from serie where id_serie = ? group by serie_id";
+            $query = "select max(numero) as lastEp from serie inner join episode on serie.id = episode.serie_id where serie.id = ? group by serie_id";
             $stmt = $this->pdo->prepare($query);
             $stmt->execute([$serie_id]);
             $res = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -389,10 +389,10 @@ class Repository
             $stmt = $this->pdo->prepare($query);
             $stmt->bindParam(1, $user_id);
             $stmt->execute();
-            $data = $stmt->fetchAll();
             $res = [];
-            foreach ($data as $serie_id) {
-                $res[] = $this->getSerie(intval($serie_id));
+            while ($row = $stmt->fetch()) {
+                $serie = $this->getSerie($row["id_serie"]);
+                $res[] = $serie;
             }
             return $res;
         } catch (PDOException $e) {

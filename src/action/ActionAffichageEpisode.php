@@ -15,21 +15,21 @@ class ActionAffichageEpisode extends Action
     public function lancerGet(): string
     {
         $repo = Repository::getInstance();
-        $episodeNum = intval($_GET['episodeNum']);
-        $episodeID = intval($_GET['episodeID']);
-        if (!isset($episodeID)) {
-            return "<h1> no episode selected </h1>";
-        }else if ($repo->getEpisode($episodeID) == null){
+
+        //on récupère l'épisode
+        $ep = $repo->getEpisode($_GET['episodeID']);
+
+        if ($ep == null){
             return "<h1> episode not existing </h1>";
         }else {
-            $episode = $repo->getEpisode($episodeID);
-            $ajout = $repo->addSerieEnCours($episode->serie_id, unserialize($_SESSION['user'])->id, $episodeNum);
+            $episodeNum = $ep->numero;
+            $ajout = $repo->addSerieEnCours($ep->serie_id, unserialize($_SESSION['user'])->id, $episodeNum);
             if (!$ajout) {
                 throw new \Exception("Erreur dans l'ajout en court");
             }
-            $tmp = "<div>";
-            $tmp .= (new EpisodeRenderer($episode))->renderLong();
-            $tmp .= "</div>";
+
+            $tmp = "<div>" . (new EpisodeRenderer($ep))->renderLong() . "</div>";
+
             return $tmp;
         }
 
