@@ -324,7 +324,7 @@ class Repository
         return $res;
     }
 
-    public function ajoutInfoUser(int $user_id,string $nom, string $prenom,int $genre, string $birth_date, string $adresse) : bool
+    public function ajoutInfoUser(?int $user_id,?string $nom, ?string $prenom,?int $genre, ?string $birth_date, ?string $adresse) : bool
     {
         $stmt = $this->pdo->prepare("insert into profil(id, nom, prenom, genre, birth_date, adresse) values(?,?,?,?,?,?) ");
         return $stmt->execute([$user_id, $nom, $prenom, $genre, $birth_date, $adresse]);

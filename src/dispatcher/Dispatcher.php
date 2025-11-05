@@ -4,6 +4,7 @@ namespace NetVOD\src\dispatcher;
 
 use NetVOD\src\action\ActionAccueil;
 use NetVOD\src\action\ActionAddPref;
+use NetVOD\src\action\ActionAddProfilInfos;
 use NetVOD\src\action\ActionAffichageEpisode;
 use NetVOD\src\action\ActionAffichageSerie;
 use NetVOD\src\action\ActionCatalogue;
@@ -61,6 +62,9 @@ class Dispatcher
                 break;
             case 'search':
                 $actionExec = new ActionSearch;
+                break;
+            case 'add-infos':
+                $actionExec=new ActionAddProfilInfos;
                 break;
             default:
         }
