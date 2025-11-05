@@ -377,4 +377,12 @@ class Repository
         }
     }
 
+    public function getCatalogueTri(string $filtre, string $tri) : ?array {
+
+    }
+
+    public function getCatalogueFiltre(string $filtre) : ?array {
+        $query = "select id_serie from serie where ? like ?";
+
+    }
 }
