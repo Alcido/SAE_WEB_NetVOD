@@ -10,6 +10,7 @@ use NetVOD\src\action\ActionAffichageInfos;
 use NetVOD\src\action\ActionAffichageSerie;
 use NetVOD\src\action\ActionCatalogue;
 use NetVOD\src\action\ActionDefault;
+use NetVOD\src\action\ActionDellInfos;
 use NetVOD\src\action\ActionDisconnect;
 use NetVOD\src\action\ActionLogIn;
 use NetVOD\src\action\ActionRegister;
@@ -69,6 +70,11 @@ class Dispatcher
                 break;
             case 'add-infos':
                 $actionExec = new ActionAddProfilInfos;
+                break;
+            case 'dell-infos':
+                $actionExec = new ActionDellInfos;
+                break;
+
             default:
         }
         $this->renderPage($actionExec());

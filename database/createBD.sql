@@ -123,7 +123,7 @@ create table profil(
                        id int(11),
                        nom varchar(128),
                        prenom varchar(128),
-                       genre int(1),
+                       genre varchar(128),
                        birth_date date NULL,
                        adresse varchar(128),
                        primary key (id),
