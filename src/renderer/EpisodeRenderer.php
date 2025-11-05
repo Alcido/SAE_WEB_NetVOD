@@ -20,12 +20,14 @@ class EpisodeRenderer
      * @return string affichage de la vidéo
      */
     public function renderCompact() : string {
-        $html = <<<HMTL
-        <a href="?action=viewEpisode&episode=$this->video->id"<img src="{$this->video->lienImage}" />
+        $html = <<<HTML
+        <div class="serie-card">
+        <a href="?action=episode&episodeID={$this->video->id}">
+        <img src="{$this->video->lienImage}" alt="Image de l'épisode"/>
         <p>Episode n°{$this->video->numero} : {$this->video->nom}</p>
-        <p>Durée : {$this->video->duree}</p>
-        
-HMTL;
+        <p>Durée : {$this->video->duree}</p></a></div>
+HTML;
+
 
         return $html;
     }
@@ -36,14 +38,19 @@ HMTL;
     public  function renderLong() : string {
         $html = <<<HMTL
         <video controls width="250">
-            <source src="{$this->video->lienFichier}" type="video/mp4" />
+            <source src="video/{$this->video->lienFichier}" type="video/mp4" />
         </video>
         <p>Série : {$this->video->nom_serie} - ep. {$this->video->numero} : {$this->video->nom}</p>
         <p>Résumé : {$this->video->resume}</p>
         <p>Durée : {$this->video->duree}</p>
-        <p>Année de création : {$this->video->annee}</p>
-        
-HMTL;
+        </br>
+        </br>
+        <form action="?action=episode&episodeID={$this->video->id}" method="post">
+            <input type="text" name="commentaire" placeholder="Ajouter un commentaire">
+            <input type="number" name="note" placeholder="Note">
+            <input type="submit" name="addComment" value="Ajouter un commentaire">
+        </form>
+        HMTL;
         return $html;
     }
 }

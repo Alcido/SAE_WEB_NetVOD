@@ -36,16 +36,17 @@ class ActionRegister extends Action
         $tmp = "<h1>Register</h1><p>";
 
         //on vérifie que les données renseignées soient conformes
-        if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) || !filter_var($_POST['username'], FILTER_VALIDATE_REGEXP)){
+        if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) || !filter_var($_POST['username'],
+                FILTER_VALIDATE_REGEXP, ['options' => ['regexp' => '/^[\p{L}0-9 ._\-]+$/u']])){
             throw new \Exception("Invalid email or password");
         }
 
         $email = $_POST['email'] ;
-        $password = $_POST['password'];
+        $password = password_hash($_POST['password'], PASSWORD_BCRYPT, ['cost' => 12]);
         $username = $_POST['username'];
 
         try {
-            AuthnProvider::register($email, $password, $username);
+            AuthnProvider::register($username, $email, $password);
         } catch (AuthnException $e) {
             return $this->lancerGet() . "<script>alert('Erreur : identifiant déjà présent !');</script>";
         }

@@ -18,15 +18,16 @@ class SerieRenderer
      * @return string affichage de la série en court
      */
     public function renderCompact() : string {
-
-
-        $html = <<<HMTL
-        <img src="{$this->serie->lienImage}" />
-        <p>Titre de la série : {$this->serie->nom}</p>
-        <p>Genre : {$this->serie->genre}</p>
-    
-HMTL;
-        $html .= $this->favorite();
+        $html = <<<HTML
+        <div class="serie-card">
+            <a href='?action=serie&serieID={$this->serie->id}'>
+                <img src="{$this->serie->lienImage}" />
+                <p>{$this->serie->nom}</p>
+                <p style="font-size: 12px; color: #ccc;">{$this->serie->genre}</p>
+            </a>
+            {$this->favorite()}
+        </div>
+HTML;
         return $html;
     }
 
@@ -34,9 +35,10 @@ HMTL;
      * @return string affichage complet de la série
      */
     public  function renderLong() : string {
+
         $nbEpisodes = sizeof($this->serie->episodes);
 
-        $html = "<p>Titre de la série : {$this->serie->nom}</p>
+        $html = "<div class=\"serie-details\"><a href='?action=serie&serieID={$this->serie->id}'><p>Titre de la série : {$this->serie->nom}</p>
                  <p>Genre : {$this->serie->genre}</p>
                  <p>Descriptif : {$this->serie->descriptif}</p>
                  <p>Nombre d'épisodes : $nbEpisodes</p>
@@ -47,7 +49,7 @@ HMTL;
             $episodeRenderer = new EpisodeRenderer($episode);
             $html .= "<li>" . $episodeRenderer->renderCompact() . "</li>";
         }
-        $html .= "</ul>";
+        $html .= "</ul></a></div>";
         $html .= $this->favorite();
 
         return $html;
@@ -55,16 +57,18 @@ HMTL;
 
     private function favorite() : string {
         $repo = Repository::getInstance();
-        $pref = $repo->getPref($_SESSION['user']);
+        $pref = $repo->getPref(unserialize($_SESSION['user'])->id);
         if (in_array($this->serie,$pref)){
-            $isLiked="remove";
+            $isLiked = "remove";
+            $texte="Supprimer des favoris";
         }else{
-            $isLiked="add";
+            $isLiked = "add";
+            $texte="Ajouter des favoris";
         }
 
         $html = <<<HMTL
-            <form class="$isLiked" action="?action=$_GET[action]" method="post">
-                <button type="submit" name="addFavorite" value="$isLiked">$isLiked from favorite</button>
+            <form class="$isLiked" action="?action=add-pref&serie_id={$this->serie->id}" method="post">
+                <button type="submit" name="addFavorite" value="$isLiked">$texte</button>
             </form>
 HMTL;
 

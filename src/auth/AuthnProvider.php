@@ -28,11 +28,11 @@ class AuthnProvider
             throw new AuthnException("Utilisateur n'existe pas");
         }
         // Si le mot de passe est invalide
-        if (!password_verify($mdp, $user['passwd'])) {
+        if (!password_verify($mdp, $user['pwd'])) {
             throw new AuthnException("Mot de passe incorrect");
         }
         // On ajoute l'utilisateur trouvé en session
-        $value = new User($user['id'], intval($user['role']), $user['pseudo']);
+        $value = $user['user'];
         $_SESSION['user'] = serialize($value);
     }
 

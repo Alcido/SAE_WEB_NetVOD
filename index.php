@@ -6,7 +6,7 @@ use NetVOD\src\repository\Repository;
 
 session_start();
 
-Repository::setConfig("Config/config.db.ini");
+Repository::setConfig("config/config.db.ini");
 
 //on verifie si la personne cherche à se connecter
 $demandeConn = (isset($_GET['action']) and $_GET['action'] === 'register');

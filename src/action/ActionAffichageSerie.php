@@ -15,17 +15,40 @@ class ActionAffichageSerie extends Action
     public function lancerGet(): string
     {
         $repo = Repository::getInstance();
-        if (!isset($_GET['serieID'])) {
+
+        $serie_id = $_GET['serieID'];
+        if (!isset($serie_id)) {
             return "<h1> no serie selected </h1>";
         }
-        $serie = $repo->getSerie($_GET['serieID']);
+        $serie = $repo->getSerie($serie_id);
         if ($serie == null) {
             return "<h1> serie not existing </h1>";
         }
-        $tmp ="<div>";
-        $tmp .= (new SerieRenderer($serie))->renderLong();
-        $tmp .= "</div>";
+        //Variables
+        $moyenne = $repo->getNoteMoyenne($serie_id);
+        $listeCom = $repo->getListeCommentaires($serie_id);
 
+        //Affichage de la moyenne des notes
+        $tmp = "<div>";
+        $tmp .= "<p> Moyenne notes : $moyenne </p>";
+        //Affichage de la serie
+        $tmp .= (new SerieRenderer($serie))->renderLong();
+
+        //Affichage des commentaires
+        $tmp .= "<div class=\"serie-details\">";
+
+        if ($listeCom == null){
+            $tmp.= "<p>Pas de Commentaires</p>";
+        }
+        else {
+            $tmp .= "<ul>Commentaires : ";
+            foreach ($listeCom as $commentaire) {
+                $tmp .= "<li>$commentaire[commentaire]</li>";
+            }
+            $tmp .= "</ul>";
+        }
+
+        $tmp.= "</div>";
 
         return $tmp;
 
