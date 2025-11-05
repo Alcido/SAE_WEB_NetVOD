@@ -99,7 +99,7 @@ create  table  enCours2User(
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
-drop table  if exists notation;
+drop table if exists notation;
 create  table  notation(
                            id_user int(11),
                            id_serie int (11),
@@ -110,6 +110,14 @@ create  table  notation(
                            constraint fk_SERIE_id_Note foreign key (id_serie) references serie (id) on delete cascade
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+drop table if exists serieFinie2User;
+create table serieFinie2User (
+                                 id_user int(11),
+                                 id_serie int(11),
+                                 primary key (id_user,id_serie),
+                                 constraint fk_serieFinie1 foreign key (id_user) references utilisateur(id),
+                                 constraint fk_serieFinie2 foreign key (id_serie) references serie(id)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 drop table if exists profil;
 create table profil(
                        id int(11),
