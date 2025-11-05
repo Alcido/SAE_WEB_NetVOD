@@ -59,8 +59,16 @@ class Repository
      * cette methode permet d'insérer un User dans la BD
      */
     public function createUser(string $pseudo, string $email, string $password, int $role=1) : bool {
-        $stmt = $this->pdo->prepare("INSERT INTO utilisateur (pseudo, email, password, role) VALUES (?, ?, ?, ?)");
-        return $stmt->execute([$pseudo,$email, $password,$role]);
+        try {
+            $stmt = $this->pdo->prepare("INSERT INTO utilisateur (pseudo, email, password, role) VALUES (?, ?, ?, ?)");
+            return $stmt->execute([$pseudo, $email, $password, $role]);
+        }catch (PDOException $e) {
+            if ($e->getCode() == '23000') {
+                //le user a deja un compte
+                return false;
+            }
+            throw $e;
+        }
     }
 
     /**
