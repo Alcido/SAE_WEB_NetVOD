@@ -24,16 +24,31 @@ class ActionAffichageSerie extends Action
         if ($serie == null) {
             return "<h1> serie not existing </h1>";
         }
+        //Variables
         $moyenne = $repo->getNoteMoyenne($serie_id);
+        $listeCom = $repo->getListeCommentaires($serie_id);
+
+        //Affichage de la moyenne des notes
         $tmp = "<div>";
         $tmp .= "<p> Moyenne notes : $moyenne </p>";
+        //Affichage de la serie
         $tmp .= (new SerieRenderer($serie))->renderLong();
-        $tmp .= "<div><ul>";
-        foreach ($repo->getListeCommentaires($serie_id) as $commentaire) {
-            $tmp.="<li>$commentaire</li>";
+
+        //Affichage des commentaires
+        $tmp .= "<div class=\"serie-details\">";
+
+        if ($listeCom == null){
+            $tmp.= "<p>Pas de Commentaires</p>";
         }
-        $tmp .= "</ul></div>
-                </div>";
+        else {
+            $tmp .= "<ul>Commentaires : ";
+            foreach ($listeCom as $commentaire) {
+                $tmp .= "<li>$commentaire[commentaire]</li>";
+            }
+            $tmp .= "</ul>";
+        }
+
+        $tmp.= "</div>";
 
         return $tmp;
 
