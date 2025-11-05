@@ -400,14 +400,14 @@ class Repository
      */
     public function getInfosUser(int $user_id): ?array
     {
-        $stmt=$this->pdo->prepare("SELECT * FROM profil WHERE id = ?");
+        $stmt = $this->pdo->prepare("SELECT * FROM profil WHERE id = ?");
         $stmt->execute([$user_id]);
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
         if ($data) {
             return $data;
         }
         return null;
-        }
+    }
 
     public function isEnCours(int $serie_id, int $user_id) : ?array {
         $query = "select num_ep, id from enCours2User inner join episode on episode.serie_id = enCours2User.id_serie where id_serie = ? and id_user = ? and num_ep = numero";
