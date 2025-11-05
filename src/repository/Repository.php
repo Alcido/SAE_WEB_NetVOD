@@ -138,18 +138,18 @@ class Repository
     }
 
     //ajoute serie en cours
-    public function addSerieEnCours(int $serie_id, int $user_id, int $ep_id) : ?bool
+    public function addSerieEnCours(int $serie_id, int $user_id, int $ep_num) : ?bool
     {
         try {
             if ($this->isEnCours($serie_id, $user_id)) {
-                $query = "update enCours2User set id_ep = ? where id_serie = ? and id_user = ?";
+                $query = "update enCours2User set num_ep = ? where id_serie = ? and id_user = ?";
                 $stmt = $this->pdo->prepare($query);
-                $stmt->execute([$ep_id, $user_id, $serie_id]);
-                $this->verifDejaVu($serie_id, $ep_id, $user_id);
+                $stmt->execute([$ep_num, $user_id, $serie_id]);
+                $this->verifDejaVu($serie_id, $ep_num, $user_id);
             } else {
                 $query = "insert into enCours2User values (?,?,?)";
                 $stmt = $this->pdo->prepare($query);
-                $stmt->execute([$user_id, $serie_id, $ep_id]);
+                $stmt->execute([$user_id, $serie_id, $ep_num]);
             }
             return true;
         } catch (PDOException $e) {
@@ -352,25 +352,22 @@ class Repository
         return $stmt->execute([$user_id, $nom, $prenom, $genre, $birth_date, $adresse]);
     }
 
-    public function getInfosUser(int $user_id): ?array
-    {
-        $stmt=$this->pdo->prepare("SELECT * FROM profil WHERE id = ?");
-        $stmt->execute([$user_id]);
-        $data = $stmt->fetch(PDO::FETCH_ASSOC);
-        if ($data) {
-            return $data;
-        }
-        return null;
+    public function isEnCours(int $serie_id, int $user_id) : ?array {
+        $query = "select num_ep, id from enCours2User inner join episode on episode.serie_id = enCours2User.id_serie where id_serie = ? and id_user = ?";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute(array($serie_id, $user_id));
+        $res = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $res ?? null;
     }
 
 
-    public function verifDejaVu (int $serie_id, int $ep_id, int $user_id) : ?bool {
+    public function verifDejaVu (int $serie_id, int $num_ep, int $user_id) : ?bool {
         try {
             $query = "select max(numero) as lastEp from serie where id_serie = ? group by serie_id";
             $stmt = $this->pdo->prepare($query);
             $stmt->execute([$serie_id]);
             $res = $stmt->fetch(PDO::FETCH_ASSOC);
-            if ($res["lastEp"] === $ep_id) {
+            if ($res["lastEp"] === $num_ep) {
                 $query = "delete from enCours2User where id_serie = ? and id_user = ?";
                 $stmt = $this->pdo->prepare($query);
                 $stmt->execute([$serie_id, $user_id]);

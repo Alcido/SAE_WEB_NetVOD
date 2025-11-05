@@ -36,7 +36,7 @@ class ActionAffichageSerie extends Action
         $isEnCours = $repo->isEnCours($serie_id, unserialize($_SESSION['user'])->id);
         if ($isEnCours !== null) {
             $tmp .= <<<HTML
-                <a href="?action=episode&episodeID={$isEnCours}"><button>Reprendre</button></a>
+                <a href="?action=episode&episodeNum={$isEnCours['num_ep']}&episodeID={$isEnCours['id']}"><button>Reprendre</button></a>
                HTML;
         }
 

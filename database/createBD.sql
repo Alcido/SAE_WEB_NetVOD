@@ -90,12 +90,10 @@ drop table if exists enCours2User;
 create  table  enCours2User(
                                id_user int(11),
                                id_serie int (11),
-                               id_ep int(11),
-                               primary key (id_user,id_serie,id_ep),
+                               num_ep int(11),
+                               primary key (id_user,id_serie,num_ep),
                                constraint fk_UTILISATEUR_id_enCOurs foreign key (id_user) REFERENCES utilisateur (id) on delete cascade,
-                               constraint fk_SERIE_id_enCours foreign key (id_serie) references serie (id) on delete cascade,
-                               constraint fk_EPISODE_id_enCours foreign key (id_ep) references episode (id) on delete cascade
-
+                               constraint fk_SERIE_id_enCours foreign key (id_serie) references serie (id) on delete cascade
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
