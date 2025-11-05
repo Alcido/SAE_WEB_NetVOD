@@ -53,14 +53,15 @@ class ActionRegister extends Action
 
 
         //Gestion du Token
-        $currentURL = "https://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+        $currentURL = "https://$_SERVER[HTTP_HOST]" . explode('?',$_SERVER['REQUEST_URI'])[0];
         $token = $this->generateRandomString();
-        $_SESSION['token'] = $token;
-        $_SESSION['unverifiedUser'] = Repository::getInstance()->getUser($email);
+        $user = Repository::getInstance()->getUser($email)->id;
+
+        Repository::getInstance()->saveToken($user,$token,true);
 
         $tmp.= "L'enregistrement est presque effectué</p>
                 <p> Veuillez cliquer sur ce lien :</p>
-                <a href='$currentURL?action=verify&token=$token'>$currentURL?action=verify&token=$token</a>";
+                <a href='$currentURL?action=verify&token=$token'>$currentURL?action=verify&token=$token&id=$user</a>";
 
 
 

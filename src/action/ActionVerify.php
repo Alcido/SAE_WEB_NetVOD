@@ -14,14 +14,13 @@ class ActionVerify extends Action
      */
     public function lancerGet(): string
     {
-        if (isset($_GET['token']) && isset($_SESSION['token']) && isset($_SESSION['unverifiedUser'])){
-            if ($_GET['token'] === $_SESSION['token']){
-                AuthnProvider::validateUser($_SESSION['unverifiedUser']);
-                unset($_SESSION['token']);
-                unset($_SESSION['unverifiedUser']);
+        if (isset($_GET['token']) && isset($_GET['id'])){
+            $repo = Repository::getInstance();
+            $storedToken = $repo->getToken($_GET['id']);
+            if ($_GET['token'] === $storedToken){
+                AuthnProvider::validateUser($_GET['id']);
                 return "<h1>Vous êtes maintenant validé</h1>";
             }
-
             return "<h1>Token invalide</h1>";
         }
         return "<h1>Token manquant</h1>";

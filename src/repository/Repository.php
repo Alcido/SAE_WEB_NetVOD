@@ -60,7 +60,7 @@ class Repository
      */
     public function createUser(string $pseudo, string $email, string $password, int $role=1) : bool {
         try {
-            $stmt = $this->pdo->prepare("INSERT INTO utilisateur (pseudo, email, password, role) VALUES (?, ?, ?, ?)");
+            $stmt = $this->pdo->prepare("INSERT INTO utilisateur (pseudo, email, password, role,verifie) VALUES (?, ?, ?, ?,0)");
             return $stmt->execute([$pseudo, $email, $password, $role]);
         }catch (PDOException $e) {
             if ($e->getCode() == '23000') {
@@ -570,6 +570,23 @@ class Repository
         }
         catch (PDOException $e) {
             return false;
+        }
+    }
+
+    public function getToken(int $user_id) : ?array
+    {
+        try {
+            $stmt = $this->pdo->prepare("SELECT token FROM token where id=?");
+            $stmt->execute([$user_id]);
+            $arr = [];
+            while ($row = $stmt->fetch()){
+                $arr[] = $row['token'];
+            }
+
+            return $arr;
+        }
+        catch (PDOException $e) {
+            return null;
         }
     }
 }
