@@ -17,9 +17,9 @@ class ActionCatalogue extends Action
 
         //Preparation du catalogue
         if (isset($_GET['tri'])&& isset($GET['filtre'])) {
-            $catalogue = $repo->getCatalogueTriFiltre($_GET['tri'],$_GET['valeurFiltre'],$_GET['filtre']);
+            $catalogue = $repo->getCatalogueTriFiltre($_GET['filtre'],$_GET['valeurFiltre'],$_GET['tri']);
         }elseif (isset($_GET['tri'])) {
-            echo "test";
+            echo "test : $_GET[tri]";
             $catalogue = $repo->getCatalogueTri($_GET['tri']);
         }elseif (isset($_GET['filtre'])) {
             $catalogue = $repo->getCatalogueFiltre($_GET['filtre'],$_GET['valeurFiltre']);
