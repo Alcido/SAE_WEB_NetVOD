@@ -2,6 +2,7 @@
 
 namespace NetVOD\src\action;
 
+use NetVOD\src\gestion\GestionCatalogue;
 use NetVOD\src\renderer\ListeSerieRenderer;
 use NetVOD\src\repository\Repository;
 
@@ -15,79 +16,85 @@ class ActionCatalogue extends Action
     {
         $repo = Repository::getInstance();
 
-        //Preparation du catalogue
-        if (isset($_GET['tri'])&& isset($GET['filtre'])) {
-            $filtre = $_GET['filtre'];
-            $tri = $_GET['tri'];
-            if ($filtre != "public" && $filtre != "genre" && $tri != "id" && $tri != "titre" && $tri != "moyenne") {
-                throw new \Exception("Filtre invalide");
-            }
-            $catalogue = $repo->getCatalogueTriFiltre($_GET['filtre'],$_GET['valeurFiltre'],$_GET['tri']);
-        }elseif (isset($_GET['tri'])) {
-            $tri = $_GET['tri'];
-            if ($tri != "id" && $tri != "titre" && $tri != "moyenne") {
-                throw new \Exception("Filtre invalide");
-            }
-            echo "test : $_GET[tri]";
-            $catalogue = $repo->getCatalogueTri($_GET['tri']);
-        }elseif (isset($_GET['filtre'])) {
-            $filtre = $_GET['filtre'];
-            if ($filtre != "public" && $filtre != "genre") {
-                throw new \Exception("Filtre invalide");
-            }
-            $catalogue = $repo->getCatalogueFiltre($_GET['filtre'],$_GET['valeurFiltre']);
-        }else{
+//        Preparation du catalogue
+//        if (isset($_GET['tri'])&& isset($GET['filtre'])) {
+//            $filtre = $_GET['filtre'];
+//            $tri = $_GET['tri'];
+//            if ($filtre != "public" && $filtre != "genre" && $tri != "id" && $tri != "titre" && $tri != "moyenne") {
+//                throw new \Exception("Filtre invalide");
+//            }
+//            $catalogue = $repo->getCatalogueTriFiltre($_GET['filtre'],$_GET['valeurFiltre'],$_GET['tri']);
+//        }elseif (isset($_GET['tri'])) {
+//            $tri = $_GET['tri'];
+//            if ($tri != "id" && $tri != "titre" && $tri != "moyenne") {
+//                throw new \Exception("Filtre invalide");
+//            }
+//            echo "test : $_GET[tri]";
+//            $catalogue = $repo->getCatalogueTri($_GET['tri']);
+//        }elseif (isset($_GET['filtre'])) {
+//            $filtre = $_GET['filtre'];
+//            if ($filtre != "public" && $filtre != "genre") {
+//                throw new \Exception("Filtre invalide");
+//            }
+//            $catalogue = $repo->getCatalogueFiltre($_GET['filtre'],$_GET['valeurFiltre']);
+//        }else{
+//            $catalogue = $repo->getCatalogue();
+//        }
+//
+//        //Recupere les argument de tri
+//        if (isset($_GET['tri'])) {
+//            $tri = <<<HTML
+//                 <input type="hidden" name="tri" value="$_GET[tri]">
+//            HTML;
+//        }else {
+//            $tri = "";
+//        }
+//
+//        //Recupere les argument de filtre
+//        if (isset($_GET['filtre'])) {
+//            $filtre = <<<HTML
+//                <input type="hidden" name="filtre" value="$_GET[filtre]">
+//                <input type="hidden" name="valeurFiltre" value="$_GET[valeurFiltre]">
+//            HTML;
+//        }else{
+//            $filtre = "";
+//        }
+
+        //preparation du catalogue initial
+        if (!isset($_SESSION['catalogue']) or !isset($_GET['tri'])) {
             $catalogue = $repo->getCatalogue();
+            $_SESSION['catalogue'] = serialize($catalogue);
         }
 
+        //récupération des genres, public
+        $type_genre = Repository::getInstance()->getGenre();
+        $type_public = Repository::getInstance()->getTypePublic();
+        //tableau des types de tri
+        $type_tris = ["moyenne", "nbEpisodes", "dateAjout"];
 
+        //récupération de l'affichage html
+        $selectionGenre = GestionCatalogue::getGenreHTML($type_genre);
+        $selectionPublic = GestionCatalogue::getPublicHTML($type_public);
+        $selectionTri = GestionCatalogue::getTriHTML($type_tris);
 
-
-        $renderer = new ListeSerieRenderer($catalogue);
-
-        //Recupere les argument de tri
+        //si un choix a été fait (donc un tri, un public et un genre sont dans l'url) on modifie le catalogue en session qu'on
         if (isset($_GET['tri'])) {
-            $tri = <<<HTML
-                 <input type="hidden" name="tri" value="$_GET[tri]"> 
-            HTML;
-        }else {
-            $tri = "";
-        }
-
-        //Recupere les argument de filtre
-        if (isset($_GET['filtre'])) {
-            $filtre = <<<HTML
-                <input type="hidden" name="filtre" value="$_GET[filtre]"> 
-                <input type="hidden" name="valeurFiltre" value="$_GET[valeurFiltre]"> 
-            HTML;
-        }else{
-            $filtre = "";
+            $currentCatalogue = unserialize($_SESSION['catalogue']);
+            $filtre1 = GestionCatalogue::filtrerGenre($currentCatalogue,$_GET['genre']);
+            $filtre2 = GestionCatalogue::filtrerPublic($filtre1,$_GET['public']);
+            GestionCatalogue::trierListe($filtre2, $_GET['tri']);
+            $_SESSION['catalogue'] = serialize($filtre2);
         }
 
         //Formulaire de tri et de filtre
-        $tmp = <<<HTML
-            <form action="" method="get">
-                <input type="hidden" name="action" value="catalogue">
-                $filtre
-                <button type="submit" name="tri" value="moyenne">Moyenne</button>
-                <button type="submit" name="tri" value="titre">A-Z</button>
-            </form>
+        $html = $selectionGenre . $selectionPublic . $selectionTri . '
+        <a href="?action=catalogue"><button>Reset</button></a>
+        <h1>Catalogue de NetVOD</h1>';
 
-            <form action="" method="get">
-                <input type="hidden" name="action" value="catalogue">
-                $tri
-                <button type="submit" name="filtre" value="genre">Genre</button>
-                <button type="submit" name="filtre" value="public">Public</button>
-                <input type="text" name="valeurFiltre" placeholder="Valeur" required>
-            </form>
+        //on prend le renderer pour la (nouvelle) liste de série
+        $rendererCatalogue = new ListeSerieRenderer(unserialize($_SESSION['catalogue']));
 
-            <a href="?action=catalogue"><button>Reset</button></a>
-        HTML;
-
-
-        $tmp .= "<h1>Catalogue de NetVOD</h1>" . $renderer->render();
-
-        return $tmp;
+        return $html . $rendererCatalogue->render();
     }
 
     public function lancerPost(): string
