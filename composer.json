@@ -11,5 +11,7 @@
             "email": "matthieu.petelot5@etu.univ-lorraine.fr"
         }
     ],
-    "require": {}
+    "require": {
+      "ext-pdo": "*"
+    }
 }

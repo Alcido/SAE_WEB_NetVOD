@@ -29,16 +29,14 @@ class ActionAffichageSerie extends Action
         $listeCom = $repo->getListeCommentaires($serie_id);
 
 
-
         //Affichage de la moyenne des notes
-        $tmp = "<div>
-                    <p> Moyenne notes : $moyenne </p>
-                    </div>";
+        $tmp = "<p> Moyenne notes : $moyenne </p>";
 
         //BoutonReprise
-        if ($repo->isEnCours() != null) {
+        $isEnCours = $repo->isEnCours($serie_id, unserialize($_SESSION['user'])->id);
+        if ($isEnCours !== null) {
             $tmp .= <<<HTML
-                <a href="?action=episode&episodeID={$repo->isEnCours()}"><button>Reprendre</button></a>
+                <a href="?action=episode&episodeID={$isEnCours}"><button>Reprendre</button></a>
                HTML;
         }
 
