@@ -6,6 +6,7 @@ use NetVOD\src\action\ActionAccueil;
 use NetVOD\src\action\ActionAddPref;
 use NetVOD\src\action\ActionAddProfilInfos;
 use NetVOD\src\action\ActionAffichageEpisode;
+use NetVOD\src\action\ActionAffichageInfos;
 use NetVOD\src\action\ActionAffichageSerie;
 use NetVOD\src\action\ActionCatalogue;
 use NetVOD\src\action\ActionDefault;
@@ -63,9 +64,11 @@ class Dispatcher
             case 'search':
                 $actionExec = new ActionSearch;
                 break;
-            case 'add-infos':
-                $actionExec=new ActionAddProfilInfos;
+            case 'infos':
+                $actionExec=new ActionAffichageInfos;
                 break;
+            case 'add-infos':
+                $actionExec = new ActionAddProfilInfos;
             default:
         }
         $this->renderPage($actionExec());
@@ -94,6 +97,7 @@ class Dispatcher
                   <nav>
                     <a class="btn" href="?action=catalogue">Catalogue</a>
                     <a class="btn" href="?action=home">Mes favoris</a>
+                    <a class="btn" href="?action=infos">infos</a>
                     <a class="btn btn-danger" href="?action=logout">Déconnexion</a>
                     <form action="?action=search" method="get">
                         <input type="hidden" name="action" value="search">

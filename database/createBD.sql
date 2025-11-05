@@ -116,7 +116,7 @@ create table profil(
                        nom varchar(128),
                        prenom varchar(128),
                        genre int(1),
-                       birth_date date,
+                       birth_date date NULL,
                        adresse varchar(128),
                        primary key (id),
                        constraint fk_id_user foreign key (id) references utilisateur (id) on delete cascade

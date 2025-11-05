@@ -181,7 +181,7 @@ class Repository
     {
         //on vérifie que le user na pas deja noter la serie aec une exception car si l'user veut renoter mySQL nous renvoie une contrainte d'integrité du a la clé primaire composite
         try {
-            $stmt = $this->pdo->prepare("INSERT INTO notation (id_user, id_serie, date_comm, commentaire, note) VALUES (?,?,sysdate(),?,?)");
+            $stmt = $this->pdo->prepare("INSERT INTO notation (id_user, id_serie, date_comm, commentaire, note) VALUES (?,?,SYSDATE(),?,?)");
             return $stmt->execute([$user_id, $serie_id, $comm, $note]);
         }catch (PDOException $e) {
             if ($e->getCode() == '23000') {
@@ -316,10 +316,42 @@ class Repository
         return $res;
     }
 
-    public function ajoutInfoUser(?int $user_id,?string $nom, ?string $prenom,?int $genre, ?string $birth_date, ?string $adresse) : bool
-    {
-        $stmt = this->pdo->prepare("insert into profil(id, nom, prenom, genre, birth_date, adresse) values(?,?,?,?,?,?) ");
+    public function ajoutInfoUser(
+        ?int $user_id,
+        ?string $nom,
+        ?string $prenom,
+        ?int $genre,
+        ?string $birth_date,
+        ?string $adresse
+    ): bool {
+        $nom        = ($nom !== null && $nom !== '') ? $nom : null;
+        $prenom     = ($prenom !== null && $prenom !== '') ? $prenom : null;
+        $adresse    = ($adresse !== null && $adresse !== '') ? $adresse : null;
+        $birth_date = ($birth_date !== null && $birth_date !== '') ? $birth_date : null;
+
+        $stmt = $this->pdo->prepare("
+        INSERT INTO profil (id, nom, prenom, genre, birth_date, adresse)
+        VALUES (?, ?, ?, ?, ?, ?)
+        ON DUPLICATE KEY UPDATE
+            nom = IF(VALUES(nom) IS NOT NULL, VALUES(nom), nom),
+            prenom = IF(VALUES(prenom) IS NOT NULL, VALUES(prenom), prenom),
+            genre = IF(VALUES(genre) IS NOT NULL, VALUES(genre), genre),
+            birth_date = IF(VALUES(birth_date) IS NOT NULL, VALUES(birth_date), birth_date),
+            adresse = IF(VALUES(adresse) IS NOT NULL, VALUES(adresse), adresse)
+    ");
+
         return $stmt->execute([$user_id, $nom, $prenom, $genre, $birth_date, $adresse]);
+    }
+
+    public function getInfosUser(int $user_id): ?array
+    {
+        $stmt=$this->pdo->prepare("SELECT * FROM profil WHERE id = ?");
+        $stmt->execute([$user_id]);
+        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($data) {
+            return $data;
+        }
+        return null;
     }
 
 
