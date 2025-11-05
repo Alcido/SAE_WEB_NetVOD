@@ -13,8 +13,33 @@ class ActionCatalogue extends Action
      */
     public function lancerGet(): string
     {
-        $catalogue = Repository::getInstance()->getCatalogue();
+        $tri = null;
+        $filtre = null;
+        if (isset($_GET['tri'])) {
+            $_SESSION['tri'] = $_GET['tri'];
+        }
+
+        if (isset($_GET['filtre'])) {
+            $filtre = $_GET['filtre'];
+        }
+
+
+        $catalogue = Repository::getInstance()->getCatalogue($tri,$filtre);
+
+
+
+
+
         $renderer = new ListeSerieRenderer($catalogue);
+
+        $tmp = <<<HTML
+            <form action="" method="get">
+                <button type="submit" name="tri" value="triMoyenne">Moyenne</button>
+                <button type="submit" name="tri" value="triAlphabet">A-Z</button>
+            </form>
+        HTML;
+
+
         return "<h1>Catalogue de NetVOD</h1>" . $renderer->render();
     }
 
