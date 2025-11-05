@@ -465,13 +465,23 @@ class Repository
     public function getCatalogueTri(string $tri)
     {
         try {
-            $query = "select id_serie from serie order by ?";
-            $stmt = $this->pdo->prepare($query);
-            $stmt->execute(array([$tri]));
-            $data = $stmt->fetchAll();
+            if ($tri=="moyenne"){
+                $query = "select id
+                    from serie inner join notation on serie.id = notation.id_serie
+                    group by serie.id
+                    order by avg(notation.note) desc";
+                $stmt = $this->pdo->prepare($query);;
+            }else {
+                $query = "select id from serie order by $tri";
+                $stmt = $this->pdo->prepare($query);
+            }
+
+            $stmt->execute();
             $res = [];
-            foreach ($data as $id) {
-                $res[] = $this->getSerie(intval($id));
+            while ($row = $stmt->fetch()) {
+                $serie = $this->getSerie($row["id"]);
+
+                $res[] = $serie;
             }
             return $res;
         } catch (PDOException $e) {
@@ -487,9 +497,9 @@ class Repository
      */
     public function getCatalogueTriFiltre(string $filtre, string $valeur, string $tri) : ?array {
         try {
-            $query = "select id_serie from serie where ? like ? order by ?";
+            $query = "select id from serie where ? like ? order by ?";
             $stmt = $this->pdo->prepare($query);
-            $stmt->execute(array([$filtre, $valeur, $tri]));
+            $stmt->execute(array($filtre, $valeur, $tri));
             $data = $stmt->fetchAll();
             $res = [];
             foreach ($data as $id) {
@@ -508,9 +518,9 @@ class Repository
      */
     public function getCatalogueFiltre(string $filtre, string $valeur) : ?array {
         try {
-            $query = "select id_serie from serie where ? like ?";
+            $query = "select id from serie where ? like ?";
             $stmt = $this->pdo->prepare($query);
-            $stmt->execute(array([$filtre, $valeur]));
+            $stmt->execute(array($filtre, $valeur));
             $data = $stmt->fetchAll();
             $res = [];
             foreach ($data as $id) {
