@@ -60,7 +60,7 @@ class Repository
      */
     public function createUser(string $pseudo, string $email, string $password, int $role=1) : bool {
         try {
-            $stmt = $this->pdo->prepare("INSERT INTO utilisateur (pseudo, email, password, role) VALUES (?, ?, ?, ?)");
+            $stmt = $this->pdo->prepare("INSERT INTO utilisateur (pseudo, email, password, role, verifie) VALUES (?, ?, ?, ?,0)");
             return $stmt->execute([$pseudo, $email, $password, $role]);
         }catch (PDOException $e) {
             if ($e->getCode() == '23000') {
@@ -68,6 +68,17 @@ class Repository
                 return false;
             }
             throw $e;
+        }
+    }
+
+    public function validateUser(int $id) : bool {
+        echo $id;
+        try{
+            $stmt = $this->pdo->prepare("UPDATE utilisateur SET verifie = 1 WHERE id = ?");
+            $stmt->execute([$id]);
+            return true;
+        }catch (PDOException $e) {
+            return false;
         }
     }
 
@@ -84,7 +95,8 @@ class Repository
             return ['user' => new User(
                 intval($data['id']),
                 intval($data['role']),
-                strval($data['pseudo'])
+                strval($data['pseudo']),
+                intval($data['verifie']),
             ),'pwd'=>$data['password']];
         }
 

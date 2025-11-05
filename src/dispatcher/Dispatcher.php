@@ -15,6 +15,7 @@ use NetVOD\src\action\ActionDisconnect;
 use NetVOD\src\action\ActionLogIn;
 use NetVOD\src\action\ActionRegister;
 use NetVOD\src\action\ActionSearch;
+use NetVOD\src\action\ActionVerify;
 use NetVOD\src\repository\Repository;
 
 class Dispatcher
@@ -73,6 +74,9 @@ class Dispatcher
                 break;
             case 'dell-infos':
                 $actionExec = new ActionDellInfos;
+                break;
+            case 'verify':
+                $actionExec = new ActionVerify;
                 break;
 
             default:

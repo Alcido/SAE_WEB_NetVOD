@@ -31,6 +31,11 @@ class AuthnProvider
         if (!password_verify($mdp, $user['pwd'])) {
             throw new AuthnException("Mot de passe incorrect");
         }
+
+        if (!$user['user']->verified) {
+            throw new AuthnException("Utilisateur non verifie");
+        }
+
         // On ajoute l'utilisateur trouvé en session
         $value = $user['user'];
         $_SESSION['user'] = serialize($value);
@@ -49,6 +54,10 @@ class AuthnProvider
         if ($user === false) {
             throw new AuthnException("Identifiant existe déja");
         }
+    }
+
+    public static function validateUser(int $id) : bool {
+        return Repository::getInstance()->validateUser($id);
     }
 
 }
