@@ -483,7 +483,7 @@ class Repository
      * @param string $tri
      * @return array|null
      */
-    public function getCatalogueTri(string $tri)
+    public function getCatalogueTri(string $tri) : ?array
     {
         try {
             if ($tri==="moyenne"){
@@ -588,5 +588,25 @@ class Repository
         catch (PDOException $e) {
             return null;
         }
+    }
+
+    /**Méthode permettant de récupérer les genres de la base de donnée
+     * @return array|null la liste des genres
+     */
+    public function getGenre() : ?array {
+        $query = "select genre from genre";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    /**Méthode permettant de récupérer les types de public de la base de donnée
+     * @return array|null la liste des types de public
+     */
+    public function getTypePublic() : ?array {
+        $query = "select type_public from type_public";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 }

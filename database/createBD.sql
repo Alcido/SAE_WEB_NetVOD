@@ -38,8 +38,8 @@ INSERT INTO `episode` (`id`, `numero`, `titre`, `resume`, `duree`, `file`, `seri
                                                                                                   (1,	1,	'Le lac',	'Le lac se révolte ',	8,	'lake.mp4',	1,''),
                                                                                                   (2,	2,	'Le lac : les mystères de l\'eau trouble',	'Un grand mystère, l\'eau du lac est trouble. Jack trouvera-t-il la solution ?',	8,	'lake.mp4',	1, ''),
                                                                                                   (3,	3,	'Le lac : les mystères de l\'eau sale',	'Un grand mystère, l\'eau du lac est sale. Jack trouvera-t-il la solution ?',	8,	'lake.mp4',	1, ''),
-                                                                                                  (4,	3,	'Le lac : les mystères de l\'eau chaude',	'Un grand mystère, l\'eau du lac est chaude. Jack trouvera-t-il la solution ?',	8,	'lake.mp4',	1, ''),
-                                                                                                  (5,	3,	'Le lac : les mystères de l\'eau froide',	'Un grand mystère, l\'eau du lac est froide. Jack trouvera-t-il la solution ?',	8,	'lake.mp4',	1, ''),
+                                                                                                  (4,	4,	'Le lac : les mystères de l\'eau chaude',	'Un grand mystère, l\'eau du lac est chaude. Jack trouvera-t-il la solution ?',	8,	'lake.mp4',	1, ''),
+                                                                                                  (5,	5,	'Le lac : les mystères de l\'eau froide',	'Un grand mystère, l\'eau du lac est froide. Jack trouvera-t-il la solution ?',	8,	'lake.mp4',	1, ''),
                                                                                                   (6,	1,	'Eau calme',	'L\'eau coule tranquillement au fil du temps.',	15,	'water.mp4',	2, ''),
                                                                                                   (7,	2,	'Eau calme 2',	'Le temps a passé, l\'eau coule toujours tranquillement.',	15,	'water.mp4',	2, ''),
                                                                                                   (8,	3,	'Eau moins calme',	'Le temps des tourments est pour bientôt, l\'eau s\'agite et le temps passe.',	15,	'water.mp4',	2, ''),
@@ -141,3 +141,30 @@ create table token(
     constraint fk_id_yser_token foreign key (id) references utilisateur(id) on delete cascade
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+drop table if exists type_public;
+create table type_public (
+    type_public varchar(128) primary key
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+INSERT INTO type_public (type_public)
+VALUES
+    ('Enfant'),
+    ('Adolescent'),
+    ('Famille'),
+    ('Adulte'),
+    ('Mature');
+
+drop table if exists genre;
+create table genre(
+    genre varchar(128) primary key
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+INSERT INTO genre (genre)
+VALUES
+    ('Action'),
+    ('Comédie'),
+    ('Drama'),
+    ('Science-Fiction'),
+    ('Fantastique'),
+    ('Horreur'),
+    ('Documentaire');
