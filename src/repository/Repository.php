@@ -406,8 +406,17 @@ class Repository
     public function getCatalogueTri(string $tri)
     {
         try {
-            $query = "select id from serie order by $tri";
-            $stmt = $this->pdo->prepare($query);
+            if ($tri=="moyenne"){
+                $query = "select id
+                    from serie inner join notation on serie.id = notation.id_serie
+                    group by serie.id
+                    order by avg(notation.note) desc";
+                $stmt = $this->pdo->prepare($query);;
+            }else {
+                $query = "select id from serie order by $tri";
+                $stmt = $this->pdo->prepare($query);
+            }
+
             $stmt->execute();
             $res = [];
             while ($row = $stmt->fetch()) {
