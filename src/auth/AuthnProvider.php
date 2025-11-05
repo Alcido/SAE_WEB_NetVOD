@@ -24,21 +24,22 @@ class AuthnProvider
         // On récupère l'utilisateur depuis la BDD
         $user = Repository::getInstance()->getUser($mail);
         //TODO FIX USAGE USER
+
         // Si l'utilisateur n'existe pas
         if (!$user) {
             throw new AuthnException("Utilisateur n'existe pas");
         }
         // Si le mot de passe est invalide
-        if (!password_verify($mdp, $user['pwd'])) {
+        if (!password_verify($mdp, $user->password)) {
             throw new AuthnException("Mot de passe incorrect");
         }
 
-        if (!$user['user']->verified) {
+        if (!$user->verified) {
             throw new AuthnException("Utilisateur non verifie");
         }
 
         // On ajoute l'utilisateur trouvé en session
-        $value = $user['user'];
+        $value = $user;
         $_SESSION['user'] = serialize($value);
     }
 

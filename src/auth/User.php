@@ -5,7 +5,7 @@ namespace NetVOD\src\auth;
 class User
 {
     private bool $verified = false;
-
+    private string $password;
     private int $id;
     private int $role;
     private string $pseudo;
@@ -15,7 +15,8 @@ class User
      * @param int $role role de l'utilisateur
      * @param string $pseudo pseudo de l'utilisateur
      */
-    public function __construct(int $id, int $role, string $pseudo,bool $verified) {
+    public function __construct(int $id, int $role, string $pseudo,bool $verified,string $password) {
+        $this->password=$password;
         $this->verified=$verified;
         $this->id = $id;
         $this->role = $role;

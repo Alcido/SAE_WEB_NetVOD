@@ -96,7 +96,8 @@ class Repository
                 intval($data['id']),
                 intval($data['role']),
                 strval($data['pseudo']),
-                intval($data['verifie'])
+                intval($data['verifie']),
+                strval($data['password'])
             );
         }
 
