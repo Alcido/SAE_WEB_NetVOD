@@ -410,7 +410,7 @@ class Repository
             $stmt = $this->pdo->prepare($query);
             $stmt->execute(array($tri));
             $data = $stmt->fetchAll();
-            var_dump($data);
+            echo "<script>alert({$tri})</script>";
             $res = [];
             foreach ($data as $id) {
                 $res[] = $this->getSerie(intval($id));
