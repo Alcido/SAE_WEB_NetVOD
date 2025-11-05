@@ -267,5 +267,20 @@ class Repository
         return true;
     }
 
+    public function getSerieRecherche(string $titre) : ?array{
+        $query = "select id from serie where titre like ?";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute(array("%$titre%"));
+        $res = [];
+        while ($row = $stmt->fetch()) {
+            $serie = $this->getSerie($row["id"]);
+            $res[] = $serie;
+        }
+        if (sizeof($res) == 0) {
+            return null;
+        }
+        return $res;
+    }
+
 
 }

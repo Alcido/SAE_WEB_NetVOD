@@ -11,6 +11,7 @@ use NetVOD\src\action\ActionDefault;
 use NetVOD\src\action\ActionDisconnect;
 use NetVOD\src\action\ActionLogIn;
 use NetVOD\src\action\ActionRegister;
+use NetVOD\src\action\ActionSearch;
 use NetVOD\src\repository\Repository;
 
 class Dispatcher
@@ -58,6 +59,9 @@ class Dispatcher
             case 'episode':
                 $actionExec = new ActionAffichageEpisode;
                 break;
+            case 'search':
+                $actionExec = new ActionSearch;
+                break;
             default:
         }
         $this->renderPage($actionExec());
@@ -87,6 +91,10 @@ class Dispatcher
                     <a class="btn" href="?action=catalogue">Catalogue</a>
                     <a class="btn" href="?action=home">Mes favoris</a>
                     <a class="btn btn-danger" href="?action=logout">Déconnexion</a>
+                    <form action="?action=search" method="get">
+                        <input type="hidden" name="action" value="search">
+                        <input class="searchBar" type="text" name="search" id="search" placeholder="Search" required autofocus>
+                    </form>     
                   </nav>
                 </header>
                 HTML;
