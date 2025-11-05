@@ -131,6 +131,7 @@ class Repository
             $stmt = $this->pdo->prepare($query);
             $stmt->execute([$user_id, $serie_id]);
         } catch (PDOException $e) {
+            //la serie est deja dans les serie pref
             return false;
         }
         return true;
@@ -144,6 +145,7 @@ class Repository
             $stmt = $this->pdo->prepare($query);
             $stmt->execute([$user_id, $serie_id]);
         } catch (PDOException $e) {
+            //la serie est deja en cours
             return false;
         }
         return true;
