@@ -22,7 +22,7 @@ class ActionAffichageEpisode extends Action
             return "<h1> episode not existing </h1>";
         }else {
             $episode = $repo->getEpisode($episodeID);
-            $ajout = $repo->addSerieEnCours($episode->serie_id);
+            $ajout = $repo->addSerieEnCours($episode->serie_id, unserialize($_SESSION['user'])->id, $episodeID);
             if (!$ajout) {
                 throw new \Exception("Erreur dans l'ajout en court");
             }

@@ -11,23 +11,35 @@ class ActionAccueil extends Action
     {
         $user_id = unserialize($_SESSION['user'])->id;
         $pseudo = unserialize($_SESSION['user'])->pseudo;
+
+        //on récupère les différentes séries
         $series_pref = Repository::getInstance()->getPref($user_id);
         $series_encours = Repository::getInstance()->getSeriesEncours($user_id);
+        $series_dejaVu = Repository::getInstance()->getSeriesDejaVu($user_id);
+
+        //récupère les renderers
         $rendererA = new ListeSerieRenderer($series_pref);
         $rendererB = new ListeSerieRenderer($series_encours);
+        $rendererC = new ListeSerieRenderer($series_dejaVu);
+
+        $html = "<h1>Bienvenue sur votre page d'accueil, {$pseudo} !</h1>";
 
         if (sizeof($series_pref) === 0) {
-            $html = "<h1>Bienvenue sur votre page d'accueil, {$pseudo} !</h1>
-                    <p>Vous n'avez pas de séries dans votre liste de préférences</p>";
+            $html .= "<p>Vous n'avez pas de séries dans votre liste de préférences</p>";
         } else {
-            $html = "<h1>Bienvenue sur votre page d'accueil, {$pseudo} !</h1>
-                    <p>Les séries que vous avez le plus aimé : </p>" . $rendererA->render();
+            $html .= "<div class='series-liste'><p>Les séries que vous avez le plus aimé : </p>" . $rendererA->render() . "</div>";
         }
 
         if (sizeof($series_encours) === 0) {
             $html .= "<p>Vous n'avez pas de séries en cours.</p>";
         } else {
-            $html .= "<p>Vos séries en cours : </p>" . $rendererB->render();
+            $html .= "<div class='series-liste'><p>Vos séries en cours : </p>" . $rendererB->render() . "</div>";
+        }
+
+        if (sizeof($series_dejaVu) === 0 ) {
+            $html .= "<p>Vous n'avez pas de séries finies.</p>";
+        } else {
+            $html .= "<div class='series-liste'><p>Vos séries en terminée(s) : </p>" . $rendererC->render() . "</div>";
         }
 
         return $html;
