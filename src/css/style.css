@@ -139,3 +139,45 @@ form input[type="submit"]:hover {
     border-radius: 8px;
     margin-top: 15px;
 }
+
+
+
+/*ajout pour test*/
+
+.profil-infos ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.profil-infos li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px; /* espace entre les lignes */
+}
+
+.profil-infos li label {
+    width: 120px; /* largeur fixe pour le nom du champ */
+    font-weight: bold;
+}
+
+.profil-infos li .value,
+.profil-infos li form {
+    flex-grow: 1; /* occupe le reste de la ligne */
+    display: flex;
+    align-items: center;
+    gap: 5px; /* espace entre input et boutons */
+}
+
+.profil-infos li input[type="text"],
+.profil-infos li input[type="date"] {
+    flex-grow: 1; /* prend tout l'espace disponible */
+    max-width: 200px; /* limite la taille si besoin */
+}
+
+.profil-infos li button,
+.profil-infos li input[type="submit"] {
+    padding: 3px 8px;
+    font-size: 0.9rem;
+}
+

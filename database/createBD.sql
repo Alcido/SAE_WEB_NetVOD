@@ -64,6 +64,7 @@ create table utilisateur(
                             email varchar(256) not null,
                             password varchar(256) not null,
                             role int(5),
+                            verifie boolean not null,
                             primary key (id),
                             unique key email (email)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
