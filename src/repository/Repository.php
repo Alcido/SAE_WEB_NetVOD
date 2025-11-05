@@ -455,7 +455,6 @@ class Repository
             $stmt = $this->pdo->prepare($query);
             $stmt->bindParam(1, $user_id);
             $stmt->execute();
-            $data = $stmt->fetchAll();
             $res = [];
             while ($row = $stmt->fetch()) {
                 $serie = $this->getSerie($row["id_serie"]);
@@ -474,7 +473,7 @@ class Repository
     public function getCatalogueTri(string $tri)
     {
         try {
-            if ($tri=="moyenne"){
+            if ($tri==="moyenne"){
                 $query = "select id
                     from serie inner join notation on serie.id = notation.id_serie
                     group by serie.id
@@ -484,12 +483,10 @@ class Repository
                 $query = "select id from serie order by $tri";
                 $stmt = $this->pdo->prepare($query);
             }
-
             $stmt->execute();
             $res = [];
             while ($row = $stmt->fetch()) {
                 $serie = $this->getSerie($row["id"]);
-
                 $res[] = $serie;
             }
             return $res;
