@@ -377,12 +377,52 @@ class Repository
         }
     }
 
-    public function getCatalogueTri(string $filtre, string $tri) : ?array {
-
+    public function getCatalogueTri(string $tri)
+    {
+        try {
+            $query = "select id_serie from serie order by ?";
+            $stmt = $this->pdo->prepare($query);
+            $stmt->execute(array([$tri]));
+            $data = $stmt->fetchAll();
+            $res = [];
+            foreach ($data as $id) {
+                $res[] = $this->getSerie(intval($id));
+            }
+            return $res;
+        } catch (PDOException $e) {
+            return null;
+        }
     }
 
-    public function getCatalogueFiltre(string $filtre) : ?array {
-        $query = "select id_serie from serie where ? like ?";
+    public function getCatalogueTriFiltre(string $filtre, string $valeur, string $tri) : ?array {
+        try {
+            $query = "select id_serie from serie where ? like ? order by ?";
+            $stmt = $this->pdo->prepare($query);
+            $stmt->execute(array([$filtre, $valeur, $tri]));
+            $data = $stmt->fetchAll();
+            $res = [];
+            foreach ($data as $id) {
+                $res[] = $this->getSerie(intval($id));
+            }
+            return $res;
+        } catch (PDOException $e) {
+            return null;
+        }
+    }
 
+    public function getCatalogueFiltre(string $filtre, string $valeur) : ?array {
+        try {
+            $query = "select id_serie from serie where ? like ?";
+            $stmt = $this->pdo->prepare($query);
+            $stmt->execute(array([$filtre, $valeur]));
+            $data = $stmt->fetchAll();
+            $res = [];
+            foreach ($data as $id) {
+                $res[] = $this->getSerie(intval($id));
+            }
+            return $res;
+        } catch (PDOException $e) {
+            return null;
+        }
     }
 }
