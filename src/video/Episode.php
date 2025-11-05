@@ -25,7 +25,6 @@ class Episode extends Video
         $this->numero = $numero;
     }
 
-
     /** Getter magique
      * @param string $attribut
      * @return mixed

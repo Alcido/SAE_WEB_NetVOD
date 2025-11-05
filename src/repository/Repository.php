@@ -129,9 +129,33 @@ class Repository
     }
 
     //ajoute serie en cours
-    public function addSerieEnCours(int $serie_id) : ?bool
+    public function addSerieEnCours(int $serie_id, int $user_id) : ?bool
     {
+        try {
+            $query = "insert into enCours2User values (?, ?)";
+            $stmt = $this->pdo->prepare($query);
+            $stmt->execute([$user_id, $serie_id]);
+        } catch (PDOException $e) {
+            return false;
+        }
         return true;
+    }
+
+    public function getSeriesEncours(int $user_id) : ?array  {
+        try {
+            $query = "select id_serie from enCours2User where id_user = ?";
+            $stmt = $this->pdo->prepare($query);
+            $stmt->bindParam(1, $user_id);
+            $stmt->execute();
+            $data = $stmt->fetchAll();
+            $res = [];
+            foreach ($data as $serie_id) {
+                $res[] = $this->getSerie(intval($serie_id));
+            }
+            return $res;
+        } catch (PDOException $e) {
+            return null;
+        }
     }
 
 
