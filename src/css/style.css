@@ -140,9 +140,7 @@ form input[type="submit"]:hover {
     margin-top: 15px;
 }
 
-
-
-/*ajout pour test*/
+/* Styles pour les informations de profil */
 
 .profil-infos ul {
     list-style: none;
@@ -153,31 +151,47 @@ form input[type="submit"]:hover {
 .profil-infos li {
     display: flex;
     align-items: center;
-    margin-bottom: 8px; /* espace entre les lignes */
+    margin-bottom: 8px;
+    min-height: 40px; /* hauteur minimale pour uniformiser */
 }
 
-.profil-infos li label {
-    width: 120px; /* largeur fixe pour le nom du champ */
+.profil-infos li strong {
+    width: 180px;
     font-weight: bold;
 }
 
 .profil-infos li .value,
 .profil-infos li form {
-    flex-grow: 1; /* occupe le reste de la ligne */
+    flex-grow: 1;
     display: flex;
     align-items: center;
-    gap: 5px; /* espace entre input et boutons */
+    gap: 8px;
+}
+
+/* Supprime les marges et paddings pour les formulaires inline dans profil-infos */
+.profil-infos li form {
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    flex-direction: row; /* override du column du form global */
 }
 
 .profil-infos li input[type="text"],
 .profil-infos li input[type="date"] {
-    flex-grow: 1; /* prend tout l'espace disponible */
-    max-width: 200px; /* limite la taille si besoin */
+    flex-grow: 1;
+    max-width: 300px;
+    padding: 6px 10px; /* padding réduit pour cohérence */
 }
 
 .profil-infos li button,
-.profil-infos li input[type="submit"] {
-    padding: 3px 8px;
+.profil-infos li input[type="submit"],
+.profil-infos li a button {
+    padding: 5px 12px;
     font-size: 0.9rem;
+    margin: 0; /* supprime toute marge */
 }
 
+/* Style pour les boutons dans les liens */
+.profil-infos li a {
+    display: inline-block;
+}
