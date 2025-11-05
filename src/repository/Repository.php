@@ -417,7 +417,7 @@ class Repository
      */
     public function verifDejaVu (int $serie_id, int $ep_id, int $user_id) : ?bool {
         try {
-            $query = "select max(numero) as lastEp from serie where id_serie = ? group by serie_id";
+            $query = "select max(numero) as lastEp from serie where id = ? group by id";
             $stmt = $this->pdo->prepare($query);
             $stmt->execute([$serie_id]);
             $res = $stmt->fetch(PDO::FETCH_ASSOC);
