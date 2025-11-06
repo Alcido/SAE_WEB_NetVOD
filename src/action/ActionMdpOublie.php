@@ -29,7 +29,10 @@ class ActionMdpOublie extends Action
         $user_id = $repo->getUserByEmail($email);
 
         if ($user_id === null) {
-            return "<p>Aucun compte associé à cette adresse email.</p>";
+            return <<<HTML
+            <p>Aucun compte associé à cette adresse email.</p>
+            <a href="?action=register\"><button>S'inscrire</button></a>
+            HTML;
         }
 
 
