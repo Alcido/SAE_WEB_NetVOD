@@ -23,7 +23,7 @@ class SerieRenderer
             <a href='?action=serie&serieID={$this->serie->id}'>
                 <img src="{$this->serie->lienImage}" />
                 <p>{$this->serie->nom}</p>
-                <p style="font-size: 12px; color: #ccc;">{$this->serie->genre}</p>
+                <p>{$this->serie->genre}</p>
             </a>
             {$this->favorite()}
         </div>

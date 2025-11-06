@@ -16,61 +16,14 @@ class ActionCatalogue extends Action
     {
         $repo = Repository::getInstance();
 
-//        Preparation du catalogue
-//        if (isset($_GET['tri'])&& isset($GET['filtre'])) {
-//            $filtre = $_GET['filtre'];
-//            $tri = $_GET['tri'];
-//            if ($filtre != "public" && $filtre != "genre" && $tri != "id" && $tri != "titre" && $tri != "moyenne") {
-//                throw new \Exception("Filtre invalide");
-//            }
-//            $catalogue = $repo->getCatalogueTriFiltre($_GET['filtre'],$_GET['valeurFiltre'],$_GET['tri']);
-//        }elseif (isset($_GET['tri'])) {
-//            $tri = $_GET['tri'];
-//            if ($tri != "id" && $tri != "titre" && $tri != "moyenne") {
-//                throw new \Exception("Filtre invalide");
-//            }
-//            echo "test : $_GET[tri]";
-//            $catalogue = $repo->getCatalogueTri($_GET['tri']);
-//        }elseif (isset($_GET['filtre'])) {
-//            $filtre = $_GET['filtre'];
-//            if ($filtre != "public" && $filtre != "genre") {
-//                throw new \Exception("Filtre invalide");
-//            }
-//            $catalogue = $repo->getCatalogueFiltre($_GET['filtre'],$_GET['valeurFiltre']);
-//        }else{
-//            $catalogue = $repo->getCatalogue();
-//        }
-//
-//        //Recupere les argument de tri
-//        if (isset($_GET['tri'])) {
-//            $tri = <<<HTML
-//                 <input type="hidden" name="tri" value="$_GET[tri]">
-//            HTML;
-//        }else {
-//            $tri = "";
-//        }
-//
-//        //Recupere les argument de filtre
-//        if (isset($_GET['filtre'])) {
-//            $filtre = <<<HTML
-//                <input type="hidden" name="filtre" value="$_GET[filtre]">
-//                <input type="hidden" name="valeurFiltre" value="$_GET[valeurFiltre]">
-//            HTML;
-//        }else{
-//            $filtre = "";
-//        }
-
-        //preparation du catalogue initial
-        if (!isset($_SESSION['catalogue']) or !isset($_GET['tri'])) {
-            $catalogue = $repo->getCatalogue();
-            $_SESSION['catalogue'] = serialize($catalogue);
-        }
+        $catalogue = $repo->getCatalogue();
+        $_SESSION['catalogue'] = serialize($catalogue);
 
         //récupération des genres, public
         $type_genre = Repository::getInstance()->getGenre();
         $type_public = Repository::getInstance()->getTypePublic();
         //tableau des types de tri
-        $type_tris = ["moyenne", "nbEpisodes", "dateAjout"];
+        $type_tris = ["moyenne", "nbEpisodes", "dateAjout", "A-Z"];
 
         //récupération de l'affichage html
         $selectionGenre = GestionCatalogue::getGenreHTML($type_genre);
@@ -82,8 +35,9 @@ class ActionCatalogue extends Action
             $currentCatalogue = unserialize($_SESSION['catalogue']);
             $filtre1 = GestionCatalogue::filtrerGenre($currentCatalogue,$_GET['genre']);
             $filtre2 = GestionCatalogue::filtrerPublic($filtre1,$_GET['public']);
-            GestionCatalogue::trierListe($filtre2, $_GET['tri']);
-            $_SESSION['catalogue'] = serialize($filtre2);
+            $tri = GestionCatalogue::trierListe($filtre2, $_GET['tri']);
+
+            $_SESSION['catalogue'] = serialize($tri);
         }
 
         //Formulaire de tri et de filtre
