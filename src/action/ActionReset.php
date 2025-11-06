@@ -16,14 +16,18 @@ class ActionReset extends Action
         $token = $_GET['token'];
         $repo = Repository::getInstance();
 
-        $stored = $repo->getToken($userId);
+        $storedTokens = $repo->getToken($userId);
 
-        if (!$stored || $stored['reset_token'] !== $token) {
-            return "<h1>Token invalide</h1>";
+        $isValid = false;
+        foreach ($storedTokens as $storedToken) {
+            if ($storedToken === $token) {
+                $isValid = true;
+                break;
+            }
         }
 
-        if (strtotime($stored['reset_expires']) < time()) {
-            return "<h1>Le lien de réinitialisation a expiré.</h1>";
+        if (!$isValid) {
+            return "<h1>Token invalide</h1>";
         }
 
         return <<<HTML
@@ -50,13 +54,18 @@ class ActionReset extends Action
         $token = $_GET['token'];
         $repo = Repository::getInstance();
 
-        $stored = $repo->getToken($userId);
-        if (!$stored || $stored['reset_token'] !== $token) {
-            return "<h1>Token invalide</h1>";
+        $storedTokens = $repo->getToken($userId);
+
+        $isValid = false;
+        foreach ($storedTokens as $storedToken) {
+            if ($storedToken === $token) {
+                $isValid = true;
+                break;
+            }
         }
 
-        if (strtotime($stored['reset_expires']) < time()) {
-            return "<h1>Le lien a expiré.</h1>";
+        if (!$isValid) {
+            return "<h1>Token invalide</h1>";
         }
 
         if ($_POST['password'] !== $_POST['password2']) {
@@ -64,11 +73,10 @@ class ActionReset extends Action
         }
 
         $hashed = password_hash($_POST['password'], PASSWORD_BCRYPT, ['cost' => 12]);
-
         $repo->changeMdp($userId, $hashed);
-
         $repo->dellToken($userId, $token);
 
-        return "<h1>Mot de passe mis à jour avec succès !</h1><p><a href='?action=login'>Se connecter</a></p>";
+        return "<h1>Mot de passe mis à jour avec succès !</h1>
+                <p><a href='?action=login'>Se connecter</a></p>";
     }
 }
