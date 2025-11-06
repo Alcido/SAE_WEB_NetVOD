@@ -60,11 +60,8 @@ class ActionCatalogue extends Action
 //            $filtre = "";
 //        }
 
-        //preparation du catalogue initial
-        if (!isset($_SESSION['catalogue']) or !isset($_GET['tri'])) {
-            $catalogue = $repo->getCatalogue();
-            $_SESSION['catalogue'] = serialize($catalogue);
-        }
+        $catalogue = $repo->getCatalogue();
+        $_SESSION['catalogue'] = serialize($catalogue);
 
         //récupération des genres, public
         $type_genre = Repository::getInstance()->getGenre();
@@ -82,8 +79,9 @@ class ActionCatalogue extends Action
             $currentCatalogue = unserialize($_SESSION['catalogue']);
             $filtre1 = GestionCatalogue::filtrerGenre($currentCatalogue,$_GET['genre']);
             $filtre2 = GestionCatalogue::filtrerPublic($filtre1,$_GET['public']);
-            GestionCatalogue::trierListe($filtre2, $_GET['tri']);
-            $_SESSION['catalogue'] = serialize($filtre2);
+            $tri = GestionCatalogue::trierListe($filtre2, $_GET['tri']);
+
+            $_SESSION['catalogue'] = serialize($tri);
         }
 
         //Formulaire de tri et de filtre

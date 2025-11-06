@@ -238,13 +238,18 @@ class Repository
      * retourne la note moyenne d'une serie
      */
     public function getNoteMoyenne(int $serie_id): ?float{
-        $stmt = $this->pdo->prepare("SELECT Avg(note) FROM notation WHERE id_serie = ? group by id_serie");
-        $stmt->execute([$serie_id]);
-        $data = $stmt->fetch(PDO::FETCH_ASSOC);
-        if ($data) {
-            return floatval($data['Avg(note)']);
+        try {
+            $stmt = $this->pdo->prepare("SELECT Avg(note) FROM notation WHERE id_serie = ? group by id_serie");
+            $stmt->execute([$serie_id]);
+            $data = $stmt->fetch(PDO::FETCH_ASSOC);
+            if ($data) {
+                return floatval($data['Avg(note)']);
+            }
+            return null;
+        } catch (PDOException $e) {
+            echo $e->getMessage();
         }
-        return null;
+
     }
 
     /**
@@ -535,7 +540,7 @@ class Repository
         $query = "select genre from genre";
         $stmt = $this->pdo->prepare($query);
         $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        return $stmt->fetchAll();
     }
 
     /**Méthode permettant de récupérer les types de public de la base de donnée
@@ -545,6 +550,6 @@ class Repository
         $query = "select type_public from type_public";
         $stmt = $this->pdo->prepare($query);
         $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        return $stmt->fetchAll();
     }
 }

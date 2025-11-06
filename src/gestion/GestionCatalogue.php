@@ -15,19 +15,19 @@ class GestionCatalogue
 
         $html = '<option value="" ' . (empty($_GET['genre']) ? 'selected' : '') . '>Tous</option>';
         foreach ($array as $genre) {
-            $html .= '<option value="' . $genre . '" ' .
-                (($_GET['genre'] ?? '') == $genre ? 'selected' : '') . '>' .
-                $genre . '</option>';
+            $html .= '<option value="' . $genre['genre'] . '" ' .
+                (($_GET['genre'] ?? '') == $genre['genre'] ? 'selected' : '') . '>' .
+                $genre['genre'] . '</option>';
         }
 
-        return '<form action="?action=catalogue" method="GET">
-            <input type="hidden" name="action" value="catalogue">  
+        return '<form method="GET"> 
           <label>Genre :</label>
           <select name="genre" onchange="this.form.submit()">'.
             $html
             . '</select>
           <input type="hidden" name="tri" value="' . ($_GET['tri'] ?? '') . '">
           <input type="hidden" name="public" value="' . ($_GET['public'] ?? '') . '">
+          <input type="hidden" name="action" value="catalogue">
         </form>';
     }
 
@@ -37,21 +37,21 @@ class GestionCatalogue
      */
     public static function getPublicHTML(array $array) : string {
 
-        $html = '<option value="" ' . (empty($_GET['public']) ? 'selected' : '') . '>---</option>';
+        $html = '<option value="" ' . (empty($_GET['public']) ? 'selected' : '') . '>Tout public</option>';
         foreach ($array as $public) {
-            $html .= '<option value="' . $public . '" ' .
-                (($_GET['tri'] ?? '') == $public ? 'selected' : '') . '>' .
-                $public . '</option>';
+            $html .= '<option value="' . $public['type_public'] . '" ' .
+                (($_GET['public'] ?? '') == $public['type_public'] ? 'selected' : '') . '>' .
+                $public['type_public'] . '</option>';
         }
 
-        return '<form action="?action=catalogue" method="GET">
-            <input type="hidden" name="action" value="catalogue">  
+        return '<form method="GET">
           <label>Public :</label>
           <select name="public" onchange="this.form.submit()">' .
             $html
           . '</select>
           <input type="hidden" name="tri" value="' . ($_GET['tri'] ?? '') . '">
           <input type="hidden" name="genre" value="' . ($_GET['genre'] ?? '') . '">
+          <input type="hidden" name="action" value="catalogue">  
         </form>';
     }
 
@@ -66,14 +66,14 @@ class GestionCatalogue
                 (($_GET['tri'] ?? '') == $tri ? 'selected' : '') . '>' .
                 $tri . '</option>';
         }
-        return '<form action="?action=catalogue" method="GET">
-            <input type="hidden" name="action" value="catalogue">  
+        return '<form method="GET">
           <label>Trier par :</label>
           <select name="tri" onchange="this.form.submit()">' .
            $html
           . '</select>
           <input type="hidden" name="genre" value="' . ($_GET['genre'] ?? '') . '">
           <input type="hidden" name="public" value="' . ($_GET['public'] ?? '') . '">
+          <input type="hidden" name="action" value="catalogue">  
         </form>';
     }
 //    le tableau devrait être un truc du style ["moyenne", "nbEpisodes", "dateAjout"]
@@ -85,17 +85,16 @@ class GestionCatalogue
      * @return array liste triée
      * @throws \Exception au cas ou erreur dans le choix du tri
      */
-    public static function trierListe(array $array, string $typeTri) : void {
+    public static function trierListe(array $array, string $typeTri) : array {
         switch($typeTri) {
             case 'moyenne':
-                self::trierMoyenne($array);
+                $res = self::trierMoyenne($array);
                 break;
             case 'nbEpisodes':
-                echo "Test";
-                self::trierNbEpisode($array);
+                $res = self::trierNbEpisode($array);
                 break;
             case 'dateAjout':
-                self::trierDateAjout($array);
+                $res = self::trierDateAjout($array);
                 break;
             case '':
                 //rien ne se passe la liste est pas modifiée
@@ -103,37 +102,42 @@ class GestionCatalogue
             default:
                 throw new \Exception("Erreur dans le choix du tri");
         }
+        return $res;
     }
 
     /**Tri par moyenne
      * @param array $array liste à trier
      * @return true liste triée
      */
-    private static function trierMoyenne(array $array) : void
+    private static function trierMoyenne(array $array) : array
     {
         usort($array, function ($a, $b) {
             $noteA = Repository::getInstance()->getNoteMoyenne($a->id) ?? 0;
             $noteB = Repository::getInstance()->getNoteMoyenne($b->id) ?? 0;
-            return $noteA <=> $noteB;
+            if ($noteA === $noteB) return 0;
+            return $noteB > $noteA ? 1 : -1;
         });
+        return $array;
     }
 
     /**Tri par nombre d'épisode
      * @param array $array liste à trier
      * @return array liste triée
      */
-    private static function trierNbEpisode(array $array) : void{
+    private static function trierNbEpisode(array $array) : array {
         usort($array, function ($a, $b) {
             return count($a->episodes) <=> count($b->episodes);
         });
+        return $array;
     }
 
     /**Tri par date d'ajout
      * @param array $array liste à trier
      * @return array liste triée
      */
-    private static function trierDateAjout(array $array) : void{
+    private static function trierDateAjout(array $array) : array {
         //TODO je sais pu comment les dates sont stockées
+        return [];
     }
 
     /**Permet de filter la liste sur le genre
