@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 namespace NetVOD\src\renderer;
+use NetVOD\src\repository\Repository;
 use NetVOD\src\video\Episode;
 use NetVOD\src\video\Video;
 
@@ -35,22 +36,34 @@ HTML;
     /**Renderer long d'une vidéo
      * @return string affichage complet de la vidéo
      */
-    public  function renderLong() : string {
-        $html = <<<HMTL
-        <video controls width="250">
-            <source src="video/{$this->video->lienFichier}" type="video/mp4" />
-        </video>
-        <p>Série : {$this->video->nom_serie} - ep. {$this->video->numero} : {$this->video->nom}</p>
-        <p>Résumé : {$this->video->resume}</p>
-        <p>Durée : {$this->video->duree}</p>
-        </br>
-        </br>
-        <form action="?action=episode&episodeID={$this->video->id}" method="post">
-            <input type="text" name="commentaire" placeholder="Ajouter un commentaire">
-            <input type="number" name="note" placeholder="Note">
-            <input type="submit" name="addComment" value="Ajouter un commentaire">
-        </form>
-        HMTL;
+    public function renderLong(): string {
+        $nextEpisode = Repository::getInstance()->getNextEpisode($this->video->id);
+
+        // Préparer le bouton seulement si un épisode suivant existe
+        if ($nextEpisode) {
+            $nextButton = "<button onclick=\"window.location.href='?action=episode&episodeNum={$nextEpisode->numero}&episodeID={$nextEpisode->id}'\">Next Episode</button>";
+        } else {
+            $nextButton = "<button disabled>Next Episode</button>";
+        }
+
+        $html = <<<HTML
+                <video controls width="250">
+                    <source src="video/{$this->video->lienFichier}" type="video/mp4" />
+                </video>
+                $nextButton
+                
+                <p>Série : {$this->video->nom_serie} - ep. {$this->video->numero} : {$this->video->nom}</p>
+                <p>Résumé : {$this->video->resume}</p>
+                <p>Durée : {$this->video->duree}s</p>
+                <br><br>
+                <form action="?action=episode&episodeID={$this->video->id}" method="post">
+                    <input type="text" name="commentaire" placeholder="Ajouter un commentaire">
+                    <input type="number" name="note" placeholder="Note">
+                    <input type="submit" name="addComment" value="Ajouter un commentaire">
+                </form>
+                HTML;
+
         return $html;
     }
+
 }

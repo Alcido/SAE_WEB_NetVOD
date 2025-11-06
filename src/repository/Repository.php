@@ -578,4 +578,47 @@ class Repository
         $stmt = $this->pdo->prepare("DELETE FROM token WHERE id = ? and token = ?");
         return $stmt->execute([$user_id, $token]);
     }
+
+    public function getNextEpisode(int $episode_id): ?Episode
+    {
+        $stmt = $this->pdo->prepare("SELECT serie_id, numero FROM episode WHERE id = ?");
+        $stmt->execute([$episode_id]);
+        $current = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$current) {
+            throw new \Exception("Épisode introuvable.");
+        }
+
+        $serieId = $current['serie_id'];
+        $nextNumero = $current['numero'] + 1;
+
+        // Chercher le prochain épisode dans la même série
+        $query = "
+        SELECT episode.id as id_ep, episode.titre, episode.file, duree, serie.titre as serieTitre, serie.id as serieID, numero, resume, episode.img
+        FROM episode
+        INNER JOIN serie  ON serie.id = episode.serie_id
+        WHERE episode.serie_id = ? AND numero = ?
+        LIMIT 1
+    ";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute([$serieId, $nextNumero]);
+        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($data) {
+            return new Episode(
+                intval($data['id_ep']),
+                intval($data['serieID']),
+                $data['titre'],
+                $data['file'],
+                intval($data['duree']),
+                $data['serieTitre'],
+                intval($data['numero']),
+                $data['resume'],
+                $data['img']
+            );
+        }
+
+        return null;
+    }
+
 }
