@@ -44,6 +44,7 @@ class ActionAffichageEpisode extends Action
         if(isset($_POST['note'])){
             $repo = Repository::getInstance();
             $episode = $repo->getEpisode($_GET['episodeID']);
+            $_POST['commentaire'] = htmlspecialchars($_POST['commentaire']  ?? '', ENT_QUOTES, 'UTF-8');
             $repo->noterSerie($episode->serie_id,unserialize($_SESSION['user'])->id,intval($_POST['note']),$_POST['commentaire']);
             $tmp = "<h2> Note appliquee</h2>";
         }
