@@ -1,3 +1,30 @@
+
+drop table if exists type_public;
+create table type_public (
+                             type_public varchar(128) primary key
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+INSERT INTO type_public (type_public)
+VALUES
+    ('Enfant'),
+    ('Adolescent'),
+    ('Famille'),
+    ('Adulte'),
+    ('Mature');
+
+drop table if exists genre;
+create table genre(genre varchar(128) primary key
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+INSERT INTO genre (genre)
+VALUES
+    ('Action'),
+    ('Comédie'),
+    ('Drama'),
+    ('Science-Fiction'),
+    ('Fantastique'),
+    ('Horreur');
+
 drop table if exists serie;
 create table  serie(
                        id int(11)auto_increment,
@@ -8,16 +35,18 @@ create table  serie(
                        date_ajout date not null,
                        genre varchar(128),
                        type_public varchar(128),
-                       primary key (id)
+                       primary key (id),
+                       constraint fk_genre foreign key (genre) references genre (genre) on delete cascade,
+                       constraint fk_public foreign key (type_public) references type_public (type_public) on delete cascade
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO `serie` (`id`, `titre`, `descriptif`, `img`, `annee`, `date_ajout`, `genre`, `type_public`) VALUES
-                                                                                                            (1,'Le lac aux mystères',	'C\'est l\'histoire d\'un lac mystérieux et plein de surprises. La série, bluffante et haletante, nous entraine dans un labyrinthe d\'intrigues époustouflantes. A ne rater sous aucun prétexte !','',2020,'2022-10-30', null, null),
-                                                                                                            (2,'L\'eau a coulé','Une série nostalgique qui nous invite à revisiter notre passé et à se remémorer tout ce qui s\'est passé depuis que tant d\'eau a coulé sous les ponts.','',1907,'2022-10-29', null, null),
-                                                                                                            (3,'Chevaux fous','Une série sur la vie des chevals sauvages en liberté. Décoiffante.','',2017,'2022-10-31', null, null),
-                                                                                                            (4,'A la plage','Le succès de l\'été 2021, à regarder sans modération et entre amis.','',2021,'2022-11-04', null, null),
-                                                                                                            (5,'Champion','La vie trépidante de deux champions de surf, passionnés dès leur plus jeune age. Ils consacrent leur vie à ce sport. ','',2022,'2022-11-03', null, null),
-                                                                                                            (6,'Une ville la nuit','C\'est beau une ville la nuit, avec toutes ces voitures qui passent et qui repassent. La série suit un livreur, un chauffeur de taxi, et un insomniaque. Tous parcourent la grande ville une fois la nuit venue, au volant de leur véhicule.','',2017,'2022-10-31', null, null);
+                                                                                                            (1,'Le lac aux mystères',	'C\'est l\'histoire d\'un lac mystérieux et plein de surprises. La série, bluffante et haletante, nous entraine dans un labyrinthe d\'intrigues époustouflantes. A ne rater sous aucun prétexte !','',2020,'2022-10-30', 'Action', 'Enfant'),
+                                                                                                            (2,'L\'eau a coulé','Une série nostalgique qui nous invite à revisiter notre passé et à se remémorer tout ce qui s\'est passé depuis que tant d\'eau a coulé sous les ponts.','',1907,'2022-10-29', 'Drama', 'Famille'),
+                                                                                                            (3,'Chevaux fous','Une série sur la vie des chevals sauvages en liberté. Décoiffante.','',2017,'2022-10-31', 'Science-Fiction', 'Enfant'),
+                                                                                                            (4,'A la plage','Le succès de l\'été 2021, à regarder sans modération et entre amis.','',2021,'2022-11-04', 'Action', 'Adulte'),
+                                                                                                            (5,'Champion','La vie trépidante de deux champions de surf, passionnés dès leur plus jeune age. Ils consacrent leur vie à ce sport. ','',2022,'2022-11-03', 'Fantastique', 'Famille'),
+                                                                                                            (6,'Une ville la nuit','C\'est beau une ville la nuit, avec toutes ces voitures qui passent et qui repassent. La série suit un livreur, un chauffeur de taxi, et un insomniaque. Tous parcourent la grande ville une fois la nuit venue, au volant de leur véhicule.','',2017,'2022-10-31', 'Drama', 'Mature');
 
 
 drop table if exists episode;
@@ -133,37 +162,14 @@ create table profil(
 
 drop table if exists  token;
 create table token(
-    id int(11),
-    token varchar(512) not null ,
-    expire date not null,
-    primary key (id,token),
-    unique key token (token),
-    constraint fk_id_yser_token foreign key (id) references utilisateur(id) on delete cascade
+                      id int(11),
+                      token varchar(512) not null ,
+                      expire date not null,
+                      primary key (id,token),
+                      unique key token (token),
+                      constraint fk_id_yser_token foreign key (id) references utilisateur(id) on delete cascade
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-drop table if exists type_public;
-create table type_public (
-    type_public varchar(128) primary key
-)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO type_public (type_public)
-VALUES
-    ('Enfant'),
-    ('Adolescent'),
-    ('Famille'),
-    ('Adulte'),
-    ('Mature');
 
-drop table if exists genre;
-create table genre(
-    genre varchar(128) primary key
-)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO genre (genre)
-VALUES
-    ('Action'),
-    ('Comédie'),
-    ('Drama'),
-    ('Science-Fiction'),
-    ('Fantastique'),
-    ('Horreur');
