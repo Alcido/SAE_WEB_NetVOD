@@ -24,29 +24,29 @@ class ActionAffichageInfos extends Action
         <h2>Mes informations personnelles</h2>
         <ul>
             <li>
-                <a href="?action=add-infos&value=nom"><button type="button" class="btn-edit">✏️</button></a>
+                <a href="?action=add-infos&value=nom"><button type="button" class="btn-edit"><img src="img/edit.png" id="info" alt="edit"></button></a>
                 <strong>Nom :</strong>
-                <a href="?action=dell-infos&value=nom"><button type="button" class="btn-del">🗑️</button></a>
+                <a href="?action=dell-infos&value=nom"><button type="button" class="btn-del"><img src="img/bin.png" id="info" alt="del"></button></a>
             </li>
             <li>
-                <a href="?action=add-infos&value=prenom"><button type="button" class="btn-edit">✏️</button></a>
+                <a href="?action=add-infos&value=prenom"><button type="button" class="btn-edit"><img src="img/edit.png" id="info" alt="edit"></button></a>
                 <strong>Prénom :</strong>
-                <a href="?action=dell-infos&value=prenom"><button type="button" class="btn-del">🗑️</button></a>
+                <a href="?action=dell-infos&value=prenom"><button type="button" class="btn-del"><img src="img/bin.png" id="info" alt="del"></button></a>
             </li>
             <li>
-                <a href="?action=add-infos&value=genre"><button type="button" class="btn-edit">✏️</button></a>
+                <a href="?action=add-infos&value=genre"><button type="button" class="btn-edit"><img src="img/edit.png" id="info" alt="edit"></button></a>
                 <strong>Genre :</strong>
-                <a href="?action=dell-infos&value=genre"><button type="button" class="btn-del">🗑️</button></a>
+                <a href="?action=dell-infos&value=genre"><button type="button" class="btn-del"><img src="img/bin.png" id="info" alt="del"></button></a>
             </li>
             <li>
-                <a href="?action=add-infos&value=birth_date"><button type="button" class="btn-edit">✏️</button></a>
+                <a href="?action=add-infos&value=birth_date"><button type="button" class="btn-edit"><img src="img/edit.png" id="info" alt="edit"></button></a>
                 <strong>Date de naissance :</strong>
-                <a href="?action=dell-infos&value=birth_date"><button type="button" class="btn-del">🗑️</button></a>
+                <a href="?action=dell-infos&value=birth_date"><button type="button" class="btn-del"><img src="img/bin.png" id="info" alt="del"></button></a>
             </li>
             <li>
-                <a href="?action=add-infos&value=adresse"><button type="button" class="btn-edit">✏️</button></a>
+                <a href="?action=add-infos&value=adresse"><button type="button" class="btn-edit"><img src="img/edit.png" id="info" alt="edit"></button></a>
                 <strong>Adresse :</strong>
-                <a href="?action=dell-infos&value=adresse"><button type="button" class="btn-del">🗑️</button></a>
+                <a href="?action=dell-infos&value=adresse"><button type="button" class="btn-del"><img src="img/bin.png" id="info" alt="del"></button></a>
             </li>
         </ul>
         <br>
@@ -68,29 +68,29 @@ class ActionAffichageInfos extends Action
         <h2>Mes informations personnelles</h2>
         <ul>
             <li>
-                <a href="?action=add-infos&value=nom"><button type="button" class="btn-edit">✏️</button></a>
+                <a href="?action=add-infos&value=nom"><button type="button" class="btn-edit"><img src="img/edit.png" id="info" alt="edit"></button></a>
                 <strong>Nom :</strong> $nom
-                <a href="?action=dell-infos&value=nom"><button type="button" class="btn-del">🗑️</button></a>
+                <a href="?action=dell-infos&value=nom"><button type="button" class="btn-del"><img src="img/bin.png" id="info" alt="del"></button></a>
             </li>
             <li>
-                <a href="?action=add-infos&value=prenom"><button type="button" class="btn-edit">✏️</button></a>
+                <a href="?action=add-infos&value=prenom"><button type="button" class="btn-edit"><img src="img/edit.png" id="info" alt="edit"></button></a>
                 <strong>Prénom :</strong> $prenom
-                <a href="?action=dell-infos&value=prenom"><button type="button" class="btn-del">🗑️</button></a>
+                <a href="?action=dell-infos&value=prenom"><button type="button" class="btn-del"><img src="img/bin.png" id="info" alt="del"></button></a>
             </li>
             <li>
-                <a href="?action=add-infos&value=genre"><button type="button" class="btn-edit">✏️</button></a>
+                <a href="?action=add-infos&value=genre"><button type="button" class="btn-edit"><img src="img/edit.png" id="info" alt="edit"></button></a>
                 <strong>Genre :</strong> $genre
-                <a href="?action=dell-infos&value=genre"><button type="button" class="btn-del">🗑️</button></a>
+                <a href="?action=dell-infos&value=genre"><button type="button" class="btn-del"><img src="img/bin.png" id="info" alt="del"></button></a>
             </li>
             <li>
-                <a href="?action=add-infos&value=birth_date"><button type="button" class="btn-edit">✏️</button></a>
+                <a href="?action=add-infos&value=birth_date"><button type="button" class="btn-edit"><img src="img/edit.png" id="info" alt="edit"></button></a>
                 <strong>Date de naissance :</strong> $birth_date
-                <a href="?action=dell-infos&value=birth_date"><button type="button" class="btn-del">🗑️</button></a>
+                <a href="?action=dell-infos&value=birth_date"><button type="button" class="btn-del"><img src="img/bin.png" id="info" alt="del"></button></a>
             </li>
             <li>
-                <a href="?action=add-infos&value=adresse"><button type="button" class="btn-edit">✏️</button></a>
+                <a href="?action=add-infos&value=adresse"><button type="button" class="btn-edit"><img src="img/edit.png" id="info" alt="edit"></button></a>
                 <strong>Adresse :</strong> $adresse
-                <a href="?action=dell-infos&value=adresse"><button type="button" class="btn-del">🗑️</button></a>
+                <a href="?action=dell-infos&value=adresse"><button type="button" class="btn-del"><img src="img/bin.png" id="info" alt="del"></button></a>
             </li>
         </ul>
         <br>

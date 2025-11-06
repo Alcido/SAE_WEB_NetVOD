@@ -325,3 +325,11 @@ form .btn-submit:hover {
     opacity: 1;
     transform: translateX(-50%) translateY(-4px);
 }
+
+#info {
+    width: 24px;      /* Largeur de l'image */
+    height: 24px;     /* Hauteur de l'image */
+    object-fit: contain; /* Pour que l'image garde ses proportions */
+    vertical-align: middle; /* Optionnel : pour l'aligner avec le texte si nécessaire */
+    cursor: pointer;       /* Optionnel : montre que c'est cliquable */
+}
