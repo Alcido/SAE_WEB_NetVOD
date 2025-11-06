@@ -16,7 +16,6 @@ class Repository
     private static ?Repository $instance = null;
 
     public PDO $pdo;
-
     private function __construct() {
         $dsn = Repository::$config['driver'] . ':host=' .Repository::$config['host'] . ';dbname=' . Repository::$config['database'];
         $this->pdo = new PDO($dsn, Repository::$config['username'], Repository::$config['password'],[
@@ -26,6 +25,8 @@ class Repository
     }
 
     /**
+     * @param String $file
+     * @return void
      * @throws Exception
      */
     public static function setConfig (String $file) : void {
@@ -72,6 +73,10 @@ class Repository
         }
     }
 
+    /**
+     * @param int $id
+     * @return bool
+     */
     public function validateUser(int $id) : bool {
         echo $id;
         try{
@@ -162,7 +167,7 @@ class Repository
     /**
      * @param int $serie_id
      * @param int $user_id
-     * @param int $ep_id
+     * @param int $ep_num
      * @return bool|null
      */
     public function addSerieEnCours(int $serie_id, int $user_id, int $ep_num) : ?bool
@@ -302,6 +307,12 @@ class Repository
     }
 
     //ajoute u episode a une serie
+
+    /**
+     * @param int $serie_id
+     * @param Episode $ep
+     * @return bool|null
+     */
     public function addEpisode(int $serie_id, Episode $ep) : ?bool
     {
         return null;
@@ -429,6 +440,11 @@ class Repository
         return null;
     }
 
+    /**
+     * @param int $serie_id
+     * @param int $user_id
+     * @return array|null
+     */
     public function isEnCours(int $serie_id, int $user_id) : ?array {
         $query = "select num_ep, id from enCours2User inner join episode on episode.serie_id = enCours2User.id_serie where id_serie = ? and id_user = ? and num_ep = numero";
         $stmt = $this->pdo->prepare($query);
@@ -439,7 +455,7 @@ class Repository
 
     /**
      * @param int $serie_id
-     * @param int $ep_id
+     * @param int $num_ep
      * @param int $user_id
      * @return bool|null
      */
@@ -486,6 +502,10 @@ class Repository
         }
     }
 
+    /**
+     * @param string $email
+     * @return int|null
+     */
     public function getUserByEmail(string $email): ?int
     {
         $stmt = $this->pdo->prepare("SELECT id FROM utilisateur WHERE email = ?");
@@ -499,6 +519,9 @@ class Repository
 
 
     /**
+     * @param int $user_id
+     * @param bool $expire
+     * @return string|null
      * @throws RandomException
      */
     public function saveToken(int $user_id, bool $expire) : ?string
@@ -523,6 +546,10 @@ class Repository
         }
     }
 
+    /**
+     * @param int $user_id
+     * @return array|null
+     */
     public function getToken(int $user_id) : ?array
     {
         try {
@@ -541,6 +568,9 @@ class Repository
         }
     }
 
+    /**
+     * @return void
+     */
     public function updateToken(){
         $query = "delete from token where expire < current_time()";
         $stmt = $this->pdo->prepare($query);
@@ -567,18 +597,33 @@ class Repository
         return $stmt->fetchAll();
     }
 
+    /**
+     * @param int $user_id
+     * @param string $password
+     * @return bool
+     */
     public function changeMdp(int $user_id, string $password) : bool
     {
         $stmt = $this->pdo->prepare("UPDATE utilisateur SET password = ? WHERE id = ?");
         return $stmt->execute([$password, $user_id]);
     }
 
+    /**
+     * @param int $user_id
+     * @param string $token
+     * @return bool
+     */
     public function dellToken(int $user_id, string $token) : bool
     {
         $stmt = $this->pdo->prepare("DELETE FROM token WHERE id = ? and token = ?");
         return $stmt->execute([$user_id, $token]);
     }
 
+    /**
+     * @param int $episode_id
+     * @return Episode|null
+     * @throws Exception
+     */
     public function getNextEpisode(int $episode_id): ?Episode
     {
         $stmt = $this->pdo->prepare("SELECT serie_id, numero FROM episode WHERE id = ?");
@@ -598,8 +643,8 @@ class Repository
         FROM episode
         INNER JOIN serie  ON serie.id = episode.serie_id
         WHERE episode.serie_id = ? AND numero = ?
-        LIMIT 1
-    ";
+        LIMIT 1";
+
         $stmt = $this->pdo->prepare($query);
         $stmt->execute([$serieId, $nextNumero]);
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -617,8 +662,6 @@ class Repository
                 $data['img']
             );
         }
-
         return null;
     }
-
 }
