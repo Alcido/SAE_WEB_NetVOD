@@ -40,7 +40,7 @@ class ActionMdpOublie extends Action
         return <<<HTML
             <h1>Lien de réinitialisation envoyé</h1>
             <p>Un lien de réinitialisation a été envoyé à votre adresse email.</p>
-            <p><a href="$resetLink">Lien direct (test)</a></p>
+            <p><a href=$resetLink>Lien direct</a></p>
         HTML;
     }
 }
