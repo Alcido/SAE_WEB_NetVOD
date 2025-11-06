@@ -19,7 +19,7 @@ class ActionRegister extends Action
                 <input type="text" name="username" id="username" placeholder="Username" required autofocus>
                 <label for="email">Email</label>
                 <input type="email" name="email" id="email" placeholder="Email" required>
-                 <label for="password">Mot de passe</label>
+                <label for="password">Mot de passe</label>
                 <input type="password" name="password" id="password" placeholder="Password" required>
                 <input type="submit" value="Register">
             </form>
@@ -54,10 +54,9 @@ class ActionRegister extends Action
 
         //Gestion du Token
         $currentURL = "https://$_SERVER[HTTP_HOST]" . explode('?',$_SERVER['REQUEST_URI'])[0];
-        $token = $this->generateRandomString();
         $user = Repository::getInstance()->getUser($email)->id;
 
-        Repository::getInstance()->saveToken($user,$token,true);
+        $token =Repository::getInstance()->saveToken($user,true);
 
         $tmp.= "L'enregistrement est presque effectué</p>
                 <p> Veuillez cliquer sur ce lien :</p>
