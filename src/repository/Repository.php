@@ -566,7 +566,6 @@ class Repository
         return $stmt->fetchAll();
     }
 
-
     public function changeMdp(int $user_id, string $password) : bool
     {
         $stmt = $this->pdo->prepare("UPDATE utilisateur SET password = ? WHERE id = ?");

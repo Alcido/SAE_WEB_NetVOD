@@ -45,8 +45,8 @@ class ActionAffichageEpisode extends Action
             $repo = Repository::getInstance();
             $episode = $repo->getEpisode($_GET['episodeID']);
             $_POST['commentaire'] = htmlspecialchars($_POST['commentaire']  ?? '', ENT_QUOTES, 'UTF-8');
-            $repo->noterSerie($episode->serie_id,unserialize($_SESSION['user'])->id,intval($_POST['note']),$_POST['commentaire']);
-            $tmp = "<h2> Note appliquee</h2>";
+            $noter = $repo->noterSerie($episode->serie_id,unserialize($_SESSION['user'])->id,intval($_POST['note']),$_POST['commentaire']);
+            $tmp = ($noter===false) ? "<h2>Vous avez déjà noté cette serie</h2>" : "<h2> Note appliquee</h2>";
         }
         //TODO Save TIMECODE
         return $tmp . $this->lancerGet();
