@@ -166,5 +166,4 @@ VALUES
     ('Drama'),
     ('Science-Fiction'),
     ('Fantastique'),
-    ('Horreur'),
-    ('Documentaire');
+    ('Horreur');

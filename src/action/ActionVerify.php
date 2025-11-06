@@ -36,7 +36,7 @@ class ActionVerify extends Action
         }else {
             $tmp .= "<h1>Token manquant</h1>";
         }
-        $tmp .= "<a href=\"?action=login\"><button>Se connecter</button></a>";
+        $tmp .= "<a href=\"?action=login\"><button class='btn'>Se connecter</button></a>";
         return $tmp;
     }
 
