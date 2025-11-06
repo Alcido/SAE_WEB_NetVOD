@@ -100,7 +100,7 @@ class GestionCatalogue
                 $res = self::trierNom($array);
                 break;
             case '':
-                //rien ne se passe la liste est pas modifiée
+                $res = $array;
                 break;
             default:
                 throw new \Exception("Erreur dans le choix du tri");
@@ -147,7 +147,7 @@ class GestionCatalogue
 
     public static function trierNom(array $array) : array {
         usort($array, function ($a, $b) {
-            return $b->nom <=> $a->nom;
+            return $a->nom <=> $b->nom;
         });
         return $array;
     }
