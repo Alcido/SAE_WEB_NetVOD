@@ -140,7 +140,7 @@ class GestionCatalogue
      */
     private static function trierDateAjout(array $array) : array {
         usort($array, function ($a, $b) {
-            return $b->date_ajout <=> $a->date_ajout;
+            return $a->date_ajout <=> $b->date_ajout;
         });
         return $array;
     }

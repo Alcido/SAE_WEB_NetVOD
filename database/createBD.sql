@@ -134,6 +134,7 @@ create  table  notation(
                            date_comm date,
                            commentaire text,
                            note int(5),
+                           primary key (id_user, id_serie),
                            constraint fk_UTILISATEUR_id_Note foreign key (id_user) REFERENCES utilisateur (id) on delete cascade,
                            constraint fk_SERIE_id_Note foreign key (id_serie) references serie (id) on delete cascade
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
