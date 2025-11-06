@@ -34,8 +34,8 @@ class ActionMdpOublie extends Action
 
 
         $token = $repo->saveToken($user_id, true);
-
-        $resetLink = "http://" . $_SERVER['HTTP_HOST'] . "/?action=reset-mdp&id=$user_id&token=$token";
+        $currentURL = "https://$_SERVER[HTTP_HOST]" . explode('?',$_SERVER['REQUEST_URI'])[0];
+        $resetLink = "$currentURL?action=reset-mdp&id=$user_id&token=$token";
 
         return <<<HTML
             <h1>Lien de réinitialisation envoyé</h1>
