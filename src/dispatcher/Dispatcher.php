@@ -13,7 +13,9 @@ use NetVOD\src\action\ActionDefault;
 use NetVOD\src\action\ActionDellInfos;
 use NetVOD\src\action\ActionDisconnect;
 use NetVOD\src\action\ActionLogIn;
+use NetVOD\src\action\ActionMdpOublie;
 use NetVOD\src\action\ActionRegister;
+use NetVOD\src\action\ActionReset;
 use NetVOD\src\action\ActionSearch;
 use NetVOD\src\action\ActionVerify;
 use NetVOD\src\repository\Repository;
@@ -78,7 +80,12 @@ class Dispatcher
             case 'verify':
                 $actionExec = new ActionVerify;
                 break;
-
+            case 'mdp-oublie':
+                $actionExec = new ActionMdpOublie;
+                break;
+            case 'reset-mdp':
+                $actionExec = new ActionReset;
+                break;
             default:
         }
         $this->renderPage($actionExec());

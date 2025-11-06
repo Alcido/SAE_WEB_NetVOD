@@ -19,7 +19,7 @@ class ActionRegister extends Action
                 <input type="text" name="username" id="username" placeholder="Username" required autofocus>
                 <label for="email">Email</label>
                 <input type="email" name="email" id="email" placeholder="Email" required>
-                 <label for="password">Mot de passe</label>
+                <label for="password">Mot de passe</label>
                 <input type="password" name="password" id="password" placeholder="Password" required>
                 <input type="submit" value="Register">
             </form>

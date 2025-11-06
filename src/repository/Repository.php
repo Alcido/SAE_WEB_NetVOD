@@ -8,6 +8,7 @@ use NetVOD\src\video\Episode;
 use NetVOD\src\video\Serie;
 use PDO;
 use PDOException;
+use Random\RandomException;
 
 class Repository
 {
@@ -490,24 +491,28 @@ class Repository
         return null;
     }
 
-    public function saveToken(int $user_id, string $token, bool $expire) : bool
+    /**
+     * @throws RandomException
+     */
+    public function saveToken(int $user_id, bool $expire) : ?string
     {
-        //TODO NOTWORKING
-        //Expire exporté en BOOL
+        $token = bin2hex(random_bytes(16));
+
         if ($expire){
             $expire = date('Y-m-d H:i:s', strtotime('+1 day'));
         }else{
-            $expire = date('Y-m-d H:i:s', strtotime('+100 day'));
+            $expire = date('Y-m-d H:i:s', strtotime('+360 day'));
         }
 
         try {
             $stmt = $this->pdo->prepare("insert into token (id, token, expire) values (?, ?, ?)");
-            return $stmt->execute([$user_id, $token, $expire]);
+            $stmt->execute([$user_id, $token, $expire]);
+            return $token;
         }
 
         catch (PDOException $e) {
             echo $e->getMessage();
-            return false;
+            return null;
         }
     }
 
@@ -546,5 +551,18 @@ class Repository
         $stmt = $this->pdo->prepare($query);
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+
+    public function changeMdp(int $user_id, string $password) : bool
+    {
+        $stmt = $this->pdo->prepare("UPDATE utilisateur SET password = ? WHERE id = ?");
+        return $stmt->execute([$password, $user_id]);
+    }
+
+    public function dellToken(int $user_id, string $token) : bool
+    {
+        $stmt = $this->pdo->prepare("DELETE FROM token WHERE id = ? and token = ?");
+        return $stmt->execute([$user_id, $token]);
     }
 }
