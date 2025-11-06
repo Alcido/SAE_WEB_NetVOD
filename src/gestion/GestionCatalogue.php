@@ -96,6 +96,9 @@ class GestionCatalogue
             case 'dateAjout':
                 $res = self::trierDateAjout($array);
                 break;
+            case 'A-Z':
+                $res = self::trierNom($array);
+                break;
             case '':
                 //rien ne se passe la liste est pas modifiée
                 break;
@@ -136,8 +139,17 @@ class GestionCatalogue
      * @return array liste triée
      */
     private static function trierDateAjout(array $array) : array {
-        //TODO je sais pu comment les dates sont stockées
-        return [];
+        usort($array, function ($a, $b) {
+            return $b->date_ajout <=> $a->date_ajout;
+        });
+        return $array;
+    }
+
+    public static function trierNom(array $array) : array {
+        usort($array, function ($a, $b) {
+            return $b->nom <=> $a->nom;
+        });
+        return $array;
     }
 
     /**Permet de filter la liste sur le genre
