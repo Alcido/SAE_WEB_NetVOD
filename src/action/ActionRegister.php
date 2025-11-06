@@ -61,7 +61,7 @@ class ActionRegister extends Action
 
         $tmp.= "L'enregistrement est presque effectué</p>
                 <p> Veuillez cliquer sur ce lien :</p>
-                <a href='$currentURL?action=verify&token=$token'>$currentURL?action=verify&token=$token&id=$user</a>";
+                <a href='$currentURL?action=verify&token=$token&id=$user'>$currentURL?action=verify&token=$token&id=$user</a>";
 
 
 
