@@ -31,8 +31,8 @@ class ActionLogIn extends Action
                 <input type="submit" value="LogIn">
             </form>
 
-            <a href="?action=register"><button>Register</button></a>
-            <a href="?action=mdp-oublie"><button>mots de passe oublié</button></a>
+            <a href="?action=register" "><button class="btn">Register</button></a>
+            <a href="?action=mdp-oublie" ><button class="btn">mots de passe oublié</button></a>
             HTML;
         }
         return $tmp;
