@@ -14,6 +14,7 @@ class ActionVerify extends Action
      */
     public function lancerGet(): string
     {
+        $tmp = "";
         if (isset($_GET['token']) && isset($_GET['id'])){
             $isokay = false;
             $repo = Repository::getInstance();
@@ -23,15 +24,20 @@ class ActionVerify extends Action
                     $isokay = true;
                 }
             }
-            if ($isokay){
-                AuthnProvider::validateUser($_GET['id']);
-                return "<h1>Vous êtes maintenant validé</h1>";
+            if($isokay){
+            AuthnProvider::validateUser($_GET['id']);
+            $tmp .= "<h1>Vous êtes maintenant validé</h1>";
+            }else{
+                echo implode(',', $storedToken) . " compareTo " . $_GET['token'];
+                $tmp.= "<h1>Token invalide</h1>";
             }
-            echo implode(',', $storedToken) . " compareTo " . $_GET['token'];
 
-            return "<h1>Token invalide</h1>";
+
+        }else {
+            $tmp .= "<h1>Token manquant</h1>";
         }
-        return "<h1>Token manquant</h1>";
+        $tmp .= "<a href=\"?action=login\"><button>Se connecter</button></a>";
+        return $tmp;
     }
 
     /**
