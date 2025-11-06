@@ -19,10 +19,13 @@ class ActionRegister extends Action
                 <input type="text" name="username" id="username" placeholder="Username" required autofocus>
                 <label for="email">Email</label>
                 <input type="email" name="email" id="email" placeholder="Email" required>
-                <label for="password">Mot de passe</label>
+                <label for="password"> Mot de passe <span class="tooltip">*</span></label>
                 <input type="password" name="password" id="password" placeholder="Password" required>
+                <label for="password">Répéter le mot de passe</label>
+                <input type="password" name="password2" id="password" placeholder="Password" required>
                 <input type="submit" value="Register">
             </form>
+            <a href="?action=login" "><button class="btn">Se connecter</button></a>
         HTML;
 
         return $tmp;
@@ -46,6 +49,10 @@ class ActionRegister extends Action
             return $this->lancerGet() . "<script>
                 alert('Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial.');
             </script>";
+        }
+
+        if ($_POST['password'] !== $_POST['password2']) {
+            return "<h1>Les mots de passe ne correspondent pas.</h1>";
         }
 
         $email = $_POST['email'] ;

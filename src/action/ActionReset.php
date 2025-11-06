@@ -33,11 +33,14 @@ class ActionReset extends Action
         return <<<HTML
             <h1>Réinitialiser votre mot de passe</h1>
             <form action="?action=reset-mdp&id=$userId&token=$token" method="post">
-                <label for="password">Nouveau mot de passe :</label>
-                <input type="password" name="password" id="password" required>
+                <label for="password">
+                    Nouveau mot de passe 
+                    <span class="tooltip">*</span>
+                </label>
+                <input type="password" name="password" id="password"  placeholder="Password" required>
 
-                <label for="password2">Répéter le mot de passe :</label>
-                <input type="password" name="password2" id="password2" required>
+                <label for="password2">Répéter le mot de passe</label>
+                <input type="password" name="password2" id="password2"  placeholder="Password" required>
 
                 <input type="submit" value="Réinitialiser">
             </form>

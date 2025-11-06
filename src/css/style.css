@@ -195,3 +195,34 @@ form input[type="submit"]:hover {
 .profil-infos li a {
     display: inline-block;
 }
+
+
+
+ .tooltip {
+     position: relative;
+     cursor: pointer;
+     color: red;
+ }
+
+.tooltip::after {
+    content: "Le mot de passe doit contenir au moins 8 caractères, une majuscule et un chiffre";
+    position: absolute;
+    left: 50%;
+    bottom: 125%; /* au-dessus de l'étoile */
+    transform: translateX(-50%);
+    background-color: #333;
+    color: #fff;
+    padding: 6px;
+    border-radius: 4px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+    font-size: 12px;
+    z-index: 10;
+}
+
+.tooltip:hover::after {
+    opacity: 1;
+}
+
