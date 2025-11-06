@@ -38,7 +38,8 @@ HTML;
 
         $nbEpisodes = sizeof($this->serie->episodes);
 
-        $html = "<div class=\"serie-details\"><a href='?action=serie&serieID={$this->serie->id}'><p>Titre de la série : {$this->serie->nom}</p>
+        $html = "<a href='?action=serie&serieID={$this->serie->id}'>
+                 <div class=\"serie-details\"><p>Titre de la série : {$this->serie->nom}</p>
                  <p>Genre : {$this->serie->genre}</p>
                  <p>Descriptif : {$this->serie->descriptif}</p>
                  <p>Nombre d'épisodes : $nbEpisodes</p>
@@ -49,7 +50,7 @@ HTML;
             $episodeRenderer = new EpisodeRenderer($episode);
             $html .= "<li>" . $episodeRenderer->renderCompact() . "</li>";
         }
-        $html .= "</ul></a></div>";
+        $html .= "</ul></div></a>";
         $html .= $this->favorite();
 
         return $html;
