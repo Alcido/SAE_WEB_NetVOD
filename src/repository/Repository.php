@@ -480,16 +480,17 @@ class Repository
         }
     }
 
-    public function getUserByEmail($email): ?int
+    public function getUserByEmail(string $email): ?int
     {
         $stmt = $this->pdo->prepare("SELECT id FROM utilisateur WHERE email = ?");
         $stmt->execute([$email]);
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
-        if ($data) {
-            return $data;
+        if ($data && isset($data['id'])) {
+            return (int) $data['id'];
         }
         return null;
     }
+
 
     /**
      * @throws RandomException

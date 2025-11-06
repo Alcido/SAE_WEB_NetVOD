@@ -27,7 +27,8 @@ class ActionVerify extends Action
                 AuthnProvider::validateUser($_GET['id']);
                 return "<h1>Vous êtes maintenant validé</h1>";
             }
-            echo "$storedToken  compareTo  $_GET[token]";
+            echo implode(',', $storedToken) . " compareTo " . $_GET['token'];
+
             return "<h1>Token invalide</h1>";
         }
         return "<h1>Token manquant</h1>";
