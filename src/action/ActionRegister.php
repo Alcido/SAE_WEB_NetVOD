@@ -41,6 +41,13 @@ class ActionRegister extends Action
             return $this->lancerGet() . "<script>alert('Invalid email or password')</script>";
         }
 
+
+        if (!$this->checkPasswordStrength($_POST['password'], 8)) {
+            return $this->lancerGet() . "<script>
+                alert('Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial.');
+            </script>";
+        }
+
         $email = $_POST['email'] ;
         $password = password_hash($_POST['password'], PASSWORD_BCRYPT, ['cost' => 12]);
         $username = $_POST['username'];
@@ -68,7 +75,16 @@ class ActionRegister extends Action
         return $tmp;
     }
 
-    function generateRandomString($length = 10) {
-        return substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil($length/strlen($x)) )),1,$length);
+
+
+    public function checkPasswordStrength(string $pass, int $minimumLength): bool
+    {
+        $length = strlen($pass) >= $minimumLength;  // ✅ longueur minimale correcte
+        $digit = preg_match("#\d#", $pass);         // au moins un chiffre
+        $special = preg_match("#\W#", $pass);       // au moins un caractère spécial
+        $lower = preg_match("#[a-z]#", $pass);      // au moins une minuscule
+        $upper = preg_match("#[A-Z]#", $pass);      // au moins une majuscule
+
+        return $length && $digit && $special && $lower && $upper;
     }
 }
