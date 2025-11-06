@@ -479,78 +479,6 @@ class Repository
         }
     }
 
-    /**
-     * @param string $tri
-     * @return array|null
-     */
-    public function getCatalogueTri(string $tri) : ?array
-    {
-        try {
-            if ($tri==="moyenne"){
-                $query = "select id
-                    from serie inner join notation on serie.id = notation.id_serie
-                    group by serie.id
-                    order by avg(notation.note) desc";
-                $stmt = $this->pdo->prepare($query);;
-            }else {
-                $query = "select id from serie order by $tri";
-                $stmt = $this->pdo->prepare($query);
-            }
-            $stmt->execute();
-            $res = [];
-            while ($row = $stmt->fetch()) {
-                $serie = $this->getSerie($row["id"]);
-                $res[] = $serie;
-            }
-            return $res;
-        } catch (PDOException $e) {
-            return null;
-        }
-    }
-
-    /**
-     * @param string $filtre
-     * @param string $valeur
-     * @param string $tri
-     * @return array|null
-     */
-    public function getCatalogueTriFiltre(string $filtre, string $valeur, string $tri) : ?array {
-        try {
-            $query = "select id from serie where ? like ? order by ?";
-            $stmt = $this->pdo->prepare($query);
-            $stmt->execute(array($filtre, $valeur, $tri));
-            $data = $stmt->fetchAll();
-            $res = [];
-            foreach ($data as $id) {
-                $res[] = $this->getSerie(intval($id));
-            }
-            return $res;
-        } catch (PDOException $e) {
-            return null;
-        }
-    }
-
-    /**
-     * @param string $filtre
-     * @param string $valeur
-     * @return array|null
-     */
-    public function getCatalogueFiltre(string $filtre, string $valeur) : ?array {
-        try {
-            $query = "select id from serie where ? like ?";
-            $stmt = $this->pdo->prepare($query);
-            $stmt->execute(array($filtre, $valeur));
-            $data = $stmt->fetchAll();
-            $res = [];
-            foreach ($data as $id) {
-                $res[] = $this->getSerie(intval($id));
-            }
-            return $res;
-        } catch (PDOException $e) {
-            return null;
-        }
-    }
-
     public function getUserByEmail($email): ?int
     {
         $stmt = $this->pdo->prepare("SELECT id FROM utilisateur WHERE email = ?");
@@ -565,7 +493,7 @@ class Repository
     public function saveToken(int $user_id, string $token, bool $expire) : bool
     {
         try {
-            $stmt = $this->pdo->prepare("Insert into token (id, token, expire) values (?, ?, ?)");
+            $stmt = $this->pdo->prepare("insert into token (id, token, expire) values (?, ?, ?)");
             return $stmt->execute([$user_id, $token, $expire]);
         }
         catch (PDOException $e) {
