@@ -21,11 +21,11 @@ class GestionCatalogue
         }
 
         return '<form action="?action=catalogue" method="GET">
+            <input type="hidden" name="action" value="catalogue">  
           <label>Genre :</label>
           <select name="genre" onchange="this.form.submit()">'.
             $html
             . '</select>
-        
           <input type="hidden" name="tri" value="' . ($_GET['tri'] ?? '') . '">
           <input type="hidden" name="public" value="' . ($_GET['public'] ?? '') . '">
         </form>';
@@ -45,11 +45,11 @@ class GestionCatalogue
         }
 
         return '<form action="?action=catalogue" method="GET">
+            <input type="hidden" name="action" value="catalogue">  
           <label>Public :</label>
           <select name="public" onchange="this.form.submit()">' .
             $html
           . '</select>
-        
           <input type="hidden" name="tri" value="' . ($_GET['tri'] ?? '') . '">
           <input type="hidden" name="genre" value="' . ($_GET['genre'] ?? '') . '">
         </form>';
@@ -67,11 +67,11 @@ class GestionCatalogue
                 $tri . '</option>';
         }
         return '<form action="?action=catalogue" method="GET">
+            <input type="hidden" name="action" value="catalogue">  
           <label>Trier par :</label>
           <select name="tri" onchange="this.form.submit()">' .
            $html
           . '</select>
-        
           <input type="hidden" name="genre" value="' . ($_GET['genre'] ?? '') . '">
           <input type="hidden" name="public" value="' . ($_GET['public'] ?? '') . '">
         </form>';
@@ -91,6 +91,7 @@ class GestionCatalogue
                 self::trierMoyenne($array);
                 break;
             case 'nbEpisodes':
+                echo "Test";
                 self::trierNbEpisode($array);
                 break;
             case 'dateAjout':

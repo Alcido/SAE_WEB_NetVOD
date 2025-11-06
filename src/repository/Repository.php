@@ -564,11 +564,21 @@ class Repository
 
     public function saveToken(int $user_id, string $token, bool $expire) : bool
     {
+        //TODO NOTWORKING
+        //Expire exporté en BOOL
+        if ($expire){
+            $expire = date('Y-m-d H:i:s', strtotime('+1 day'));
+        }else{
+            $expire = date('Y-m-d H:i:s', strtotime('+100 day'));
+        }
+
         try {
             $stmt = $this->pdo->prepare("Insert into token (id, token, expire) values (?, ?, ?)");
             return $stmt->execute([$user_id, $token, $expire]);
         }
+
         catch (PDOException $e) {
+            echo $e->getMessage();
             return false;
         }
     }
