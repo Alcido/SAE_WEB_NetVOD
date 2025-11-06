@@ -15,6 +15,7 @@ class ActionMdpOublie extends Action
                 <input type="email" name="email" id="email" placeholder="Votre adresse email" required>
                 <input type="submit" value="Envoyer le lien de réinitialisation">
             </form>
+            <a href="?action=login" "><button class="btn">retour arriere</button></a>
         HTML;
     }
 
@@ -43,7 +44,7 @@ class ActionMdpOublie extends Action
         return <<<HTML
             <h1>Lien de réinitialisation envoyé</h1>
             <p>Un lien de réinitialisation a été envoyé à votre adresse email.</p>
-            <p><a href=$resetLink>Lien direct</a></p>
+            <p><a href=$resetLink>Lien direct pour reset le mot de passe</a></p>
         HTML;
     }
 }

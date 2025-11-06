@@ -249,6 +249,7 @@ class Repository
             return null;
         } catch (PDOException $e) {
             echo $e->getMessage();
+            return null;
         }
 
     }
