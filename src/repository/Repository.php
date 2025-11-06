@@ -519,6 +519,7 @@ class Repository
     public function getToken(int $user_id) : ?array
     {
         try {
+            $this->updateToken();
             $stmt = $this->pdo->prepare("SELECT token FROM token where id=?");
             $stmt->execute([$user_id]);
             $arr = [];
@@ -531,6 +532,12 @@ class Repository
         catch (PDOException $e) {
             return null;
         }
+    }
+
+    public function updateToken(){
+        $query = "delete from token where expire < current_time()";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute();
     }
 
     /**Méthode permettant de récupérer les genres de la base de donnée
