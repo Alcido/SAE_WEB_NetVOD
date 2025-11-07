@@ -18,18 +18,21 @@ class SerieRenderer
      * @return string affichage de la série en court
      */
     public function renderCompact() : string {
+        $image = $this->serie->lienImage ?: "img/placeholder.jpeg";
+
         $html = <<<HTML
-        <div class="serie-card">
-            <a href='?action=serie&serieID={$this->serie->id}'>
-                <img src="{$this->serie->lienImage}" />
-                <p>{$this->serie->nom}</p>
-                <p>{$this->serie->genre}</p>
-            </a>
-            {$this->favorite()}
-        </div>
+    <div class="serie-card">
+        <a href='?action=serie&serieID={$this->serie->id}'>
+            <img src="$image" />
+            <p>{$this->serie->nom}</p>
+            <p>{$this->serie->genre}</p>
+        </a>
+        {$this->favorite()}
+    </div>
 HTML;
         return $html;
     }
+
 
     /**Renderer long d'une série
      * @return string affichage complet de la série

@@ -66,7 +66,7 @@ class ActionAddProfilInfos extends Action
                             <input type="$type" name="value" value="$value" required>
                             <input type="hidden" name="field" value="$field">
                         </form>
-                        <a href="?action=dell-infos&value=$field"><button type="button">del</button></a>
+                        <a href="?action=dell-infos&value=$field"><button type="button">🗑️</button></a>
                     </li>
                 HTML;
             } else {
@@ -74,9 +74,9 @@ class ActionAddProfilInfos extends Action
                 $displayValue = $value ?: '<em>Non renseigné</em>';
                 $html .= <<<HTML
                     <li>
-                        <a href="?action=add-infos&value=$field"><button>edit</button></a>
+                        <a href="?action=add-infos&value=$field"><button><img src="img/edit.png" id="info" alt="edit"></button></a>
                         <strong>{$this->formatFieldName($field)} :</strong> $displayValue 
-                        <a href="?action=dell-infos&value=$field"><button>del</button></a>
+                        <a href="?action=dell-infos&value=$field"><button><img src="img/bin.png" id="info" alt="del"></button></a>
                     </li>
                 HTML;
             }

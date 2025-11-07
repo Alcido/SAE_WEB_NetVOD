@@ -11,15 +11,25 @@ class ListeSerieRenderer
         $this->series = $series;
     }
 
-    public function render() : string {
+    public function render(): string {
         $nbSerie = sizeof($this->series);
+
+        // En-tête du catalogue
         $html = "<p>Nombre de séries dans cette liste : $nbSerie</p>";
-        $html .= "<ul>";
+
+        // Container en grille
+        $html .= "<div class='catalogue-container'>";
+
+        // Boucle sur chaque série
         foreach ($this->series as $serie) {
             $rendererSerie = new SerieRenderer($serie);
-            $html .= "<li>" . $rendererSerie->renderCompact() . "</li>";
+            // On suppose que renderCompact() renvoie déjà une carte HTML d'une série
+            $html .= "<div class='serie-card'>" . $rendererSerie->renderCompact() . "</div>";
         }
-        $html .= "</ul>";
+
+        $html .= "</div>"; // fin du container
+
         return $html;
     }
+
 }
