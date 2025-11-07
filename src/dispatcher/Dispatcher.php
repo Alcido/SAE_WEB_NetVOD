@@ -98,7 +98,7 @@ class Dispatcher
                 <!DOCTYPE html>
                 <html lang="en">
                 <head>
-                <meta charset="UTF-8">
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
                 <title>NetVOD</title>
                 <link rel="stylesheet" href="src/css/style.css">
                 </head>
