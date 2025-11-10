@@ -41,8 +41,8 @@ class ActionCatalogue extends Action
         }
 
         //Formulaire de tri et de filtre
-        $html = $selectionGenre . $selectionPublic . $selectionTri . '
-        <a href="?action=catalogue"><button>Réinitialiser les filtres</button></a>
+        $html = '<div class="filtrage">' . $selectionGenre . $selectionPublic . $selectionTri . '
+        <a href="?action=catalogue" class="btn-reset">Réinitialiser les filtres</a> </div>
         <h1>Catalogue de NetVOD</h1>';
 
         //on prend le renderer pour la (nouvelle) liste de série

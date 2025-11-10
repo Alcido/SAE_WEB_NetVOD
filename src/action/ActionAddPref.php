@@ -17,12 +17,12 @@ class ActionAddPref extends Action
             }else{
                 $repo->removeSeriePref($serie_id, $user_id);
             }
-            header("Location: ?action=home");
+            header("Location: ?action=catalogue");
             return "";
     }
 
     public function lancerGet(): string
     {
-        return $this->lancerGet();
+        return $this->lancerPost();
     }
 }
