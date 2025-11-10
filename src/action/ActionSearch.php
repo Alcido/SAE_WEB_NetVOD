@@ -17,10 +17,10 @@ class ActionSearch extends Action
         $repo = Repository::getInstance();
 
         $tmp = <<<HTML
-        <h1>Search</h1>
+        <h1>Rechercher une série</h1>
             <form action="?action=search" method="get">
             <input type="hidden" name="action" value="search">
-            <input type="text" name="search" id="search" placeholder="Search" required autofocus>
+            <input type="text" name="search" id="search" placeholder="Rechercher une série" required autofocus>
             <input type="submit" value="Search">
             </form>
         
@@ -30,7 +30,7 @@ class ActionSearch extends Action
         if (isset($_GET['search'])){
             $listeSeries = $repo->getSerieRecherche($_GET['search']);
             if ($listeSeries == null){
-                $tmp .= "<h1> No result </h1>";
+                $tmp .= "<h1>Aucun résultat.</h1>";
             }else{
                 $tmp .= (new ListeSerieRenderer($listeSeries))->render();
             }

@@ -16,14 +16,14 @@ class ActionRegister extends Action
             </br>
             <form action="?action=register" method="post">
                 <label for="username">Nom d'utilisateur</label>
-                <input type="text" name="username" id="username" placeholder="Username" required autofocus>
+                <input type="text" name="username" id="username" placeholder="nom d'utilisateur" required autofocus>
                 <label for="email">Email</label>
                 <input type="email" name="email" id="email" placeholder="Email" required>
                 <label for="password"> Mot de passe <span class="tooltip">*</span></label>
-                <input type="password" name="password" id="password" placeholder="Password" required>
+                <input type="password" name="password" id="password" placeholder="mot de passe" required>
                 <label for="password">Répéter le mot de passe</label>
-                <input type="password" name="password2" id="password" placeholder="Password" required>
-                <input type="submit" value="Register">
+                <input type="password" name="password2" id="password" placeholder="mot de passe" required>
+                <input type="submit" value="Créer mon compte">
             </form>
             <a href="?action=login" "><button class="btn">Se connecter</button></a>
         HTML;
@@ -41,7 +41,7 @@ class ActionRegister extends Action
         //on vérifie que les données renseignées soient conformes
         if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) || !filter_var($_POST['username'],
                 FILTER_VALIDATE_REGEXP, ['options' => ['regexp' => '/^[\p{L}0-9 ._\-]+$/u']])){
-            return $this->lancerGet() . "<script>alert('Invalid email or password')</script>";
+            return $this->lancerGet() . "<script>alert('Mot de passe ou email invalide.')</script>";
         }
 
 
@@ -62,7 +62,7 @@ class ActionRegister extends Action
         try {
             AuthnProvider::register($username, $email, $password);
         } catch (AuthnException $e) {
-            return $this->lancerGet() . "<script>alert('Erreur : identifiant déjà présent !');</script>";
+            return $this->lancerGet() . "<script>alert('Identifiant déjà présent.');</script>";
         }
 
 

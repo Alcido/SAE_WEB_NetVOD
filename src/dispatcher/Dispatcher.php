@@ -112,13 +112,13 @@ class Dispatcher
                 <<<HTML
                 <header class="header">
                   <nav>
+                     <a class="btn" href="?action=home">Accueil</a>
                     <a class="btn" href="?action=catalogue">Catalogue</a>
-                    <a class="btn" href="?action=home">Mes favoris</a>
-                    <a class="btn" href="?action=infos">infos</a>
+                    <a class="btn" href="?action=infos">Informations personnelles</a>
                     <a class="btn btn-danger" href="?action=logout">Déconnexion</a>
                     <form action="?action=search" method="get">
                         <input type="hidden" name="action" value="search">
-                        <input class="searchBar" type="text" name="search" id="search" placeholder="Search" required autofocus>
+                        <input class="searchBar" type="text" name="search" id="search" placeholder="Rechercher une série" required autofocus>
                     </form>     
                   </nav>
                 </header>

@@ -15,24 +15,25 @@ class ActionLogIn extends Action
     {
         if (isset($_SESSION['user'])) {
             $tmp = <<<HTML
-            <h1>LogIn</h1><h2>You are already logged in</h2>
+            <h1>Connexion</h1><h2>Vous êtes déjà connecté.</h2>
             <form action="?action=disconnect" method="post">
-                <input type="submit" name="logOut" value="LogOut">
+                <input type="submit" name="logOut" value="Se déconnecter">
             </form>
             HTML;
         } else {
             $tmp = <<<HTML
+            <h1>Connexion à NetVOD</h1>
             </br> 
             <form action="?action=logIn" method="post">
                 <label for="email">Email</label>
                 <input type="email" name="email" id="email" placeholder="utilisateur@mail.com" required autofocus>
                 <label for="password">Mot de passe</label>
-                <input type="password" name="password" id="password" placeholder="Password" required>
-                <input type="submit" value="LogIn">
+                <input type="password" name="password" id="password" placeholder="mot de passe" required>
+                <input type="submit" value="Se connecter">
             </form>
 
-            <a href="?action=register" "><button class="btn">Register</button></a>
-            <a href="?action=mdp-oublie" ><button class="btn">mots de passe oublié</button></a>
+            <a href="?action=register" "><button class="btn">Créer un compte</button></a>
+            <a href="?action=mdp-oublie" ><button class="btn">Mot de passe oublié ?</button></a>
             HTML;
         }
         return $tmp;
@@ -54,7 +55,7 @@ class ActionLogIn extends Action
                 header('Location: ?action=default');
             } catch (AuthnException $e) {
                 // Erreur de connexion
-                $html = "<script>alert('Erreur : identifiants incorrects ! Merci de créer un compte ou de vérifier les informations de connexion');</script>" . $this->lancerGet();
+                $html = "<script>alert('Erreur : identifiants incorrects ! Merci de créer un compte ou de vérifier les informations de connexion.');</script>" . $this->lancerGet();
             }
         }
         return $html;
