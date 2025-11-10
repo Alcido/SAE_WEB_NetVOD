@@ -7,8 +7,9 @@ class ActionDefault extends Action {
     public function lancerGet(): string
     {
         return <<<HTML
-<p>page par défaut de NetVOD, permet de voir si ça marche</p>
-<a href="?action=catalogue"><button>accès au catalogue</button> </a>
+<h1>Bienvenue sur NetVOD !</h1>
+<p>Profitez de notre catalogue des séries les plus en vogues !</p>
+<p>N'hésitez pas à vous rendre sur votre accueil où vous trouverez vos séries préférées, vos séries en cours ainsi que vos séries terminées !</p>
 HTML;
 
     }

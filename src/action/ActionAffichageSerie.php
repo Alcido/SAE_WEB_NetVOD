@@ -18,11 +18,11 @@ class ActionAffichageSerie extends Action
 
         $serie_id = $_GET['serieID'];
         if (!isset($serie_id)) {
-            return "<h1> no serie selected </h1>";
+            return "<h1>Aucune série sélectionnée.</h1>";
         }
         $serie = $repo->getSerie($serie_id);
         if ($serie == null) {
-            return "<h1> serie not existing </h1>";
+            return "<h1>Série inexistante.</h1>";
         }
         //Variables
         $moyenne = $repo->getNoteMoyenne($serie_id);
@@ -30,7 +30,7 @@ class ActionAffichageSerie extends Action
 
 
         //Affichage de la moyenne des notes
-        $tmp = "<p> Moyenne notes : $moyenne </p>";
+        $tmp = "";
 
         //BoutonReprise
         $isEnCours = $repo->isEnCours($serie_id, unserialize($_SESSION['user'])->id);
@@ -47,9 +47,10 @@ class ActionAffichageSerie extends Action
         $tmp .= "<div class=\"serie-details\">";
 
         if ($listeCom == null){
-            $tmp.= "<p>Pas de Commentaires</p>";
+            $tmp.= "<p>Aucun commentaire.</p>";
         }
         else {
+            $tmp .= "<p>Note moyenne : $moyenne </p>";
             $tmp .= "<ul>Commentaires : ";
             foreach ($listeCom as $commentaire) {
                 $tmp .= "<li>$commentaire[commentaire]</li>";

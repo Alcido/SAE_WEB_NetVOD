@@ -16,23 +16,12 @@ class ActionSearch extends Action
     {
         $repo = Repository::getInstance();
 
-        $tmp = <<<HTML
-        <h1>Search</h1>
-            <form action="?action=search" method="get">
-            <input type="hidden" name="action" value="search">
-            <input type="text" name="search" id="search" placeholder="Search" required autofocus>
-            <input type="submit" value="Search">
-            </form>
-        
-        
-        HTML;
-
         if (isset($_GET['search'])){
             $listeSeries = $repo->getSerieRecherche($_GET['search']);
             if ($listeSeries == null){
-                $tmp .= "<h1> No result </h1>";
+                $tmp = "<h1>Aucun résultat.</h1>";
             }else{
-                $tmp .= (new ListeSerieRenderer($listeSeries))->render();
+                $tmp = (new ListeSerieRenderer($listeSeries))->render();
             }
         }
 

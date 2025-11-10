@@ -67,7 +67,7 @@ HTML;
             $texte="Supprimer des favoris";
         }else{
             $isLiked = "add";
-            $texte="Ajouter des favoris";
+            $texte="Ajouter aux favoris";
         }
 
         $html = <<<HMTL
