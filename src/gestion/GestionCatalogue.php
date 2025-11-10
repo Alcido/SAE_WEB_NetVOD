@@ -20,7 +20,7 @@ class GestionCatalogue
                 $genre['genre'] . '</option>';
         }
 
-        return '<form method="GET"> 
+        return '<form class="filtrage" method="GET"> 
           <label>Genre :</label>
           <select name="genre" onchange="this.form.submit()">'.
             $html
@@ -44,7 +44,7 @@ class GestionCatalogue
                 $public['type_public'] . '</option>';
         }
 
-        return '<form method="GET">
+        return '<form class="filtrage" method="GET">
           <label>Public :</label>
           <select name="public" onchange="this.form.submit()">' .
             $html
@@ -66,7 +66,7 @@ class GestionCatalogue
                 (($_GET['tri'] ?? '') == $tri ? 'selected' : '') . '>' .
                 $tri . '</option>';
         }
-        return '<form method="GET">
+        return '<form class="filtrage" method="GET">
           <label>Trier par :</label>
           <select name="tri" onchange="this.form.submit()">' .
            $html

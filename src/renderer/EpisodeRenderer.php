@@ -41,9 +41,9 @@ HTML;
 
         // Préparer le bouton seulement si un épisode suivant existe
         if ($nextEpisode) {
-            $nextButton = "<button onclick=\"window.location.href='?action=episode&episodeNum={$nextEpisode->numero}&episodeID={$nextEpisode->id}'\">Next Episode</button>";
+            $nextButton = "<button class='nextEp' onclick=\"window.location.href='?action=episode&episodeNum={$nextEpisode->numero}&episodeID={$nextEpisode->id}'\">Next Episode</button>";
         } else {
-            $nextButton = "<button disabled>Next Episode</button>";
+            $nextButton = "<button class='nextEp' disabled>Next Episode</button>";
         }
 
         $html = <<<HTML
