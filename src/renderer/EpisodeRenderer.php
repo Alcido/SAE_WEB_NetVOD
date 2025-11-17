@@ -58,7 +58,20 @@ HTML;
                 <br><br>
                 <form action="?action=episode&episodeID={$this->video->id}" method="post">
                     <input type="text" name="commentaire" placeholder="Ajouter un commentaire">
-                    <input type="number" name="note" placeholder="Note">
+                    <input type="radio" id="num1" name="note" value="1">
+                    <label for="num1">1</label><br>
+                      
+                    <input type="radio" id="num2" name="note" value="2">
+                    <label for="num2">2</label><br>
+                    
+                    <input type="radio" id="num3" name="note" value="3">
+                    <label for="num3">3</label><br>
+                      
+                    <input type="radio" id="num4" name="note" value="4">
+                    <label for="num4">4</label><br>
+                      
+                    <input type="radio" id="num5" name="note" value="5">
+                    <label for="num5">5</label><br>
                     <input type="submit" name="addComment" value="Ajouter un commentaire">
                 </form>
                 HTML;
