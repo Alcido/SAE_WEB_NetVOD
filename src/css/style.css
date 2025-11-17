@@ -315,34 +315,30 @@ form .btn-submit:hover {
     cursor: pointer;
 }
 
-/* conteneur de filtres : met tout sur une ligne (ou wrap si trop petit) */
 .filtrage {
     display: flex;
     align-items: center;
     gap: 14px;
-    flex-wrap: wrap;           /* si l'écran est trop petit, les éléments passent à la ligne suivante */
+    flex-wrap: wrap;
     margin: 10px 0 20px 0;
 }
 
-/* cible uniquement les <form> à l'intérieur de .filtrage */
 .filtrage form {
-    display: inline-flex !important;   /* force l'affichage en ligne */
-    flex-direction: row !important;    /* éléments du form sur la même ligne */
+    display: inline-flex !important;
+    flex-direction: row !important;
     align-items: center;
     gap: 8px;
-    background: transparent;           /* supprime le fond et padding des forms de filtrage */
+    background: transparent;
     padding: 0;
     margin: 0;
     border-radius: 0;
     box-shadow: none;
 }
 
-/* si tu veux que chaque form soit compact (ne prenne pas toute la largeur) */
 .filtrage form {
     width: auto;
 }
 
-/* selects / labels plus compacts */
 .filtrage label {
     margin: 0 4px 0 0;
     font-weight: 600;
@@ -359,7 +355,6 @@ form .btn-submit:hover {
     color: #f2f2f2;
 }
 
-/* bouton de réinitialisation (lien stylé) */
 .btn-reset {
     display: inline-block;
     text-decoration: none;
@@ -377,20 +372,19 @@ form .btn-submit:hover {
     box-shadow: 0 6px 18px rgba(0,0,0,0.45);
 }
 
-/* si tu veux que le lien ait le look "primaire" */
 .btn-reset.btn-primary {
     background: linear-gradient(135deg, #0073ff, #005bd1);
     border: none;
 }
 
 video {
-    width: 100%;         /* prend toute la largeur du conteneur */
-    max-width: 900px;    /* largeur max pour éviter que ce soit trop énorme */
-    height: auto;        /* garde le ratio original */
+    width: 100%;
+    max-width: 900px;
+    height: auto;
     display: block;
-    margin: 20px auto;   /* centre la vidéo */
-    border-radius: 12px; /* coins arrondis */
-    box-shadow: 0 8px 20px rgba(0, 255, 255, 0.2); /* léger effet néon cyan */
+    margin: 20px auto;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 255, 255, 0.2);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -423,4 +417,35 @@ video:hover {
     cursor: not-allowed;
     box-shadow: none;
     transform: none;
+}
+
+
+.rating {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.rating input[type="radio"] {
+    display: none;
+}
+
+.rating label {
+    background: #222;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid #444;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.rating label:hover {
+    background: #2b2b2b;
+    transform: translateY(-2px);
+}
+
+.rating input[type="radio"]:checked + label {
+    background: #0073ff;
+    border-color: #0073ff;
+    transform: translateY(-2px);
 }
