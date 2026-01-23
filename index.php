@@ -10,7 +10,7 @@ use NetVOD\src\repository\Repository;
 
 session_start();
 
-Repository::setConfig("config/config.db.ini");
+Repository::setConfig("../../../Config.ini");
 
 //on verifie si la personne cherche à se connecter
 $demandeConn = (isset($_GET['action']) and ($_GET['action'] === 'register' || $_GET['action']=="verify" || $_GET['action']=="mdp-oublie" || $_GET['action']=="reset-mdp"));
